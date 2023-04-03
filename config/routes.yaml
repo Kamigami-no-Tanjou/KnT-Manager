@@ -1,0 +1,40 @@
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute
+
+index:
+    path: /
+    controller: App\Controller\DefaultController::index
+    methods: GET|HEAD
+
+elems:
+    path: /elems/
+    controller: App\Controller\ElemController::index
+    methods: GET|HEAD
+
+classes:
+    path: /classes/
+    controller: App\Controller\ClassesController::index
+    methods: GET|HEAD
+
+nations:
+    path: /nations/
+    controller: App\Controller\NationsController::index
+    methods: GET|HEAD
+
+nation_info:
+    path: /nations/{id}
+    controller: App\Controller\NationsController::nationInfo
+    methods: GET|HEAD
+
+events:
+    path: /events/
+    controller: App\Controller\CharacEventsController::index
+    methods: GET|HEAD
+
+events_charac:
+    path: /events/{characId}
+    controller: App\Controller\CharacEventsController::forCharac
+    methods: GET|HEAD

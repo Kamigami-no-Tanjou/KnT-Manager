@@ -1,0 +1,401 @@
+{% extends 'nav.html.twig' %}
+
+{% block page_content %}
+    <nav class="flex mb-4" aria-label="Breadcrumb">
+        <ol class="inline-flex items-center space-x-1 md:space-x-3">
+            <li class="inline-flex items-center">
+                <a href="/" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
+                    <svg aria-hidden="true" class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+                    Dashboard
+                </a>
+            </li>
+            <li>
+                <div class="flex items-center">
+                    <svg aria-hidden="true" class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                    <a href="/nations/" class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ml-2 dark:text-gray-400 dark:hover:text-white">Nations</a>
+                </div>
+            </li>
+            <li aria-current="page">
+                <div class="flex items-center">
+                    <svg aria-hidden="true" class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                    <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400">{{ nation.getName() }}</span>
+                </div>
+            </li>
+        </ol>
+    </nav>
+
+    <h3 class="text-3xl font-bold dark:text-white
+                   p-4">Informations sur {{ nation.getName() }}</h3>
+
+    <div class="mb-4 border-b border-gray-200 dark:border-gray-700 mx-1.5">
+        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
+            <li class="mr-2" role="presentation">
+                <button class="flex inline-block p-4 border-b-2 rounded-t-lg" id ="general-tab" data-tabs-target="#general" type="button" role="tab" aria-controls="general" aria-selected="false"
+                        style="line-height: 2rem">
+                    Informations générales
+                </button>
+            </li>
+            <li class="mr-2" role="presentation">
+                <button class="flex inline-block p-4 border-b-2 rounded-t-lg" id ="characs-tab" data-tabs-target="#characs" type="button" role="tab" aria-controls="characs" aria-selected="false"
+                        style="line-height: 2rem">
+                    Personnages
+                </button>
+            </li>
+            {% if maps|length > 0 %}
+            <li class="mr-2" role="presentation">
+                <button class="flex inline-block p-4 border-b-2 rounded-t-lg" id ="maps-tab" data-tabs-target="#maps" type="button" role="tab" aria-controls="maps" aria-selected="false"
+                        style="line-height: 2rem">
+                    Cartes
+                </button>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+
+    <div id="myTabContent">
+        <div class="p-4 rounded-lg bg-gray-100 dark:bg-gray-800" id="general" role="tabpanel" aria-labelledby="general-tab">
+            <div class="flex w-full">
+                {% if maps|length > 0 %}
+                    <div class="flex-auto relative overflow-x-auto sm:rounded-lg"
+                         style="margin: 0.75rem 1rem 1rem 0.75rem; flex: auto">
+                        <img src="data:image/png;base64,{{ maps[0].getContent() }}" alt="{{ maps[0].getName() }}-map"
+                             style="max-height: 12rem; border-radius: 0.5rem"/>
+                    </div>
+                {% else %}
+                    <div class="flex-auto relative overflow-x-auto sm:rounded-lg"
+                         style="margin: auto 1rem auto 0.75rem; flex: auto">
+                        <p class="text-left text-base text-gray-900 dark:text-white">
+                            Pas encore de carte pour ce pays...
+                        </p>
+                    </div>
+                {% endif %}
+
+                <div class="flex-none" style="width: fit-content; height: fit-content;
+                                              margin: 0.5rem 0.75rem 0">
+                    <h4 class="mb-2 text-xl font-bold dark:text-white">Avènement</h4>
+                    <p class="text-right text-base text-gray-900 dark:text-white">
+                        {{ nation.getFoundationDate().format('d/m/Y') }}
+                    </p>
+                    <h4 class="mt-4 mb-2 text-xl font-bold dark:text-white">Terme</h4>
+                    <p class="text-right text-base text-gray-900 dark:text-white">
+                        {% if nation.getDestructionDate() is not null %}
+                            {{ nation.getDestructionDate().format('d/m/Y') }}
+                        {% else %}
+                            Toujours existant
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+
+            <div style="margin: 0 0.75rem 1rem">
+                <h4 class="mb-2 text-2xl font-bold dark:text-white">Description</h4>
+                <p class="text-left text-base text-gray-900 dark:text-white">
+                    {% if nation.getDescription() != "" %}
+                        {{ nation.getDescription() }}
+                    {% else %}
+                        Pas encore de description pour ce pays...
+                    {% endif %}
+                </p>
+            </div>
+
+            <div style="margin: 0 0.75rem">
+                <h4 class="mb-2 text-2xl font-bold dark:text-white">Liste des dirigeants</h4>
+                <table class="w-full shadow-md text-sm text-left text-gray-500 dark:text-gray-400 mb-4"
+                       style="border-bottom-right-radius: 0.5rem; border-bottom-left-radius: 0.5rem">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-center"
+                            style="border-top-left-radius: 0.5rem">
+                            Nom
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-center">
+                            Date de naissance
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-center">
+                            Date de mort
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-center">
+                            Début du règne
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-center">
+                            Fin du règne
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-center">
+                            Origine
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-center w-1"
+                            style="border-top-right-radius: 0.5rem; min-width: 0.25rem">
+                            <span class="sr-only">Consulter</span>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for leader in leaders %}
+
+                        {% if not loop.last %}
+                            <tr class="bg-white border-b dark:bg-gray-900 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                                    style="padding-top: 0.5rem; padding-bottom: 0.5rem">
+                                    {{ leader.getLeader().getFirstNames() }} {{ leader.getLeader().getLastNames() }}
+                                </th>
+                                <td class="text-center" style="padding-top: 0.5rem; padding-bottom: 0.5rem">
+                                    {{ leader.getLeader().getBirthdate().format('d/m/Y') }}
+                                </td>
+                                <td class="px-6 py-4 text-center" style="padding-top: 0.5rem; padding-bottom: 0.5rem">
+                                    {% if leader.getLeader().getDeathdate() is not null %}
+                                        {{ leader.getLeader().getDeathdate().format('d/m/Y') }}
+                                    {% endif %}
+                                </td>
+                                <td class="px-6 py-4 text-center"
+                                    style="padding-top: 0.5rem; padding-bottom: 0.5rem">
+                                    {{ leader.getLeadStartDate().format('d/m/Y') }}
+                                </td>
+                                <td class="px-6 py-4 text-center"
+                                    style="padding-top: 0.5rem; padding-bottom: 0.5rem">
+                                    {% if leader.getLeadEndDate() is not null %}
+                                        {{ leader.getLeadEndDate().format('d/m/Y') }}
+                                    {% endif %}
+                                </td>
+                                <td class="px-6 py-4"
+                                    style="padding-top: 0.5rem; padding-bottom: 0.5rem">
+                                    {{ leader.getLeader().getOrigin().getName() }}
+                                </td>
+                                <td class="px-6 py-4 text-center"
+                                    style="padding-top: 0.5rem; padding-bottom: 0.5rem">
+                                    <a href="/characs/{{ leader.getLeader().getId() }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Consulter</a>
+                                </td>
+                            </tr>
+                        {% endif %}
+
+                    {% endfor %}
+
+                    <!-- Last line! -->
+                    <tr class="bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-600">
+                        {% if leaders|length > 0 %}
+                            {% set leader = leaders|last %}
+                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                                style="border-bottom-left-radius: 0.5rem; padding-top: 0.5rem; padding-bottom: 0.5rem">
+                                {{ leader.getLeader().getFirstNames() }} {{ leader.getLeader().getLastNames() }}
+                            </th>
+                            <td class="text-center" style="padding-top: 0.5rem; padding-bottom: 0.5rem">
+                                {{ leader.getLeader().getBirthdate().format('d/m/Y') }}
+                            </td>
+                            <td class="px-6 py-4 text-center" style="padding-top: 0.5rem; padding-bottom: 0.5rem">
+                                {% if leader.getLeader().getDeathdate() is not null %}
+                                    {{ leader.getLeader().getDeathdate().format('d/m/Y') }}
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4 text-center"
+                                style="padding-top: 0.5rem; padding-bottom: 0.5rem">
+                                {{ leader.getLeadStartDate().format('d/m/Y') }}
+                            </td>
+                            <td class="px-6 py-4 text-center"
+                                style="padding-top: 0.5rem; padding-bottom: 0.5rem">
+                                {% if leader.getLeadEndDate() is not null %}
+                                {{ leader.getLeadEndDate().format('d/m/Y') }}
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4"
+                                style="padding-top: 0.5rem; padding-bottom: 0.5rem">
+                                {{ leader.getLeader().getOrigin().getName() }}
+                            </td>
+                            <td class="px-6 py-4 text-center"
+                                style="border-bottom-right-radius: 0.5rem; padding-top: 0.5rem; padding-bottom: 0.5rem">
+                                <a href="/characs/{{ leader.getLeader().getId() }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Consulter</a>
+                            </td>
+                        {% else %}
+                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 text-center whitespace-nowrap dark:text-white"
+                                style="border-bottom-left-radius: 0.5rem; padding-top: 0.5rem; padding-bottom: 0.5rem;
+                                       border-bottom-right-radius: 0.5rem"
+                                colspan="7"
+                            >
+                                Pas de dirigeants répertoriés pour cette nation...
+                            </th>
+                        {% endif %}
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="p-4 rounded-lg bg-gray-100 dark:bg-gray-800" id="characs" role="tabpanel" aria-labelledby="characs-tab">
+            <div class="flex-auto relative overflow-x-auto sm:rounded-lg"
+                 style="margin: 0.5rem 1rem 0 0.75rem; flex: auto">
+                <h4 class="mb-2 text-2xl font-bold dark:text-white">Liste des personnages de la nation</h4>
+
+                <table class="w-full shadow-md text-sm text-left text-gray-500 dark:text-gray-400 mb-4"
+                       style="border-bottom-right-radius: 0.5rem; border-bottom-left-radius: 0.5rem">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-center"
+                            style="border-top-left-radius: 0.5rem">
+                            Nom
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-center">
+                            Naissance
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-center">
+                            Potentiel
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-center">
+                            Première magie
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-center">
+                            Seconde magie
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-center">
+                            Décès
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-center w-1"
+                            style="border-top-right-radius: 0.5rem; min-width: 0.25rem">
+                            <span class="sr-only">Consulter</span>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for charac in characs %}
+
+                        {% if not loop.last %}
+                            <tr class="bg-white border-b dark:bg-gray-900 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                                    style="padding-top: 0.5rem; padding-bottom: 0.5rem">
+                                    {{ charac.getFirstNames() }} {{ charac.getLastNames() }}
+                                </th>
+                                <td class="text-center" style="padding-top: 0.5rem; padding-bottom: 0.5rem">
+                                    {{ charac.getBirthdate().format('d/m/Y') }}
+                                </td>
+                                <td class="text-center" style="padding-top: 0.5rem; padding-bottom: 0.5rem">
+
+                                </td>
+                                <td style="padding-top: 0.5rem; padding-bottom: 0.5rem">
+                                    {% if charac.getMagics()|length > 0 %}
+                                    <a href="/magics/{{ charac.getMagics()[0].getId() }}" class="font-medium hover:text-gray-600 dark:hover:text-gray-300">
+                                        {{ charac.getMagics()[0].getName() }}
+                                    </a>
+                                    {% endif %}
+                                </td>
+                                <td class="px-6 py-4" style="padding-top: 0.5rem; padding-bottom: 0.5rem">
+                                    {% if charac.getMagics()|length > 1 %}
+                                        <a href="/magics/{{ charac.getMagics()[1].getId() }}" class="font-medium hover:text-gray-600 dark:hover:text-gray-300">
+                                            {{ charac.getMagics()[1].getName() }}
+                                        </a>
+                                    {% endif %}
+                                </td>
+                                <td class="px-6 py-4 text-center"
+                                    style="max-width: 350px; padding-top: 0.5rem; padding-bottom: 0.5rem">
+                                    {% if charac.getDeathdate() is not null %}
+                                    {{ charac.getDeathdate().format('d/m/Y') }}
+                                    {% endif %}
+                                </td>
+                                <td class="px-6 py-4 text-center"
+                                    style="padding-top: 0.5rem; padding-bottom: 0.5rem">
+                                    <a href="/characs/{{ charac.getId() }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Consulter</a>
+                                </td>
+                            </tr>
+                        {% endif %}
+
+                    {% endfor %}
+
+                    <!-- Last line! -->
+                    <tr class="bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-600">
+                        {% if characs|length > 0 %}
+                            {% set charac = characs|last %}
+                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                                style="border-bottom-left-radius: 0.5rem; padding-top: 0.5rem; padding-bottom: 0.5rem">
+                                {{ charac.getFirstNames() }} {{ charac.getLastNames() }}
+                            </th>
+                            <td class="text-center" style="padding-top: 0.5rem; padding-bottom: 0.5rem">
+                                {{ charac.getBirthdate().format('d/m/Y') }}
+                            </td>
+                            <td class="text-center" style="padding-top: 0.5rem; padding-bottom: 0.5rem">
+
+                            </td>
+                            <td style="padding-top: 0.5rem; padding-bottom: 0.5rem">
+                                <a href="/magics/{{ charac.getMagics()[0].getId() }}" class="font-medium hover:text-gray-600 dark:hover:text-gray-300">
+                                    {{ charac.getMagics()[0].getName() }}
+                                </a>
+                            </td>
+                            <td class="px-6 py-4" style="padding-top: 0.5rem; padding-bottom: 0.5rem">
+                                {% if charac.getMagics()|length > 1 %}
+                                    <a href="/magics/{{ charac.getMagics()[1].getId() }}" class="font-medium hover:text-gray-600 dark:hover:text-gray-300">
+                                        {{ charac.getMagics()[1].getName() }}
+                                    </a>
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4 text-center"
+                                style="max-width: 350px; padding-top: 0.5rem; padding-bottom: 0.5rem">
+                                {% if charac.getDeathdate() is not null %}
+                                    {{ charac.getDeathdate().format('d/m/Y') }}
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4 text-center"
+                                style="border-bottom-right-radius: 0.5rem; padding-top: 0.5rem; padding-bottom: 0.5rem">
+                                <a href="/characs/{{ charac.getId() }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Consulter</a>
+                            </td>
+                        {% else %}
+                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 text-center whitespace-nowrap dark:text-white"
+                                colspan="7"
+                                style="border-bottom-left-radius: 0.5rem; padding-top: 0.5rem; padding-bottom: 0.5rem;
+                                       border-bottom-right-radius: 0.5rem">
+                                Pas de personnages pour ce pays...
+                            </th>
+                        {% endif %}
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="flex justify-end">
+                <p class="text-right text-sm text-gray-900 dark:text-white">Total : {{ characs|length }}</p>
+            </div>
+        </div>
+        {% if maps|length > 0 %}
+        <div class="p-4 rounded-lg bg-gray-100 dark:bg-gray-800" id="maps" role="tabpanel" aria-labelledby="maps-tab">
+            <div style="margin: 0 0.75rem 1rem">
+                <div style="margin-bottom: 0.75rem">
+                    <h4 class="mb-2 text-xl font-bold dark:text-white">Accès rapide</h4>
+                    {% for map in maps %}
+                    <p>
+                        <a href="#map-{{ loop.index }}" class="text-gray-900 dark:text-white hover:text-gray-600 dark:hover:text-gray-300">
+                            {{ loop.index }}. {{ map.getName() }}
+                        </a>
+                    </p>
+                    {% endfor %}
+                </div>
+
+                {% for map in maps %}
+                <div id="map-{{ loop.index }}" class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-700 dark:border-gray-600"
+                    style="width: fit-content; margin: 0 auto 1rem auto"
+                >
+                    <a href="/maps/{{ map.getId() }}">
+                        <img src="data:image/png;base64,{{ map.getContent() }}" alt="{{ map.getName() }}-map"
+                             style="border-radius: 0.5rem 0.5rem 0 0" />
+                    </a>
+                    <div class="p-5" style="padding: 1.25rem">
+                        <a href="/maps/{{ map.getId() }}">
+                            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ map.getName() }}</h5>
+                        </a>
+                        <p class="mb-3 font-normal text-gray-700 dark:text-gray-400" style="margin-bottom: 0.75rem">
+                            {% if map.getEstablishmentDate() is not null and map.getExpiryDate() is not null %}
+                                Valable du {{ map.getEstablishmentDate().format('d/m/Y') }} au {{ map.getExpiryDate().format('d/m/Y') }}.
+                            {% elseif map.getEstablishmentDate() is not null and map.getExpiryDate() is null %}
+                                Valable depuis le {{ map.getEstablishmentDate().format('d/m/Y') }}.
+                            {% elseif map.getEstablishmentDate() is null and map.getExpiryDate() is not null %}
+                                Valable jusqu'au {{ map.getExpiryDate().format('d/m/Y') }}.
+                            {% endif %}
+                        </p>
+                        <a href="/maps/{{ map.getId() }}" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                            style="padding: 0.5rem 0.75rem 0.5rem 0.75rem"
+                        >
+                            Consulter
+                            <svg aria-hidden="true" class="w-4 h-4 ml-2 -mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+{% endblock %}
