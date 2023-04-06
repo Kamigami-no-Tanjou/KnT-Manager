@@ -4,7 +4,10 @@ namespace App\Repository;
 
 use App\Entity\_Class;
 use App\Entity\Charac;
+use App\Entity\Genders;
+use App\Entity\Magic;
 use App\Entity\Nation;
+use App\Entity\Sexes;
 use App\Utils\DateTimeService;
 use App\Utils\PDOService;
 use DateTime;
@@ -42,12 +45,27 @@ class CharacService implements IGetService
                         ID AS id,
                         LastNames AS lastNames,
                         FirstNames AS firstNames,
-                        Portrait AS portrait,
+                        Description AS description,
                         Calendar AS calendarId,
                         Birthdate AS birthdate,
                         IFNULL(Deathdate, 'N/A') AS deathdate,
+                        MagicalPotential AS magicalPotential,
                         Class AS classId,
-                        Origin AS originId
+                        Sex AS sex,
+                        Gender AS gender,
+                        SexualOrientation AS sexualOrientation,
+                        Origin AS originId,
+                        
+                        -- Physical characteristics
+                        Height AS height,
+                        HairColour AS hairColour,
+                        EyeColour AS eyeColour,
+                        Appearance AS appearance,
+                        
+                        -- Taste
+                        FavoriteColour AS favoriteColour,
+                        ThingsLoved AS thingsLoved,
+                        ThingsHated AS thingsHated
                    FROM Characs
                    WHERE ID = :id"
         );
@@ -57,14 +75,25 @@ class CharacService implements IGetService
         $charac->setId($values[0]['id']);
         $charac->setLastNames($values[0]['lastNames']);
         $charac->setFirstNames($values[0]['firstNames']);
-        $charac->setPortrait($values[0]['portrait']);
+        $charac->setDescription($values[0]['description']);
         $charac->setCalendar($this->calendarService->getById($values[0]['calendarId']));
         $charac->setBirthdate(new DateTime($values[0]['birthdate']));
         $charac->setDeathdate(
             $this->dateTimeService->getDateTime($values[0]['deathdate'])
         );
+        $charac->setMagicalPotential($values[0]['magicalPotential']);
         $charac->setClass($this->getClass($values[0]['classId']));
+        $charac->setSex(Sexes::from($values[0]['sex']));
+        $charac->setGender(Genders::from($values[0]['gender']));
+        $charac->setSexualOrientation($values[0]['sexualOrientation']);
         $charac->setOrigin($this->nationService->getById($values[0]['originId']));
+        $charac->setHeight($values[0]['height']);
+        $charac->setHairColour($values[0]['hairColour']);
+        $charac->setEyeColour($values[0]['eyeColour']);
+        $charac->setAppearance($values[0]['appearance']);
+        $charac->setFavoriteColour($values[0]['favoriteColour']);
+        $charac->setThingsLoved($values[0]['thingsLoved']);
+        $charac->setThingsHated($values[0]['thingsHated']);
         $charac->setMagics($this->getMagics($charac->getId()));
 
         return $charac;
@@ -77,12 +106,27 @@ class CharacService implements IGetService
                         ID AS id,
                         LastNames AS lastNames,
                         FirstNames AS firstNames,
-                        Portrait AS portrait,
+                        Description AS description,
                         Calendar AS calendarId,
                         Birthdate AS birthdate,
                         IFNULL(Deathdate, 'N/A') AS deathdate,
+                        MagicalPotential AS magicalPotential,
                         Class AS classId,
-                        Origin AS originId
+                        Sex AS sex,
+                        Gender AS gender,
+                        SexualOrientation AS sexualOrientation,
+                        Origin AS originId,
+                        
+                        -- Physical characteristics
+                        Height AS height,
+                        HairColour AS hairColour,
+                        EyeColour AS eyeColour,
+                        Appearance AS appearance,
+                        
+                        -- Taste
+                        FavoriteColour AS favoriteColour,
+                        ThingsLoved AS thingsLoved,
+                        ThingsHated AS thingsHated
                    FROM Characs
                    LIMIT :amt"
         );
@@ -99,12 +143,27 @@ class CharacService implements IGetService
                         ID AS id,
                         LastNames AS lastNames,
                         FirstNames AS firstNames,
-                        Portrait AS portrait,
+                        Description AS description,
                         Calendar AS calendarId,
                         Birthdate AS birthdate,
                         IFNULL(Deathdate, 'N/A') AS deathdate,
+                        MagicalPotential AS magicalPotential,
                         Class AS classId,
-                        Origin AS originId
+                        Sex AS sex,
+                        Gender AS gender,
+                        SexualOrientation AS sexualOrientation,
+                        Origin AS originId,
+                        
+                        -- Physical characteristics
+                        Height AS height,
+                        HairColour AS hairColour,
+                        EyeColour AS eyeColour,
+                        Appearance AS appearance,
+                        
+                        -- Taste
+                        FavoriteColour AS favoriteColour,
+                        ThingsLoved AS thingsLoved,
+                        ThingsHated AS thingsHated
                    FROM Characs"
         );
         $statement->execute();
@@ -119,12 +178,27 @@ class CharacService implements IGetService
                         ID AS id,
                         LastNames AS lastNames,
                         FirstNames AS firstNames,
-                        Portrait AS portrait,
+                        Description AS description,
                         Calendar AS calendarId,
                         Birthdate AS birthdate,
                         IFNULL(Deathdate, 'N/A') AS deathdate,
+                        MagicalPotential AS magicalPotential,
                         Class AS classId,
-                        Origin AS originId
+                        Sex AS sex,
+                        Gender AS gender,
+                        SexualOrientation AS sexualOrientation,
+                        Origin AS originId,
+                        
+                        -- Physical characteristics
+                        Height AS height,
+                        HairColour AS hairColour,
+                        EyeColour AS eyeColour,
+                        Appearance AS appearance,
+                        
+                        -- Taste
+                        FavoriteColour AS favoriteColour,
+                        ThingsLoved AS thingsLoved,
+                        ThingsHated AS thingsHated
                    FROM Characs
                    WHERE Class = :classId"
         );
@@ -137,15 +211,30 @@ class CharacService implements IGetService
     public function getByNation(Nation $nation): array {
         $statement = $this->context->prepare(
             "SELECT
-                        ID as id,
+                        ID AS id,
                         LastNames AS lastNames,
                         FirstNames AS firstNames,
-                        Portrait AS portrait,
+                        Description AS description,
                         Calendar AS calendarId,
                         Birthdate AS birthdate,
                         IFNULL(Deathdate, 'N/A') AS deathdate,
+                        MagicalPotential AS magicalPotential,
                         Class AS classId,
-                        Origin AS originId
+                        Sex AS sex,
+                        Gender AS gender,
+                        SexualOrientation AS sexualOrientation,
+                        Origin AS originId,
+                        
+                        -- Physical characteristics
+                        Height AS height,
+                        HairColour AS hairColour,
+                        EyeColour AS eyeColour,
+                        Appearance AS appearance,
+                        
+                        -- Taste
+                        FavoriteColour AS favoriteColour,
+                        ThingsLoved AS thingsLoved,
+                        ThingsHated AS thingsHated
                    FROM Characs
                    WHERE Origin = :nationId"
         );
@@ -161,12 +250,27 @@ class CharacService implements IGetService
                         DISTINCT(CRC.ID) AS id,
                         CRC.LastNames AS lastNames,
                         CRC.FirstNames AS firstNames,
-                        CRC.Portrait AS portrait,
+                        CRC.Description AS description,
                         CRC.Calendar AS calendarId,
                         CRC.Birthdate AS birthdate,
                         IFNULL(CRC.Deathdate, 'N/A') AS deathdate,
+                        CRC.MagicalPotential AS magicalPotential,
                         CRC.Class AS classId,
-                        CRC.Origin AS originId
+                        CRC.Sex AS sex,
+                        CRC.Gender AS gender,
+                        CRC.SexualOrientation AS sexualOrientation,
+                        CRC.Origin AS originId,
+                        
+                        -- Physical characteristics
+                        CRC.Height AS height,
+                        CRC.HairColour AS hairColour,
+                        CRC.EyeColour AS eyeColour,
+                        CRC.Appearance AS appearance,
+                        
+                        -- Taste
+                        CRC.FavoriteColour AS favoriteColour,
+                        CRC.ThingsLoved AS thingsLoved,
+                        CRC.ThingsHated AS thingsHated
                    FROM Characs CRC
                    INNER JOIN CharacEvents CRE
                         ON CRC.ID = CRE.Charac"
@@ -183,12 +287,27 @@ class CharacService implements IGetService
                         CRC.ID AS id,
                         CRC.LastNames AS lastNames,
                         CRC.FirstNames AS firstNames,
-                        CRC.Portrait AS portrait,
+                        CRC.Description AS description,
                         CRC.Calendar AS calendarId,
                         CRC.Birthdate AS birthdate,
                         IFNULL(CRC.Deathdate, 'N/A') AS deathdate,
+                        CRC.MagicalPotential AS magicalPotential,
                         CRC.Class AS classId,
-                        CRC.Origin AS originId
+                        CRC.Sex AS sex,
+                        CRC.Gender AS gender,
+                        CRC.SexualOrientation AS sexualOrientation,
+                        CRC.Origin AS originId,
+                        
+                        -- Physical characteristics
+                        CRC.Height AS height,
+                        CRC.HairColour AS hairColour,
+                        CRC.EyeColour AS eyeColour,
+                        CRC.Appearance AS appearance,
+                        
+                        -- Taste
+                        CRC.FavoriteColour AS favoriteColour,
+                        CRC.ThingsLoved AS thingsLoved,
+                        CRC.ThingsHated AS thingsHated
                     FROM CharacsRelationships CRR
                     INNER JOIN Characs CRC ON CRR.TowardsCharac = CRC.ID
                     WHERE CRR.FamilyStatus IS NOT NULL
@@ -225,22 +344,147 @@ class CharacService implements IGetService
         return $characs;
     }
 
+    public function getByMagic(Magic $magic): array {
+        $statement = $this->context->prepare(
+            "SELECT
+                        CRC.ID AS id,
+                        CRC.LastNames AS lastNames,
+                        CRC.FirstNames AS firstNames,
+                        CRC.Description AS description,
+                        CRC.Calendar AS calendarId,
+                        CRC.Birthdate AS birthdate,
+                        IFNULL(CRC.Deathdate, 'N/A') AS deathdate,
+                        CRC.MagicalPotential AS magicalPotential,
+                        CRC.Class AS classId,
+                        CRC.Sex AS sex,
+                        CRC.Gender AS gender,
+                        CRC.SexualOrientation AS sexualOrientation,
+                        CRC.Origin AS originId,
+                        
+                        -- Physical characteristics
+                        CRC.Height AS height,
+                        CRC.HairColour AS hairColour,
+                        CRC.EyeColour AS eyeColour,
+                        CRC.Appearance AS appearance,
+                        
+                        -- Taste
+                        CRC.FavoriteColour AS favoriteColour,
+                        CRC.ThingsLoved AS thingsLoved,
+                        CRC.ThingsHated AS thingsHated
+                   FROM LINK_CharacsMagics LCM
+                   INNER JOIN Characs CRC ON LCM.Charac = CRC.ID
+                   WHERE LCM.Magic = :magicId"
+        );
+        $statement->execute(['magicId' => $magic->getId()]);
+        $values = $statement->fetchAll();
+
+        return $this->buildInstances($values);
+    }
+
+    public function getByInstinctMagic(Magic $magic): array {
+        $statement = $this->context->prepare(
+            "SELECT
+                        CRC.ID AS id,
+                        CRC.LastNames AS lastNames,
+                        CRC.FirstNames AS firstNames,
+                        CRC.Description AS description,
+                        CRC.Calendar AS calendarId,
+                        CRC.Birthdate AS birthdate,
+                        IFNULL(CRC.Deathdate, 'N/A') AS deathdate,
+                        CRC.MagicalPotential AS magicalPotential,
+                        CRC.Class AS classId,
+                        CRC.Sex AS sex,
+                        CRC.Gender AS gender,
+                        CRC.SexualOrientation AS sexualOrientation,
+                        CRC.Origin AS originId,
+                        
+                        -- Physical characteristics
+                        CRC.Height AS height,
+                        CRC.HairColour AS hairColour,
+                        CRC.EyeColour AS eyeColour,
+                        CRC.Appearance AS appearance,
+                        
+                        -- Taste
+                        CRC.FavoriteColour AS favoriteColour,
+                        CRC.ThingsLoved AS thingsLoved,
+                        CRC.ThingsHated AS thingsHated
+                   FROM LINK_CharacsMagics LCM
+                   INNER JOIN Characs CRC ON LCM.Charac = CRC.ID
+                   WHERE LCM.Magic = :magicId
+                   AND LCM.`Rank` = 1"
+        );
+        $statement->execute(['magicId' => $magic->getId()]);
+        $values = $statement->fetchAll();
+
+        return $this->buildInstances($values);
+    }
+
+    public function getByLearntMagic(Magic $magic): array {
+        $statement = $this->context->prepare(
+            "SELECT
+                        CRC.ID AS id,
+                        CRC.LastNames AS lastNames,
+                        CRC.FirstNames AS firstNames,
+                        CRC.Description AS description,
+                        CRC.Calendar AS calendarId,
+                        CRC.Birthdate AS birthdate,
+                        IFNULL(CRC.Deathdate, 'N/A') AS deathdate,
+                        CRC.MagicalPotential AS magicalPotential,
+                        CRC.Class AS classId,
+                        CRC.Sex AS sex,
+                        CRC.Gender AS gender,
+                        CRC.SexualOrientation AS sexualOrientation,
+                        CRC.Origin AS originId,
+                        
+                        -- Physical characteristics
+                        CRC.Height AS height,
+                        CRC.HairColour AS hairColour,
+                        CRC.EyeColour AS eyeColour,
+                        CRC.Appearance AS appearance,
+                        
+                        -- Taste
+                        CRC.FavoriteColour AS favoriteColour,
+                        CRC.ThingsLoved AS thingsLoved,
+                        CRC.ThingsHated AS thingsHated
+                   FROM LINK_CharacsMagics LCM
+                   INNER JOIN Characs CRC ON LCM.Charac = CRC.ID
+                   WHERE LCM.Magic = :magicId
+                   AND LCM.`Rank` > 1"
+        );
+        $statement->execute(['magicId' => $magic->getId()]);
+        $values = $statement->fetchAll();
+
+        return $this->buildInstances($values);
+    }
+
     function buildInstances(array $fetchedValues): array
     {
         $characs = array();
         foreach($fetchedValues as $row) {
             $charac = new Charac();
+
             $charac->setId($row['id']);
             $charac->setLastNames($row['lastNames']);
             $charac->setFirstNames($row['firstNames']);
-            $charac->setPortrait($row['portrait']);
+            $charac->setDescription($row['description']);
             $charac->setCalendar($this->calendarService->getById($row['calendarId']));
             $charac->setBirthdate(new DateTime($row['birthdate']));
             $charac->setDeathdate(
                 $this->dateTimeService->getDateTime($row['deathdate'])
             );
+            $charac->setMagicalPotential($row['magicalPotential']);
             $charac->setClass($this->getClass($row['classId']));
+            $charac->setSex(Sexes::from($row['sex']));
+            $charac->setGender(Genders::from($row['gender']));
+            $charac->setSexualOrientation($row['sexualOrientation']);
             $charac->setOrigin($this->nationService->getById($row['originId']));
+            $charac->setHeight($row['height']);
+            $charac->setHairColour($row['hairColour']);
+            $charac->setEyeColour($row['eyeColour']);
+            $charac->setAppearance($row['appearance']);
+            $charac->setFavoriteColour($row['favoriteColour']);
+            $charac->setThingsLoved($row['thingsLoved']);
+            $charac->setThingsHated($row['thingsHated']);
             $charac->setMagics($this->getMagics($charac->getId()));
             $characs[] = $charac;
         }
@@ -273,5 +517,18 @@ class CharacService implements IGetService
         }
 
         return $magics;
+    }
+
+    public function getPortraitById(int $id): ?string {
+        $statement = $this->context->prepare(
+            "SELECT
+                        Portrait AS portrait
+                   FROM Characs
+                   WHERE ID = :id"
+        );
+        $statement->execute(['id' => $id]);
+        $portrait = $statement->fetchAll();
+
+        return $portrait[0]['portrait'];
     }
 }

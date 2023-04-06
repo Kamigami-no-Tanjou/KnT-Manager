@@ -14,6 +14,10 @@ elems:
     controller: App\Controller\ElemController::index
     methods: GET|HEAD
 
+elems_images:
+    path: /elems/{id}
+    controller: App\Controller\ElemController::displayImage
+
 classes:
     path: /classes/
     controller: App\Controller\ClassesController::index
@@ -29,6 +33,11 @@ nation_info:
     controller: App\Controller\NationsController::nationInfo
     methods: GET|HEAD
 
+map_image:
+    path: /maps/{id}/image
+    controller: App\Controller\MapsController::mapImage
+    methods: GET|HEAD
+
 events:
     path: /events/
     controller: App\Controller\CharacEventsController::index
@@ -37,4 +46,44 @@ events:
 events_charac:
     path: /events/{characId}
     controller: App\Controller\CharacEventsController::forCharac
+    methods: GET|HEAD
+
+nation_leaders:
+    path: /leaders/
+    controller: App\Controller\NationLeadersController::index
+    methods: GET|HEAD
+
+magics:
+    path: /magics/
+    controller: App\Controller\MagicsController::index
+    methods: GET|HEAD
+
+magics_info:
+    path: /magics/{id}
+    controller: App\Controller\MagicsController::magicsInfo
+    methods: GET|HEAD
+
+magics_instinct:
+    path: /magics/{id}/instinct/
+    controller: App\Controller\MagicsController::magicsInstinct
+    methods: GET|HEAD
+
+magics_learnt:
+    path: /magics/{id}/learnt/
+    controller: App\Controller\MagicsController::magicsLearnt
+    methods: GET|HEAD
+
+characs:
+    path: /characs/
+    controller: App\Controller\CharacsController::index
+    methods: GET|HEAD
+
+characs_infos:
+    path: /characs/{id}
+    controller: App\Controller\CharacsController::characsInfo
+    methods: GET|HEAD
+
+characs_images:
+    path: /characs/{id}/portrait
+    controller: App\Controller\CharacsController::characPortrait
     methods: GET|HEAD

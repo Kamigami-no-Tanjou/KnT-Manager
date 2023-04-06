@@ -222,7 +222,9 @@
                                     {{ charac.getBirthdate().format('d/m/Y') }}
                                 </td>
                                 <td class="text-center" style="padding-top: 0.5rem; padding-bottom: 0.5rem">
-
+                                    {% if charac.getMagicalPotential() is not null %}
+                                        {{ charac.getMagicalPotential() }} U
+                                    {% endif %}
                                 </td>
                                 <td style="padding-top: 0.5rem; padding-bottom: 0.5rem">
                                     {% if charac.getMagics()|length > 0 %}
@@ -265,7 +267,7 @@
                                 {{ charac.getBirthdate().format('d/m/Y') }}
                             </td>
                             <td class="text-center" style="padding-top: 0.5rem; padding-bottom: 0.5rem">
-
+                                {{ charac.getMagicalPotential() }} U
                             </td>
                             <td style="padding-top: 0.5rem; padding-bottom: 0.5rem">
                                 <a href="/magics/{{ charac.getMagics()[0].getId() }}" class="font-medium hover:text-gray-600 dark:hover:text-gray-300">

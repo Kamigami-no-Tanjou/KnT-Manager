@@ -32,8 +32,7 @@ class MapService implements IGetService
                         Name AS name,
                         IFNULL(EstablishmentDate, 'N/A') AS establishmentDate,
                         IFNULL(ExpiryDate, 'N/A') AS expiryDate,
-                        Nation AS nationId,
-                        Content AS content
+                        Nation AS nationId
                    FROM Maps
                    WHERE ID = :id"
         );
@@ -49,10 +48,6 @@ class MapService implements IGetService
             $this->dateTimeService->getDateTime($values[0]['expiryDate'])
         );
         $map->setNation($this->nationService->getById($values[0]['nationId']));
-        $map->setContent(
-            base64_encode(
-                $values[0]['content']
-            ));
 
         return $map;
     }
@@ -65,8 +60,7 @@ class MapService implements IGetService
                         Name AS name,
                         IFNULL(EstablishmentDate, 'N/A') AS establishmentDate,
                         IFNULL(ExpiryDate, 'N/A') AS expiryDate,
-                        Nation AS nationId,
-                        Content AS content
+                        Nation AS nationId
                    FROM Maps
                    LIMIT :amt"
         );
@@ -84,8 +78,7 @@ class MapService implements IGetService
                         Name AS name,
                         IFNULL(EstablishmentDate, 'N/A') AS establishmentDate,
                         IFNULL(ExpiryDate, 'N/A') AS expiryDate,
-                        Nation AS nationId,
-                        Content AS content
+                        Nation AS nationId
                    FROM Maps"
         );
         $statement->execute();
@@ -101,8 +94,7 @@ class MapService implements IGetService
                         Name AS name,
                         IFNULL(EstablishmentDate, 'N/A') AS establishmentDate,
                         IFNULL(ExpiryDate, 'N/A') AS expiryDate,
-                        Nation AS nationId,
-                        Content AS content
+                        Nation AS nationId
                    FROM Maps
                    WHERE Nation = :nationId"
         );
@@ -126,13 +118,22 @@ class MapService implements IGetService
                 $this->dateTimeService->getDateTime($row['expiryDate'])
             );
             $map->setNation($this->nationService->getById($row['nationId']));
-            $map->setContent(
-                base64_encode(
-                    $row['content']
-                ));
             $maps[] = $map;
         }
 
         return $maps;
+    }
+
+    public function getMapById(int $id): string {
+        $statement = $this->context->prepare(
+            "SELECT
+                        Content AS content
+                   FROM Maps
+                   WHERE ID = :id"
+        );
+        $statement->execute(['id' => $id]);
+        $map = $statement->fetchAll();
+
+        return $map[0]['content'];
     }
 }

@@ -1,0 +1,153 @@
+{% extends 'nav.html.twig' %}
+
+{% block page_content %}
+    <nav class="flex mb-4" aria-label="Breadcrumb">
+        <ol class="inline-flex items-center space-x-1 md:space-x-3">
+            <li class="inline-flex items-center">
+                <a href="/" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
+                    <svg aria-hidden="true" class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+                    Dashboard
+                </a>
+            </li>
+            <li aria-current="page">
+                <div class="flex items-center">
+                    <svg aria-hidden="true" class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                    <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400">Personnages</span>
+                </div>
+            </li>
+        </ol>
+    </nav>
+
+    <div id="myTabContent">
+        <div class="p-4 rounded-lg bg-gray-100 dark:bg-gray-800">
+            <h3 class="text-3xl font-bold dark:text-white">Liste des personnages</h3>
+
+            <div class="relative overflow-x-auto sm:rounded-lg"
+                 style="margin: 2rem 0.75rem 0;">
+                <table class="w-full text-sm shadow-md mb-4 text-left text-gray-500 dark:text-gray-400"
+                       style="border-radius: 0.5rem">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-center"
+                            style="border-top-left-radius: 0.5rem">
+                            Nom
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-center">
+                            Potentiel
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-center">
+                            Première magie
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-center">
+                            Seconde magie
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-center">
+                            Pays d'origine
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-center w-1"
+                            style="border-top-right-radius: 0.5rem; min-width: 0.25rem">
+                            <span class="sr-only">Consulter</span>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for charac in characs %}
+
+                        {% if not loop.last %}
+                            <tr class="bg-white border-b dark:bg-gray-900 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                                    style="padding-top: 0.5rem; padding-bottom: 0.5rem">
+                                    {{ charac.getFirstNames() }} {{ charac.getLastNames() }}
+                                </th>
+                                <td class="px-6 py-4 text-center" style="padding-top: 0.5rem; padding-bottom: 0.5rem">
+                                    {% if charac.getMagicalPotential() is not null %}
+                                        {{ charac.getMagicalPotential() }} U
+                                    {% endif %}
+                                </td>
+                                <td class="px-6 py-4" style="padding-top: 0.5rem; padding-bottom: 0.5rem">
+                                    {% if charac.getMagics()|length > 0 %}
+                                    <a href="/magics/{{ charac.getMagics()[0].getId() }}" class="font-medium hover:text-gray-600 dark:hover:text-gray-300">
+                                        {{ charac.getMagics()[0].getName() }}
+                                    </a>
+                                    {% endif %}
+                                </td>
+                                <td class="px-6 py-4" style="padding-top: 0.5rem; padding-bottom: 0.5rem">
+                                    {% if charac.getMagics()|length > 1 %}
+                                        <a href="/magics/{{ charac.getMagics()[1].getId() }}" class="font-medium hover:text-gray-600 dark:hover:text-gray-300">
+                                            {{ charac.getMagics()[1].getName() }}
+                                        </a>
+                                    {% endif %}
+                                </td>
+                                <td class="px-6 py-4"
+                                    style="max-width: 350px; padding-top: 0.5rem; padding-bottom: 0.5rem">
+                                    <a href="/nations/{{ charac.getOrigin().getId() }}" class="font-medium hover:text-gray-600 dark:hover:text-gray-300">
+                                        {{ charac.getOrigin().getName() }}
+                                    </a>
+                                </td>
+                                <td class="px-6 py-4 text-center"
+                                    style="padding-top: 0.5rem; padding-bottom: 0.5rem">
+                                    <a href="/characs/{{ charac.getId() }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Consulter</a>
+                                </td>
+                            </tr>
+                        {% endif %}
+
+                    {% endfor %}
+
+                    <!-- Last line! -->
+                    <tr class="bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-600">
+                        {% if characs|length > 0 %}
+                            {% set charac = characs|last %}
+                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                                style="border-bottom-left-radius: 0.5rem; padding-top: 0.5rem; padding-bottom: 0.5rem">
+                                {{ charac.getFirstNames() }} {{ charac.getLastNames() }}
+                            </th>
+                            <td class="px-6 py-4 text-center" style="padding-top: 0.5rem; padding-bottom: 0.5rem">
+                                {% if charac.getMagicalPotential() is not null %}
+                                    {{ charac.getMagicalPotential() }} U
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4" style="padding-top: 0.5rem; padding-bottom: 0.5rem">
+                                {% if charac.getMagics()|length > 0 %}
+                                <a href="/magics/{{ charac.getMagics()[0].getId() }}" class="font-medium hover:text-gray-600 dark:hover:text-gray-300">
+                                    {{ charac.getMagics()[0].getName() }}
+                                </a>
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4" style="padding-top: 0.5rem; padding-bottom: 0.5rem">
+                                {% if charac.getMagics()|length > 1 %}
+                                    <a href="/magics/{{ charac.getMagics()[1].getId() }}" class="font-medium hover:text-gray-600 dark:hover:text-gray-300">
+                                        {{ charac.getMagics()[1].getName() }}
+                                    </a>
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4"
+                                style="max-width: 350px; padding-top: 0.5rem; padding-bottom: 0.5rem">
+                                <a href="/nations/{{ charac.getOrigin().getId() }}" class="font-medium hover:text-gray-600 dark:hover:text-gray-300">
+                                    {{ charac.getOrigin().getName() }}
+                                </a>
+                            </td>
+                            <td class="px-6 py-4 text-center"
+                                style="border-bottom-right-radius: 0.5rem; padding-top: 0.5rem; padding-bottom: 0.5rem">
+                                <a href="/characs/{{ charac.getId() }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Consulter</a>
+                            </td>
+                        {% else %}
+                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 text-center whitespace-nowrap dark:text-white"
+                                colspan="6"
+                                style="border-bottom-left-radius: 0.5rem; padding-top: 0.5rem; padding-bottom: 0.5rem;
+                                   border-bottom-right-radius: 0.5rem">
+                                Pas de mages pour cette magie...
+                            </th>
+                        {% endif %}
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="flex justify-end">
+                <p class="text-right text-sm text-gray-900 dark:text-white">Total : {{ characs|length }}</p>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

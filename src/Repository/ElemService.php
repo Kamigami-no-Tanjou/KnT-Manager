@@ -20,8 +20,7 @@ class ElemService implements IGetService
         $statement = $this->context->prepare(
             "SELECT
                         ID AS id,
-                        Name AS name,
-                        Illustration AS illustration
+                        Name AS name
                    FROM Elems
                    WHERE ID = :id"
         );
@@ -30,10 +29,6 @@ class ElemService implements IGetService
 
         $elem->setId($values[0]['id']);
         $elem->setName($values[0]['name']);
-        $elem->setIllustration(
-            base64_encode(
-                $values[0]['illustration']
-            ));
 
         return $elem;
     }
@@ -43,8 +38,7 @@ class ElemService implements IGetService
         $statement = $this->context->prepare(
             "SELECT
                         ID AS id,
-                        Name AS name,
-                        Illustration AS illustration
+                        Name AS name
                    FROM Elems
                    LIMIT :amt"
         );
@@ -59,8 +53,7 @@ class ElemService implements IGetService
         $statement = $this->context->prepare(
             "SELECT
                         ID AS id,
-                        Name AS name,
-                        Illustration AS illustration
+                        Name AS name
                    FROM Elems"
         );
         $statement->execute();
@@ -76,13 +69,22 @@ class ElemService implements IGetService
             $elem = new Elem();
             $elem->setId($row['id']);
             $elem->setName($row['name']);
-            $elem->setIllustration(
-                base64_encode(
-                    $row['illustration']
-                ));
             $elems[] = $elem;
         }
 
         return $elems;
+    }
+
+    public function getIllustrationById(int $id): string {
+        $statement = $this->context->prepare(
+            "SELECT
+                        Illustration AS illustration
+                    FROM Elems
+                    WHERE ID = :id"
+        );
+        $statement->execute(['id' => $id]);
+        $row = $statement->fetchAll();
+
+        return $row[0]['illustration'];
     }
 }

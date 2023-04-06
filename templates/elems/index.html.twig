@@ -24,7 +24,7 @@
                 <li class="mr-2" role="presentation">
                     <button class="flex inline-block p-4" id ="{{ elem.getName() }}-tab" data-tabs-target="#{{ elem.getName() }}" type="button" role="tab" aria-controls="{{ elem.getName() }}" aria-selected="false"
                         style="line-height: 2rem; border-bottom-width: 2px;">
-                        <img src="data:image/png;base64,{{ elem.getIllustration() }}" alt="{{ elem.getId() }}"
+                        <img src="/elems/{{ elem.getId() }}" alt="{{ elem.getId() }}"
                             style="height: 2rem; margin-right: 0.5rem"/>
                         {{ elem.getName() }}
                     </button>
@@ -75,7 +75,7 @@
                                 <td class="px-6 py-4" style="padding-top: 0.5rem; padding-bottom: 0.5rem">
                                     <div class="flex">
                                         {% for innerElem in magic.getElems() %}
-                                            <img src="data:image/png;base64,{{ innerElem.getIllustration() }}" alt="{{ innerElem.getId() }}"
+                                            <img src="/elems/{{ innerElem.getId() }}" alt="{{ innerElem.getId() }}"
                                                 style="width: 1.75rem">
                                         {% endfor %}
                                     </div>
@@ -107,7 +107,7 @@
                                 <td class="px-6 py-4" style="padding-top: 0.5rem; padding-bottom: 0.5rem">
                                     <div class="flex">
                                         {% for innerElem in magic.getElems() %}
-                                            <img src="data:image/png;base64,{{ innerElem.getIllustration() }}" alt="{{ innerElem.getId() }}"
+                                            <img src="/elems/{{ innerElem.getId() }}" alt="{{ innerElem.getId() }}"
                                                  style="width: 1.75rem">
                                         {% endfor %}
                                     </div>

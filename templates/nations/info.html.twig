@@ -58,7 +58,7 @@
                 {% if maps|length > 0 %}
                     <div class="flex-auto relative overflow-x-auto sm:rounded-lg"
                          style="margin: 0.75rem 1rem 1rem 0.75rem; flex: auto">
-                        <img src="data:image/png;base64,{{ maps[0].getContent() }}" alt="{{ maps[0].getName() }}-map"
+                        <img src="/maps/{{ maps[0].getId() }}/image" alt="{{ maps[0].getName() }}-map"
                              style="max-height: 12rem; border-radius: 0.5rem"/>
                     </div>
                 {% else %}
@@ -266,7 +266,9 @@
                                     {{ charac.getBirthdate().format('d/m/Y') }}
                                 </td>
                                 <td class="text-center" style="padding-top: 0.5rem; padding-bottom: 0.5rem">
-
+                                    {% if charac.getMagicalPotential() is not null %}
+                                        {{ charac.getMagicalPotential() }} U
+                                    {% endif %}
                                 </td>
                                 <td style="padding-top: 0.5rem; padding-bottom: 0.5rem">
                                     {% if charac.getMagics()|length > 0 %}
@@ -309,7 +311,7 @@
                                 {{ charac.getBirthdate().format('d/m/Y') }}
                             </td>
                             <td class="text-center" style="padding-top: 0.5rem; padding-bottom: 0.5rem">
-
+                                {{ charac.getMagicalPotential() }} U
                             </td>
                             <td style="padding-top: 0.5rem; padding-bottom: 0.5rem">
                                 <a href="/magics/{{ charac.getMagics()[0].getId() }}" class="font-medium hover:text-gray-600 dark:hover:text-gray-300">
@@ -369,7 +371,7 @@
                     style="width: fit-content; margin: 0 auto 1rem auto"
                 >
                     <a href="/maps/{{ map.getId() }}">
-                        <img src="data:image/png;base64,{{ map.getContent() }}" alt="{{ map.getName() }}-map"
+                        <img src="/maps/{{ map.getId() }}/image" alt="{{ map.getName() }}-map"
                              style="border-radius: 0.5rem 0.5rem 0 0" />
                     </a>
                     <div class="p-5" style="padding: 1.25rem">
