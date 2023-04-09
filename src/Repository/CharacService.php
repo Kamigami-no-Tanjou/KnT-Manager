@@ -531,4 +531,12 @@ class CharacService implements IGetService
 
         return $portrait[0]['portrait'];
     }
+
+    public function hasPortrait(Charac $charac): bool {
+        $statement = $this->context->prepare("SELECT HasPortrait(:characId) AS hasPortrait");
+        $statement->execute(['characId' => $charac->getId()]);
+        $value = $statement->fetchAll();
+
+        return $value[0]['hasPortrait'];
+    }
 }

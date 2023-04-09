@@ -125,10 +125,10 @@
                                         {{ ages[event.getId()~"-"~event.getCharac().getId()] }}
                                     </td>
                                     <td class="text-center" style="padding: 0.5rem 0.25rem">
-                                        {{ event.getStartingDate().format('d/m/Y') }}
+                                        {{ functions.convertToCalendar(event.getStartingDate(), viewCalendar).format('d/m/Y') }}
                                     </td>
                                     <td class="text-center" style="padding: 0.5rem 0.25rem">
-                                        {{ event.getEndingDate().format('d/m/Y') }}
+                                        {{ functions.convertToCalendar(event.getEndingDate(), viewCalendar).format('d/m/Y') }}
                                     </td>
                                     <td style="padding: 0.5rem 0.5rem 0.5rem 0.25rem">
                                         {{ event.getDescription() }}
@@ -150,10 +150,10 @@
                                     {{ ages[event.getId()~"-"~event.getCharac().getId()] }}
                                 </td>
                                 <td class="text-center" style="padding: 0.5rem 0.25rem">
-                                    {{ event.getStartingDate().format('d/m/Y') }}
+                                    {{ functions.convertToCalendar(event.getStartingDate(), viewCalendar).format('d/m/Y') }}
                                 </td>
                                 <td class="text-center" style="padding: 0.5rem 0.25rem">
-                                    {{ event.getEndingDate().format('d/m/Y') }}
+                                    {{ functions.convertToCalendar(event.getEndingDate(), viewCalendar).format('d/m/Y') }}
                                 </td>
                                 <td class="px-6 py-4" style="padding: 0.5rem 0.5rem 0.5rem 0.25rem; border-bottom-right-radius: 0.5rem">
                                     {{ event.getDescription() }}
@@ -219,7 +219,7 @@
                                     {{ charac.getFirstNames() }} {{ charac.getLastNames() }}
                                 </th>
                                 <td class="text-center" style="padding-top: 0.5rem; padding-bottom: 0.5rem">
-                                    {{ charac.getBirthdate().format('d/m/Y') }}
+                                    {{ functions.convertToCalendar(charac.getBirthdate(), viewCalendar).format('d/m/Y') }}
                                 </td>
                                 <td class="text-center" style="padding-top: 0.5rem; padding-bottom: 0.5rem">
                                     {% if charac.getMagicalPotential() is not null %}
@@ -243,7 +243,7 @@
                                 <td class="px-6 py-4 text-center"
                                     style="max-width: 350px; padding-top: 0.5rem; padding-bottom: 0.5rem">
                                     {% if charac.getDeathdate() is not null %}
-                                        {{ charac.getDeathdate().format('d/m/Y') }}
+                                        {{ functions.convertToCalendar(charac.getDeathdate(), viewCalendar).format('d/m/Y') }}
                                     {% endif %}
                                 </td>
                                 <td class="px-6 py-4 text-center"
@@ -264,7 +264,7 @@
                                 {{ charac.getFirstNames() }} {{ charac.getLastNames() }}
                             </th>
                             <td class="text-center" style="padding-top: 0.5rem; padding-bottom: 0.5rem">
-                                {{ charac.getBirthdate().format('d/m/Y') }}
+                                {{ functions.convertToCalendar(charac.getBirthdate(), viewCalendar).format('d/m/Y') }}
                             </td>
                             <td class="text-center" style="padding-top: 0.5rem; padding-bottom: 0.5rem">
                                 {{ charac.getMagicalPotential() }} U
@@ -284,7 +284,7 @@
                             <td class="px-6 py-4 text-center"
                                 style="max-width: 350px; padding-top: 0.5rem; padding-bottom: 0.5rem">
                                 {% if charac.getDeathdate() is not null %}
-                                    {{ charac.getDeathdate().format('d/m/Y') }}
+                                    {{ functions.convertToCalendar(charac.getDeathdate(), viewCalendar).format('d/m/Y') }}
                                 {% endif %}
                             </td>
                             <td class="px-6 py-4 text-center"

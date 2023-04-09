@@ -3,6 +3,12 @@
 {% block header %}
     <header>
         <script type="application/javascript">
+            function setCalendar(calendarId) {
+                document.cookie = "viewCalendar=" + calendarId;
+                document.getElementById("calendarForm").submit();
+            }
+        </script>
+        <script type="application/javascript">
             function switchTheme(theme) {
                 let dark = document.getElementById('dark-theme-switch');
                 let light = document.getElementById('light-theme-switch');
@@ -70,6 +76,19 @@
                         <img src="https://media.discordapp.net/attachments/861918687426773002/888870846867845120/KnT_Dynamic_Logo.gif" class="h-6 mr-3 sm:h-9" alt="KnT Logo">
                         <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">KnT Manager</span>
                     </a>
+
+                    <form id="calendarForm" class="flex items-center ml-6">
+                        <label for="calendarSelector" class="block mr-1 text-sm font-medium text-gray-900 dark:text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-6 h-6">
+                                <path fill-rule="evenodd" d="M5.75 2a.75.75 0 01.75.75V4h7V2.75a.75.75 0 011.5 0V4h.25A2.75 2.75 0 0118 6.75v8.5A2.75 2.75 0 0115.25 18H4.75A2.75 2.75 0 012 15.25v-8.5A2.75 2.75 0 014.75 4H5V2.75A.75.75 0 015.75 2zm-1 5.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25v-6.5c0-.69-.56-1.25-1.25-1.25H4.75z" clip-rule="evenodd" />
+                            </svg>
+                        </label>
+                        <select id="calendarSelector" name="calendarSelector" onchange="setCalendar(this.value)" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            {% for calendar in headerCalendars %}
+                                <option value="{{ calendar.getId() }}" {% if viewCalendar == calendar.getId() %}selected{% endif %}>{{ calendar.getName() }}</option>
+                            {% endfor %}
+                        </select>
+                    </form>
                 </div>
                 <div class="flex md:order-2">
                     <button id="dark-theme-switch" aria-controls="change-theme" type="button" class="inline-flex items-center p-2 mr-3 text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"

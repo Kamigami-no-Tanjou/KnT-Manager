@@ -23,9 +23,14 @@ class ServiceRegister
         $builder->register('characrelationship.service', '\App\Repository\CharacRelationshipService');
         $builder->register('class.service', '\App\Repository\ClassService');
         $builder->register('elem.service', '\App\Repository\ElemService');
+        $builder->register('familystatus.service', '\App\Repository\FamilyStatusService');
+        $builder->register('gender.service', 'App\Repository\GenderService');
         $builder->register('magic.service', '\App\Repository\MagicService');
         $builder->register('map.service', '\App\Repository\MapService');
         $builder->register('nation.service', '\App\Repository\NationService');
         $builder->register('nationleader.service', '\App\Repository\NationLeaderService');
+        $builder->register('sex.service', 'App\Repository\SexService');
+
+        $builder->register('datainitialiser.service', '\App\Utils\DataInitialiser');
     }
 }

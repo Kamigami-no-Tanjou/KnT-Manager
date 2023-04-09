@@ -169,12 +169,12 @@
                                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white
                                                        text-center"
                                     style="padding: 0.5rem 0.25rem 0.5rem 0.5rem">
-                                    {{ event.getStartingDate().format('d/m/Y') }}
+                                    {{ functions.convertToCalendar(event.getStartingDate(), viewCalendar).format('d/m/Y') }}
                                 </th>
                                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white
                                                        text-center"
                                     style="padding: 0.5rem 0.25rem">
-                                    {{ event.getEndingDate().format('d/m/Y') }}
+                                    {{ functions.convertToCalendar(event.getEndingDate(), viewCalendar).format('d/m/Y') }}
                                 </th>
                                 <td style="padding: 0.5rem 0.25rem; min-width: 47rem">
                                     {{ event.getDescription() }}
@@ -204,12 +204,12 @@
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white
                                                    text-center"
                                 style="border-bottom-left-radius: 0.5rem; padding: 0.5rem 0.25rem 0.5rem 0.5rem">
-                                {{ event.getStartingDate().format('d/m/Y') }}
+                                {{ functions.convertToCalendar(event.getStartingDate(), viewCalendar).format('d/m/Y') }}
                             </th>
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white
                                                    text-center"
                                 style="padding: 0.5rem 0.25rem">
-                                {{ event.getEndingDate().format('d/m/Y') }}
+                                {{ functions.convertToCalendar(event.getEndingDate(), viewCalendar).format('d/m/Y') }}
                             </th>
                             <td style="padding: 0.5rem 0.25rem; min-width: 47rem">
                                 {{ event.getDescription() }}

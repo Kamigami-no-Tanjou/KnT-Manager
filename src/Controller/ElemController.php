@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Repository\ElemService;
 use App\Repository\MagicService;
+use App\Utils\DataInitialiser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -12,15 +13,20 @@ class ElemController extends AbstractController
     private ElemService $elemService;
     private MagicService $magicService;
 
+    private DataInitialiser $dataInitialiser;
+
     public function __construct(ElemService $elemService,
-                                MagicService $magicService
+                                MagicService $magicService,
+                                DataInitialiser $dataInitialiser
     ) {
         $this->elemService = $elemService;
         $this->magicService = $magicService;
+
+        $this->dataInitialiser = $dataInitialiser;
     }
     public function index(): Response {
         // Data retrieval
-        $data = array();
+        $data = $this->dataInitialiser->getBaseData();
         $data['elems'] = $this->elemService->getAll();
 
         foreach ($data['elems'] as $elem) {

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Charac;
 use App\Repository\CharacService;
 use App\Repository\MagicService;
+use App\Utils\DataInitialiser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -13,16 +14,21 @@ class MagicsController extends AbstractController
     private MagicService $magicService;
     private CharacService $characService;
 
+    private DataInitialiser $dataInitialiser;
+
     public function __construct(MagicService $magicService,
-                                CharacService $characService
+                                CharacService $characService,
+                                DataInitialiser $dataInitialiser
     ) {
         $this->magicService = $magicService;
         $this->characService = $characService;
+
+        $this->dataInitialiser = $dataInitialiser;
     }
 
     public function index(): Response {
         // Data retrieval
-        $data = array();
+        $data = $this->dataInitialiser->getBaseData();
         $data['magics'] = $this->magicService->getAll();
 
         return $this->render('magics/index.html.twig', $data);
@@ -30,7 +36,7 @@ class MagicsController extends AbstractController
 
     public function magicsInfo(int $id): Response {
         // Data retrieval
-        $data = array();
+        $data = $this->dataInitialiser->getBaseData();
         $data['magic'] = $this->magicService->getById($id);
 
         $data['users'] = $this->characService->getByMagic($data['magic']);
@@ -51,7 +57,7 @@ class MagicsController extends AbstractController
 
     public function magicsInstinct(int $id): Response {
         // Data retrieval
-        $data = array();
+        $data = $this->dataInitialiser->getBaseData();
         $data['magic'] = $this->magicService->getById($id);
 
         $data['instinctUsers'] = $this->characService->getByInstinctMagic($data['magic']);
@@ -61,7 +67,7 @@ class MagicsController extends AbstractController
 
     public function magicsLearnt(int $id): Response {
         // Data retrieval
-        $data = array();
+        $data = $this->dataInitialiser->getBaseData();
         $data['magic'] = $this->magicService->getById($id);
 
         $data['learntUsers'] = $this->characService->getByLearntMagic($data['magic']);

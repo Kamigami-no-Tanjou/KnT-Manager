@@ -67,21 +67,21 @@
                                     </a>
                                 </th>
                                 <td class="text-center" style="padding-top: 0.5rem; padding-bottom: 0.5rem">
-                                    {{ leader.getLeader().getBirthdate().format('d/m/Y') }}
+                                    {{ functions.convertToCalendar(leader.getLeader().getBirthdate(), viewCalendar).format('d/m/Y') }}
                                 </td>
                                 <td class="px-6 py-4 text-center" style="padding-top: 0.5rem; padding-bottom: 0.5rem">
                                     {% if leader.getLeader().getDeathdate() is not null %}
-                                        {{ leader.getLeader().getDeathdate().format('d/m/Y') }}
+                                        {{ functions.convertToCalendar(leader.getLeader().getDeathdate(), viewCalendar).format('d/m/Y') }}
                                     {% endif %}
                                 </td>
                                 <td class="px-6 py-4 text-center"
                                     style="padding-top: 0.5rem; padding-bottom: 0.5rem">
-                                    {{ leader.getLeadStartDate().format('d/m/Y') }}
+                                    {{ functions.convertToCalendar(leader.getLeadStartDate(), viewCalendar).format('d/m/Y') }}
                                 </td>
                                 <td class="px-6 py-4 text-center"
                                     style="padding-top: 0.5rem; padding-bottom: 0.5rem">
                                     {% if leader.getLeadEndDate() is not null %}
-                                        {{ leader.getLeadEndDate().format('d/m/Y') }}
+                                        {{ functions.convertToCalendar(leader.getLeadEndDate(), viewCalendar).format('d/m/Y') }}
                                     {% endif %}
                                 </td>
                                 <td class="px-6 py-4 text-center"
@@ -118,21 +118,21 @@
                                 </a>
                             </th>
                             <td class="text-center" style="padding-top: 0.5rem; padding-bottom: 0.5rem">
-                                {{ leader.getLeader().getBirthdate().format('d/m/Y') }}
+                                {{ functions.convertToCalendar(leader.getLeader().getBirthdate(), viewCalendar).format('d/m/Y') }}
                             </td>
                             <td class="px-6 py-4 text-center" style="padding-top: 0.5rem; padding-bottom: 0.5rem">
                                 {% if leader.getLeader().getDeathdate() is not null %}
-                                    {{ leader.getLeader().getDeathdate().format('d/m/Y') }}
+                                    {{ functions.convertToCalendar(leader.getLeader().getDeathdate(), viewCalendar).format('d/m/Y') }}
                                 {% endif %}
                             </td>
                             <td class="px-6 py-4 text-center"
                                 style="padding-top: 0.5rem; padding-bottom: 0.5rem">
-                                {{ leader.getLeadStartDate().format('d/m/Y') }}
+                                {{ functions.convertToCalendar(leader.getLeadStartDate(), viewCalendar).format('d/m/Y') }}
                             </td>
                             <td class="px-6 py-4 text-center"
                                 style="padding-top: 0.5rem; padding-bottom: 0.5rem">
                                 {% if leader.getLeadEndDate() is not null %}
-                                    {{ leader.getLeadEndDate().format('d/m/Y') }}
+                                    {{ functions.convertToCalendar(leader.getLeadEndDate(), viewCalendar).format('d/m/Y') }}
                                 {% endif %}
                             </td>
                             <td class="px-6 py-4 text-center"

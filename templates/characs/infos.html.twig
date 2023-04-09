@@ -1,0 +1,464 @@
+{% extends 'nav.html.twig' %}
+
+{% block page_content %}
+    <nav class="flex mb-4" aria-label="Breadcrumb">
+        <ol class="inline-flex items-center space-x-1 md:space-x-3">
+            <li class="inline-flex items-center">
+                <a href="/" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
+                    <svg aria-hidden="true" class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+                    Dashboard
+                </a>
+            </li>
+            <li>
+                <div class="flex items-center">
+                    <svg aria-hidden="true" class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                    <a href="/characs/" class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ml-2 dark:text-gray-400 dark:hover:text-white">Personnages</a>
+                </div>
+            </li>
+            <li aria-current="page">
+                <div class="flex items-center">
+                    <svg aria-hidden="true" class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                    <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400">{{ charac.getFirstNames() }} {{ charac.getLastNames() }}</span>
+                </div>
+            </li>
+        </ol>
+    </nav>
+
+    <div class="flex flex-row justify-between items-center">
+        <h1 class="text-3xl font-bold dark:text-white
+                   p-4">{{ charac.getFirstNames() }} {{ charac.getLastNames() }}</h1>
+        <a href="/events/{{ charac.getId() }}">
+            <button class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button" style="padding: 0.5rem 0.5rem 0.5rem 0.5rem">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-6 h-6 mr-1.5">
+                    <path fill-rule="evenodd" d="M10 2c-1.716 0-3.408.106-5.07.31C3.806 2.45 3 3.414 3 4.517V17.25a.75.75 0 001.075.676L10 15.082l5.925 2.844A.75.75 0 0017 17.25V4.517c0-1.103-.806-2.068-1.93-2.207A41.403 41.403 0 0010 2z" clip-rule="evenodd" />
+                </svg>
+                Vers événements
+            </button>
+        </a>
+    </div>
+
+    <div class="mb-4 border-b border-gray-200 dark:border-gray-700 mx-1.5">
+        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
+            <li class="mr-2" role="presentation">
+                <button class="flex inline-block p-4 border-b-2 rounded-t-lg" id ="general-tab" data-tabs-target="#general" type="button" role="tab" aria-controls="general" aria-selected="false"
+                        style="line-height: 2rem">
+                    Informations générales
+                </button>
+            </li>
+            <li class="mr-2" role="presentation">
+                <button class="flex inline-block p-4 border-b-2 rounded-t-lg" id ="famtree-tab" data-tabs-target="#famtree" type="button" role="tab" aria-controls="famtree" aria-selected="false"
+                        style="line-height: 2rem">
+                    Arbre généalogique
+                </button>
+            </li>
+            <li class="mr-2" role="presentation">
+                <button class="flex inline-block p-4 border-b-2 rounded-t-lg" id ="relation-tab" data-tabs-target="#relation" type="button" role="tab" aria-controls="relation" aria-selected="false"
+                        style="line-height: 2rem">
+                    Relations
+                </button>
+            </li>
+        </ul>
+    </div>
+
+    <div id="myTabContent">
+        <div class="p-4 rounded-lg bg-gray-100 dark:bg-gray-800" id="general" role="tabpanel" aria-labelledby="general-tab">
+            <div class="container flex flex-wrap justify-between mx-auto mb-4">
+                <div class="flex"
+                     style="margin: 0.75rem">
+                    <div class="flex rounded-lg bg-gray-300 dark:bg-gray-700">
+                        {% if hasPortrait %}
+                        <img src="/characs/{{ charac.getId() }}/portrait" alt="{{ charac.getFirstNames() }}-portrait"
+                             style="max-width: 12rem; border-radius: 0.5rem"/>
+                        {% else %}
+                        <p class="text-left text-base text-gray-900 dark:text-white"
+                           style="max-width: 12rem; align-self: center; text-align: center">
+                            Pas encore de portrait pour ce personnage...
+                        </p>
+                        {% endif %}
+                    </div>
+                    <div style="margin: 0 1.75rem; min-width: 14rem">
+                        <h4 class="text-lg font-bold dark:text-white" style="margin-bottom: 0.25rem">Nom(s)</h4>
+                        <p class="mx-4 text-base text-gray-900 dark:text-white">
+                            {{ charac.getLastNames() }}
+                        </p>
+                        <h4 class="mt-4 text-lg font-bold dark:text-white" style="margin-bottom: 0.25rem">Prénom(s)</h4>
+                        <p class="mx-4 text-base text-gray-900 dark:text-white">
+                            {{ charac.getFirstNames() }}
+                        </p>
+                    </div>
+                </div>
+
+                <div style="min-width: 14rem; margin: 0.75rem">
+                    <h4 class="text-lg font-bold dark:text-white" style="margin-bottom: 0.25rem">Classe</h4>
+                    <p class="mx-4 text-base text-gray-900 dark:text-white">
+                        {% if charac.getClass() is not null %}
+                        {{ charac.getClass().getName() }}
+                        {% else %}
+                            Inconnue
+                        {% endif %}
+                    </p>
+                    <h4 class="mt-4 text-lg font-bold dark:text-white" style="margin-bottom: 0.25rem">Pays d'origine</h4>
+                    <p class="mx-4 text-base text-gray-900 dark:text-white">
+                        {{ charac.getOrigin().getName() }}
+                    </p>
+                </div>
+
+                <div style="width: fit-content; height: fit-content; min-width: 14rem; margin: 0.75rem">
+                    <h4 class="text-lg font-bold dark:text-white" style="margin-bottom: 0.25rem">Date de naissance</h4>
+                    <p class="mx-4 text-base text-gray-900 dark:text-white">
+                        {{ functions.convertToCalendar(charac.getBirthdate(), viewCalendar).format('d/m/Y') }}
+                    </p>
+                    <h4 class="mt-4 text-lg font-bold dark:text-white" style="margin-bottom: 0.25rem">Date de mort</h4>
+                    <p class="mx-4 text-base text-gray-900 dark:text-white">
+                        {% if charac.getDeathdate() is not null %}
+                            {{ functions.convertToCalendar(charac.getDeathdate(), viewCalendar).format('d/m/Y') }}
+                        {% else %}
+                            Toujours vivant(e)
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold dark:text-white" style="margin: 0 0.75rem">Caractéristiques physiques</h3>
+
+            <div class="container flex flex-wrap mx-auto">
+                <div style="padding: 0.5rem 0.75rem; width: 50%">
+                    <h4 class="text-lg font-bold dark:text-white" style="margin-bottom: 0.25rem">Sexe</h4>
+                    <p class="mx-4 text-base text-gray-900 dark:text-white">
+                        {{ characSex }}
+                    </p>
+                    <h4 class="mt-4 text-lg font-bold dark:text-white" style="margin-bottom: 0.25rem">Taille</h4>
+                    <p class="mx-4 text-base text-gray-900 dark:text-white">
+                        {{ characHeight }}
+                    </p>
+                </div>
+
+                <div style="height: fit-content; width: 50%; padding: 0.5rem 0.75rem">
+                    {% if charac.getHairColour() is not null %}
+                    <h4 class="text-lg font-bold dark:text-white" style="margin-bottom: 0.25rem">Couleur des cheveux</h4>
+                    <p class="mx-4 text-base text-gray-900 dark:text-white">
+                        {{ charac.getHairColour() }}
+                    </p>
+                    {% endif %}
+                    {% if charac.getEyeColour() is not null %}
+                    <h4 class="mt-4 text-lg font-bold dark:text-white" style="margin-bottom: 0.25rem">Couleur des yeux</h4>
+                    <p class="mx-4 text-base text-gray-900 dark:text-white">
+                        {{ charac.getEyeColour() }}
+                    </p>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if charac.getAppearance() is not null %}
+            <div style="margin: 0.75rem; height: fit-content">
+                <h4 class="text-lg font-bold dark:text-white" style="margin-bottom: 0.25rem">Autres détails</h4>
+                <p class="text-base text-gray-900 dark:text-white">
+                    {{ charac.getAppearance() }}
+                </p>
+            </div>
+            {% endif %}
+
+            <h3 class="text-2xl font-bold dark:text-white" style="margin: 1.25rem 0.75rem 0">Infos pratiques</h3>
+
+            <div class="container flex flex-wrap mx-auto">
+                <div style="padding: 0.5rem 0.75rem; width: 50%">
+                    <h4 class="text-lg font-bold dark:text-white" style="margin-bottom: 0.25rem">Calendrier</h4>
+                    <p class="mx-4 text-base text-gray-900 dark:text-white">
+                        {{ charac.getCalendar().getName() }}
+                    </p>
+                </div>
+
+                {% if charac.getMagicalPotential() is not null %}
+                <div style="height: fit-content; width: 50%; padding: 0.5rem 0.75rem">
+                    <h4 class="text-lg font-bold dark:text-white" style="margin-bottom: 0.25rem">Potentiel magique</h4>
+                    <p class="mx-4 text-base text-gray-900 dark:text-white">
+                        {{ charac.getMagicalPotential() }} Ubërt
+                    </p>
+                </div>
+                {% endif %}
+            </div>
+
+            {% if charac.getMagics() is not null %}
+            <div style="padding: 0.5rem 0.75rem 0">
+                <h4 class="text-lg font-bold dark:text-white" style="margin-bottom: 0.5rem">Magies pratiquées</h4>
+
+                <table class="mb-4 shadow-md w-full text-sm text-left text-gray-500 dark:text-gray-400"
+                       style="border-radius: 0.5rem">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-center"
+                            style="border-top-left-radius: 0.5rem">
+                            Nom
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-center">
+                            Éléments
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-center">
+                            Description
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-center">
+                            Rang
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-center">
+                            Puissance
+                        </th>
+                        <th scope="col" class="px-3 py-3 text-center w-1"
+                            style="border-top-right-radius: 0.5rem; min-width: 0.25rem">
+                            <span class="sr-only">Consulter</span>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for magic in charac.getMagics() %}
+
+                        {% if not loop.last %}
+                            <tr class="bg-white border-b dark:bg-gray-900 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                                    style="padding-top: 0.5rem; padding-bottom: 0.5rem">
+                                    {{ magic.getName() }}
+                                </th>
+                                <td class="px-6 py-4" style="padding-top: 0.5rem; padding-bottom: 0.5rem">
+                                    <div class="flex">
+                                        {% for innerElem in magic.getElems() %}
+                                            <img src="/elems/{{ innerElem.getId() }}" alt="{{ innerElem.getId() }}"
+                                                 style="width: 1.75rem">
+                                        {% endfor %}
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4"
+                                    style="max-width: 350px; padding-top: 0.5rem; padding-bottom: 0.5rem;
+                                               text-overflow: ellipsis; overflow: hidden; white-space: nowrap">
+                                    {{ magic.getDescription() }}
+                                </td>
+                                <td class="text-center px-6 py-4"
+                                    style="max-width: 350px; padding-top: 0.5rem; padding-bottom: 0.5rem;
+                                               text-overflow: ellipsis; overflow: hidden; white-space: nowrap">
+                                    {{ loop.index }}
+                                </td>
+                                <td class="text-center px-6 py-4"
+                                    style="max-width: 350px; padding-top: 0.5rem; padding-bottom: 0.5rem;
+                                               text-overflow: ellipsis; overflow: hidden; white-space: nowrap">
+                                    {% if charac.getMagicalPotential() is not null %}
+                                    {{ charac.getMagicalPotential() / loop.index }} U
+                                    {% endif %}
+                                </td>
+                                <td class="px-3 py-4 text-center max-w-min"
+                                    style="padding-top: 0.5rem; padding-bottom: 0.5rem">
+                                    <a href="/magics/{{ magic.getId() }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Consulter</a>
+                                </td>
+                            </tr>
+                        {% endif %}
+
+                    {% endfor %}
+
+                    <!-- Last line! -->
+                    <tr class="bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-600">
+                        {% if charac.getMagics()|length > 0 %}
+                            {% set magic = charac.getMagics()|last %}
+                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                                style="border-bottom-left-radius: 0.5rem; padding-top: 0.5rem; padding-bottom: 0.5rem">
+                                {{ magic.getName() }}
+                            </th>
+                            <td class="px-6 py-4" style="padding-top: 0.5rem; padding-bottom: 0.5rem">
+                                <div class="flex">
+                                    {% for innerElem in magic.getElems() %}
+                                        <img src="/elems/{{ innerElem.getId() }}" alt="{{ innerElem.getId() }}"
+                                             style="width: 1.75rem">
+                                    {% endfor %}
+                                </div>
+                            </td>
+                            <td class="px-6 py-4"
+                                style="max-width: 350px; padding-top: 0.5rem; padding-bottom: 0.5rem;
+                                               text-overflow: ellipsis; overflow: hidden; white-space: nowrap">
+                                {{ magic.getDescription() }}
+                            </td>
+                            <td class="text-center px-6 py-4"
+                                style="max-width: 350px; padding-top: 0.5rem; padding-bottom: 0.5rem;
+                                               text-overflow: ellipsis; overflow: hidden; white-space: nowrap">
+                                {{ charac.getMagics()|length }}
+                            </td>
+                            <td class="text-center px-6 py-4"
+                                style="max-width: 350px; padding-top: 0.5rem; padding-bottom: 0.5rem;
+                                               text-overflow: ellipsis; overflow: hidden; white-space: nowrap">
+                                {% if charac.getMagicalPotential() is not null %}
+                                    {{ charac.getMagicalPotential() / charac.getMagics()|length }} U
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4 text-center max-w-min"
+                                style="border-bottom-right-radius: 0.5rem; padding-top: 0.5rem; padding-bottom: 0.5rem">
+                                <a href="/magics/{{ magic.getId() }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Consulter</a>
+                            </td>
+                        {% else %}
+                            <th scope="row" class="px-6 py-4 font-medium text-center text-gray-900 whitespace-nowrap dark:text-white"
+                                style="border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem;
+                                       padding-top: 0.5rem; padding-bottom: 0.5rem"
+                                colspan="6">
+                                Pas de magies trouvées...
+                            </th>
+                        {% endif %}
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+
+            <h3 class="text-2xl font-bold dark:text-white" style="margin: 1.25rem 0.75rem 0">Personnalité</h3>
+
+            {% if charac.getDescription() is not null %}
+                <div style="margin: 0.75rem; height: fit-content">
+                    <h4 class="text-lg font-bold dark:text-white" style="margin-bottom: 0.25rem">Caractère</h4>
+                    <p class="text-base text-gray-900 dark:text-white">
+                        {{ charac.getDescription() }}
+                    </p>
+                </div>
+            {% endif %}
+
+            <div class="container flex items-center flex-wrap mx-auto">
+                <div style="padding: 0.5rem 0.75rem; width: 50%">
+                    <h4 class="text-lg font-bold dark:text-white" style="margin-bottom: 0.25rem">Genre</h4>
+                    <p class="mx-4 text-base text-gray-900 dark:text-white">
+                        {{ characGender }}
+                    </p>
+                    {% if charac.getSexualOrientation() is not null %}
+                    <h4 class="mt-4 text-lg font-bold dark:text-white" style="margin-bottom: 0.25rem">Orientation sexuelle</h4>
+                    <p class="mx-4 text-base text-gray-900 dark:text-white">
+                        {{ charac.getSexualOrientation() }}
+                    </p>
+                    {% endif %}
+                    {% if charac.getFavoriteColour() is not null %}
+                        <h4 class="mt-4 text-lg font-bold dark:text-white" style="margin-bottom: 0.25rem">Couleur préférée</h4>
+                        <p class="mx-4 text-base text-gray-900 dark:text-white">
+                            {{ charac.getFavoriteColour() }}
+                        </p>
+                    {% endif %}
+                </div>
+                {% if characLoves|length > 0 or characHates|length > 0 %}
+                    <div style="padding: 0.5rem 0.75rem; width: 50%">
+                        <h4 class="text-lg font-bold dark:text-white" style="margin-bottom: 0.5rem">Goûts</h4>
+
+                        <table class="mb-4 shadow-md text-sm w-full text-left text-gray-500 dark:text-gray-400"
+                               style="border-radius: 0.5rem">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-center"
+                                    style="border-top-left-radius: 0.5rem">
+                                    Aime
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-center"
+                                    style="border-top-right-radius: 0.5rem">
+                                    N'aime pas
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            {% for i in 0..1 %}
+                                {% if characLoves|length > i  or characHates|length > i %}
+                                <tr class="bg-white border-b dark:bg-gray-900 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                    <td class="px-6 py-4 max-w-min"
+                                        style="padding-top: 0.5rem; padding-bottom: 0.5rem">
+                                        {% if characLoves|length > i %}
+                                        {{ characLoves[i] }}
+                                        {% endif %}
+                                    </td>
+                                    <td class="px-6 py-4 max-w-min"
+                                        style="padding-top: 0.5rem; padding-bottom: 0.5rem">
+                                        {% if characHates|length > i %}
+                                        {{ characHates[i] }}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endif %}
+                            {% endfor %}
+
+                                <!-- Last line! -->
+                            {% if characLoves|length > 2 or characHates|length > 2 %}
+                                <tr class="bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                    <td class="px-6 py-4 max-w-min"
+                                        style="border-bottom-left-radius: 0.5rem; padding-top: 0.5rem; padding-bottom: 0.5rem">
+                                        {% if characLoves|length > 2 %}
+                                            {{ characLoves[2] }}
+                                        {% endif %}
+                                    </td>
+                                    <td class="px-6 py-4 max-w-min"
+                                        style="border-bottom-right-radius: 0.5rem; padding-top: 0.5rem; padding-bottom: 0.5rem">
+                                        {% if characHates|length > 2 %}
+                                            {{ characHates[2] }}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="p-4 rounded-lg bg-gray-100 dark:bg-gray-800" id="famtree" role="tabpanel" aria-labelledby="famtree-tab">
+            <h3 class="text-2xl font-bold dark:text-white" style="margin: 0 0.75rem">Coming soon...</h3>
+        </div>
+
+        <div class="p-4 rounded-lg bg-gray-100 dark:bg-gray-800" id="relation" role="tabpanel" aria-labelledby="relation-tab">
+            <h3 class="text-2xl font-bold dark:text-white" style="margin: 0 0.75rem 1rem">Relations avec les autres personnages</h3>
+
+            <div class="grid grid-cols-3 gap-4" style="margin: 0.75rem">
+
+                {% for relationship in relationships %}
+                <div class="flex flex-col justify-between w-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-700 dark:border-gray-600">
+                    <div class="sm:hidden">
+                        <label for="tabs" class="sr-only">Select tab</label>
+                        <select id="tabs" class="bg-gray-50 border-0 border-b border-gray-200 text-gray-900 text-sm rounded-t-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <option>Généralités</option>
+                            <option>Histoire</option>
+                        </select>
+                    </div>
+                    <div>
+                        <div class="hidden p-4 rounded-lg" id="preview-{{ relationship.getFromCharac().getId() }}-{{ relationship.getTowardsCharac().getId() }}" role="tabpanel" aria-labelledby="preview-tab-{{ relationship.getFromCharac().getId() }}-{{ relationship.getTowardsCharac().getId() }}">
+                            <div class="flex flex-col justify-center">
+                                <h1 class="text-8xl self-center font-bold dark:text-white mt-8">{{ relationship.getAppreciation() }}</h1>
+                                <p class="text-xs text-gray-700 uppercase dark:text-gray-400 self-center">Appréciation</p>
+                            </div>
+                            <div class="flex flex-row justify-between">
+                                <div>
+                                    <p class="text-base text-gray-900 dark:text-white">
+                                        {{ relationship.getFromCharac().getFirstNames() }}
+                                    </p>
+                                    <p class="text-base text-gray-900 dark:text-white">
+                                        {{ relationship.getFromCharac().getLastNames() }}
+                                    </p>
+                                </div>
+                                <div>
+                                    <p class="text-right text-gray-900 dark:text-white">
+                                        {{ relationship.getTowardsCharac().getFirstNames() }}
+                                    </p>
+                                    <p class="text-right text-gray-900 dark:text-white">
+                                        {{ relationship.getTowardsCharac().getLastNames() }}
+                                    </p>
+                                </div>
+                            </div>
+                            {% if relationship.getFamilyStatus() is not null %}
+                            <p class="text-base text-gray-900 dark:text-white mt-8">
+                                {{ relationship.getFromCharac().getFirstNames() }} est {{ familyStatusService.familyStatusName(relationship.getFamilyStatus()) }} de {{ relationship.getTowardsCharac().getFirstNames() }}
+                            </p>
+                            {% endif %}
+                        </div>
+                        <div class="hidden p-4 rounded-lg" id="history-{{ relationship.getFromCharac().getId() }}-{{ relationship.getTowardsCharac().getId() }}" role="tabpanel" aria-labelledby="history-tab-{{ relationship.getFromCharac().getId() }}-{{ relationship.getTowardsCharac().getId() }}">
+                            <p class="text-base text-gray-900 dark:text-white">{{ relationship.getHistory() }}</p>
+                        </div>
+                    </div>
+                    <ul class="hidden text-sm font-medium text-center text-gray-500 divide-x divide-gray-200 rounded-b-lg sm:flex dark:divide-gray-600 dark:text-gray-400 border-t border-gray-200 dark:border-gray-600" id="fullWidthTab" data-tabs-toggle="#fullWidthTabContent" role="tablist">
+                        <li class="w-full">
+                            <button id="preview-tab-{{ relationship.getFromCharac().getId() }}-{{ relationship.getTowardsCharac().getId() }}" data-tabs-target="#preview-{{ relationship.getFromCharac().getId() }}-{{ relationship.getTowardsCharac().getId() }}" type="button" role="tab" aria-controls="preview-{{ relationship.getFromCharac().getId() }}-{{ relationship.getTowardsCharac().getId() }}" aria-selected="true" class="inline-block w-full p-4 rounded-bl-lg bg-gray-50 hover:bg-gray-100 focus:outline-none dark:bg-gray-700 dark:hover:bg-gray-600">Généralités</button>
+                        </li>
+                        <li class="w-full">
+                            <button id="history-tab-{{ relationship.getFromCharac().getId() }}-{{ relationship.getTowardsCharac().getId() }}" data-tabs-target="#history-{{ relationship.getFromCharac().getId() }}-{{ relationship.getTowardsCharac().getId() }}" type="button" role="tab" aria-controls="history-{{ relationship.getFromCharac().getId() }}-{{ relationship.getTowardsCharac().getId() }}" aria-selected="false" class="inline-block w-full p-4 rounded-br-lg bg-gray-50 hover:bg-gray-100 focus:outline-none dark:bg-gray-700 dark:hover:bg-gray-600">Histoire</button>
+                        </li>
+                    </ul>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

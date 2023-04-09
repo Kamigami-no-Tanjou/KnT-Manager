@@ -57,11 +57,11 @@
                                     {{ nation.getName() }}
                                 </th>
                                 <td class="px-3 py-4 text-center" style="padding-top: 0.5rem; padding-bottom: 0.5rem">
-                                    {{ nation.getFoundationDate().format('d/m/Y') }}
+                                    {{ functions.convertToCalendar(nation.getFoundationDate(), viewCalendar).format('d/m/Y') }}
                                 </td>
                                 <td class="px-3 py-4 text-center" style="padding-top: 0.5rem; padding-bottom: 0.5rem">
                                     {% if nation.getDestructionDate() is not null %}
-                                        {{ nation.getDestructionDate().format('d/m/Y') }}
+                                        {{ functions.convertToCalendar(nation.getDestructionDate(), viewCalendar).format('d/m/Y') }}
                                     {% endif %}
                                 </td>
                                 <td class="px-6 py-4"
@@ -87,11 +87,11 @@
                                 {{ nation.getName() }}
                             </th>
                             <td class="px-6 py-4 text-center" style="padding-top: 0.5rem; padding-bottom: 0.5rem">
-                                {{ nation.getFoundationDate().format('d/m/Y') }}
+                                {{ functions.convertToCalendar(nation.getFoundationDate(), viewCalendar).format('d/m/Y') }}
                             </td>
                             <td class="px-6 py-4 text-center" style="padding-top: 0.5rem; padding-bottom: 0.5rem">
                                 {% if nation.getDestructionDate() is not null %}
-                                    {{ nation.getDestructionDate().format('d/m/Y') }}
+                                    {{ functions.convertToCalendar(nation.getDestructionDate(), viewCalendar).format('d/m/Y') }}
                                 {% endif %}
                             </td>
                             <td class="px-6 py-4"

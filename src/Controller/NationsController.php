@@ -6,6 +6,7 @@ use App\Repository\CharacService;
 use App\Repository\MapService;
 use App\Repository\NationLeaderService;
 use App\Repository\NationService;
+use App\Utils\DataInitialiser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -17,20 +18,25 @@ class NationsController extends AbstractController
 
     private MapService $mapService;
 
+    private DataInitialiser $dataInitialiser;
+
     public function __construct(NationService $nationService,
                                 NationLeaderService $nationLeaderService,
                                 CharacService $characService,
-                                MapService $mapService
+                                MapService $mapService,
+                                DataInitialiser $dataInitialiser
     ) {
         $this->nationService = $nationService;
         $this->nationLeaderService = $nationLeaderService;
         $this->characService = $characService;
         $this->mapService = $mapService;
+
+        $this->dataInitialiser = $dataInitialiser;
     }
 
     public function index(): Response {
         // Data retrieval
-        $data = array();
+        $data = $this->dataInitialiser->getBaseData();
         $data['nations'] = $this->nationService->getAll();
 
         return $this->render("nations/index.html.twig", $data);
@@ -39,7 +45,7 @@ class NationsController extends AbstractController
     public function nationInfo(int $id)
     {
         // Data retrieval
-        $data = array();
+        $data = $this->dataInitialiser->getBaseData();
         $data['nation'] = $this->nationService->getById($id);
 
         $data['leaders'] = $this->nationLeaderService->getByNation($data['nation']);

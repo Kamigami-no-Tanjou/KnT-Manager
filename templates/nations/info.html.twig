@@ -74,12 +74,12 @@
                                               margin: 0.5rem 0.75rem 0">
                     <h4 class="mb-2 text-xl font-bold dark:text-white">Avènement</h4>
                     <p class="text-right text-base text-gray-900 dark:text-white">
-                        {{ nation.getFoundationDate().format('d/m/Y') }}
+                        {{ functions.convertToCalendar(nation.getFoundationDate(), viewCalendar).format('d/m/Y') }}
                     </p>
                     <h4 class="mt-4 mb-2 text-xl font-bold dark:text-white">Terme</h4>
                     <p class="text-right text-base text-gray-900 dark:text-white">
                         {% if nation.getDestructionDate() is not null %}
-                            {{ nation.getDestructionDate().format('d/m/Y') }}
+                            {{ functions.convertToCalendar(nation.getDestructionDate(), viewCalendar).format('d/m/Y') }}
                         {% else %}
                             Toujours existant
                         {% endif %}
@@ -140,21 +140,21 @@
                                     {{ leader.getLeader().getFirstNames() }} {{ leader.getLeader().getLastNames() }}
                                 </th>
                                 <td class="text-center" style="padding-top: 0.5rem; padding-bottom: 0.5rem">
-                                    {{ leader.getLeader().getBirthdate().format('d/m/Y') }}
+                                    {{ functions.convertToCalendar(leader.getLeader().getBirthdate(), viewCalendar).format('d/m/Y') }}
                                 </td>
                                 <td class="px-6 py-4 text-center" style="padding-top: 0.5rem; padding-bottom: 0.5rem">
                                     {% if leader.getLeader().getDeathdate() is not null %}
-                                        {{ leader.getLeader().getDeathdate().format('d/m/Y') }}
+                                        {{ functions.convertToCalendar(leader.getLeader().getDeathdate(), viewCalendar).format('d/m/Y') }}
                                     {% endif %}
                                 </td>
                                 <td class="px-6 py-4 text-center"
                                     style="padding-top: 0.5rem; padding-bottom: 0.5rem">
-                                    {{ leader.getLeadStartDate().format('d/m/Y') }}
+                                    {{ functions.convertToCalendar(leader.getLeadStartDate(), viewCalendar).format('d/m/Y') }}
                                 </td>
                                 <td class="px-6 py-4 text-center"
                                     style="padding-top: 0.5rem; padding-bottom: 0.5rem">
                                     {% if leader.getLeadEndDate() is not null %}
-                                        {{ leader.getLeadEndDate().format('d/m/Y') }}
+                                        {{ functions.convertToCalendar(leader.getLeadEndDate(), viewCalendar).format('d/m/Y') }}
                                     {% endif %}
                                 </td>
                                 <td class="px-6 py-4"
@@ -179,21 +179,21 @@
                                 {{ leader.getLeader().getFirstNames() }} {{ leader.getLeader().getLastNames() }}
                             </th>
                             <td class="text-center" style="padding-top: 0.5rem; padding-bottom: 0.5rem">
-                                {{ leader.getLeader().getBirthdate().format('d/m/Y') }}
+                                {{ functions.convertToCalendar(leader.getLeader().getBirthdate(), viewCalendar).format('d/m/Y') }}
                             </td>
                             <td class="px-6 py-4 text-center" style="padding-top: 0.5rem; padding-bottom: 0.5rem">
                                 {% if leader.getLeader().getDeathdate() is not null %}
-                                    {{ leader.getLeader().getDeathdate().format('d/m/Y') }}
+                                    {{ functions.convertToCalendar(leader.getLeader().getDeathdate(), viewCalendar).format('d/m/Y') }}
                                 {% endif %}
                             </td>
                             <td class="px-6 py-4 text-center"
                                 style="padding-top: 0.5rem; padding-bottom: 0.5rem">
-                                {{ leader.getLeadStartDate().format('d/m/Y') }}
+                                {{ functions.convertToCalendar(leader.getLeadStartDate(), viewCalendar).format('d/m/Y') }}
                             </td>
                             <td class="px-6 py-4 text-center"
                                 style="padding-top: 0.5rem; padding-bottom: 0.5rem">
                                 {% if leader.getLeadEndDate() is not null %}
-                                {{ leader.getLeadEndDate().format('d/m/Y') }}
+                                {{ functions.convertToCalendar(leader.getLeadEndDate(), viewCalendar).format('d/m/Y') }}
                                 {% endif %}
                             </td>
                             <td class="px-6 py-4"
@@ -263,7 +263,7 @@
                                     {{ charac.getFirstNames() }} {{ charac.getLastNames() }}
                                 </th>
                                 <td class="text-center" style="padding-top: 0.5rem; padding-bottom: 0.5rem">
-                                    {{ charac.getBirthdate().format('d/m/Y') }}
+                                    {{ functions.convertToCalendar(charac.getBirthdate(), viewCalendar).format('d/m/Y') }}
                                 </td>
                                 <td class="text-center" style="padding-top: 0.5rem; padding-bottom: 0.5rem">
                                     {% if charac.getMagicalPotential() is not null %}
@@ -287,7 +287,7 @@
                                 <td class="px-6 py-4 text-center"
                                     style="max-width: 350px; padding-top: 0.5rem; padding-bottom: 0.5rem">
                                     {% if charac.getDeathdate() is not null %}
-                                    {{ charac.getDeathdate().format('d/m/Y') }}
+                                    {{ functions.convertToCalendar(charac.getDeathdate(), viewCalendar).format('d/m/Y') }}
                                     {% endif %}
                                 </td>
                                 <td class="px-6 py-4 text-center"
@@ -308,7 +308,7 @@
                                 {{ charac.getFirstNames() }} {{ charac.getLastNames() }}
                             </th>
                             <td class="text-center" style="padding-top: 0.5rem; padding-bottom: 0.5rem">
-                                {{ charac.getBirthdate().format('d/m/Y') }}
+                                {{ functions.convertToCalendar(charac.getBirthdate(), viewCalendar).format('d/m/Y') }}
                             </td>
                             <td class="text-center" style="padding-top: 0.5rem; padding-bottom: 0.5rem">
                                 {{ charac.getMagicalPotential() }} U
@@ -328,7 +328,7 @@
                             <td class="px-6 py-4 text-center"
                                 style="max-width: 350px; padding-top: 0.5rem; padding-bottom: 0.5rem">
                                 {% if charac.getDeathdate() is not null %}
-                                    {{ charac.getDeathdate().format('d/m/Y') }}
+                                    {{ functions.convertToCalendar(charac.getDeathdate(), viewCalendar).format('d/m/Y') }}
                                 {% endif %}
                             </td>
                             <td class="px-6 py-4 text-center"
@@ -380,11 +380,11 @@
                         </a>
                         <p class="mb-3 font-normal text-gray-700 dark:text-gray-400" style="margin-bottom: 0.75rem">
                             {% if map.getEstablishmentDate() is not null and map.getExpiryDate() is not null %}
-                                Valable du {{ map.getEstablishmentDate().format('d/m/Y') }} au {{ map.getExpiryDate().format('d/m/Y') }}.
+                                Valable du {{ functions.convertToCalendar(map.getEstablishmentDate(), viewCalendar).format('d/m/Y') }} au {{ functions.convertToCalendar(map.getExpiryDate(), viewCalendar).format('d/m/Y') }}.
                             {% elseif map.getEstablishmentDate() is not null and map.getExpiryDate() is null %}
-                                Valable depuis le {{ map.getEstablishmentDate().format('d/m/Y') }}.
+                                Valable depuis le {{ functions.convertToCalendar(map.getEstablishmentDate(), viewCalendar).format('d/m/Y') }}.
                             {% elseif map.getEstablishmentDate() is null and map.getExpiryDate() is not null %}
-                                Valable jusqu'au {{ map.getExpiryDate().format('d/m/Y') }}.
+                                Valable jusqu'au {{ functions.convertToCalendar(map.getExpiryDate(), viewCalendar).format('d/m/Y') }}.
                             {% endif %}
                         </p>
                         <a href="/maps/{{ map.getId() }}" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"

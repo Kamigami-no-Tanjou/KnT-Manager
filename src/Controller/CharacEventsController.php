@@ -6,6 +6,7 @@ use App\Entity\Charac;
 use App\Entity\CharacEvent;
 use App\Repository\CharacEventService;
 use App\Repository\CharacService;
+use App\Utils\DataInitialiser;
 use App\Utils\DateTimeService;
 use App\Utils\ParseService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,20 +19,25 @@ class CharacEventsController extends AbstractController
     private DateTimeService $dateTimeService;
     private ParseService $parseService;
 
+    private DataInitialiser $dataInitialiser;
+
     public function __construct(CharacEventService $characEventService,
                                 CharacService $characService,
                                 DateTimeService $dateTimeService,
-                                ParseService $parseService
+                                ParseService $parseService,
+                                DataInitialiser $dataInitialiser
     ) {
         $this->characEventService = $characEventService;
         $this->characService = $characService;
         $this->dateTimeService = $dateTimeService;
         $this->parseService = $parseService;
+
+        $this->dataInitialiser = $dataInitialiser;
     }
 
     public function index(): Response {
         // Data retrieval
-        $data = array();
+        $data = $this->dataInitialiser->getBaseData();
         $data['characs'] = $this->characService->getAllWithEvents();
 
         if (isset($_GET['from']) && isset($_GET['to'])) {
@@ -60,7 +66,7 @@ class CharacEventsController extends AbstractController
 
     public function forCharac($characId): Response
     {
-        $data = array();
+        $data = $this->dataInitialiser->getBaseData();
         $data['charac'] = $this->characService->getById($characId);
         $data['family'] = $this->characService->getCharacFamily($data['charac']);
         $data['events'] = $this->characEventService->getByCharac($data['charac']);

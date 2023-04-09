@@ -18,4 +18,23 @@ class ParseService
 
         return $ids;
     }
+
+    public function parseHeight(?int $height): string {
+        if ($height == null) {
+            return "Inconnue";
+        }
+
+        if ($height < 100) {
+            return $height . "cm";
+        }
+
+        return floor($height / 100) . "m" . $height - 100;
+    }
+    public function parseTastes(?string $tastes): array {
+        if ($tastes == null) {
+            return array();
+        }
+
+        return explode('; ', $tastes);
+    }
 }
