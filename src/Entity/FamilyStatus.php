@@ -26,4 +26,6 @@ enum FamilyStatus: int
     case Niece = 20;
     case Husband = 21;
     case Wife = 22;
+    case SonInLaw = 23;
+    case DaughterInLaw = 24;
 }

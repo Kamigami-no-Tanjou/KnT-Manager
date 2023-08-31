@@ -104,7 +104,29 @@ class MapService implements IGetService
         return $this->buildInstances($values);
     }
 
-    function buildInstances(array $fetchedValues): array
+    public function simpleSearch(string $research): array {
+        $statement = $this->context->prepare(
+            "SELECT
+                        DISTINCT (MAP.ID) AS id,
+                        MAP.Name AS name,
+                        IFNULL(MAP.EstablishmentDate, 'N/A') AS establishmentDate,
+                        IFNULL(MAP.ExpiryDate, 'N/A') AS expiryDate,
+                        MAP.Nation AS nationId
+                   FROM Maps MAP
+                   INNER JOIN Nations NTN ON MAP.Nation = NTN.ID
+                   WHERE
+                        DATE_FORMAT(MAP.EstablishmentDate, '%d-%m-%Y') LIKE :search
+                        OR DATE_FORMAT(MAP.ExpiryDate, '%d-%m-%Y') LIKE :search
+                        OR NTN.Name LIKE :search
+                   LIMIT 6"
+        );
+        $statement->execute(['search' => $research]);
+        $values = $statement->fetchAll();
+
+        return $this->buildInstances($values);
+    }
+
+    public function buildInstances(array $fetchedValues): array
     {
         $maps = array();
         foreach($fetchedValues as $row) {

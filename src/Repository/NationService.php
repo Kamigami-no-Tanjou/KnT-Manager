@@ -90,7 +90,34 @@ class NationService implements IGetService
         return $this->buildInstances($values);
     }
 
-    function buildInstances(array $fetchedValues): array
+    public function simpleSearch(string $research): array
+    {
+        $statement = $this->context->prepare(
+            "SELECT
+                        DISTINCT (NTN.ID) AS id,
+                        NTN.Name AS name,
+                        NTN.Calendar AS calendarId,
+                        NTN.FoundationDate AS foundationDate,
+                        IFNULL(NTN.DestructionDate, 'N/A') AS destructionDate,
+                        NTN.Description AS description
+                   FROM Nations NTN
+                   INNER JOIN Calendars CDR ON NTN.Calendar = CDR.ID
+                   LEFT JOIN NationsLeaders NTL ON NTN.ID = NTL.Nation
+                   LEFT JOIN Characs CRC ON NTL.Leader = CRC.ID
+                   WHERE
+                       CRC.LastNames LIKE :search
+                       OR CRC.FirstNames LIKE :search
+                       OR NTN.Name LIKE :search
+                       OR CDR.Name LIKE :search
+                   LIMIT 6"
+        );
+        $statement->execute(['search' => $research]);
+        $values = $statement->fetchAll();
+
+        return $this->buildInstances($values);
+    }
+
+    public function buildInstances(array $fetchedValues): array
     {
         $nations = array();
         foreach($fetchedValues as $row) {

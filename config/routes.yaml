@@ -87,3 +87,13 @@ characs_images:
     path: /characs/{id}/portrait
     controller: App\Controller\CharacsController::characPortrait
     methods: GET|HEAD
+
+mpc:
+    path: /mpc/
+    controller: App\Controller\MagicPowerCalculatorController::index
+    methods: GET|HEAD
+
+browse:
+    path: /browse/
+    controller: App\Controller\BrowsingController::browse
+    methods: GET|HEAD

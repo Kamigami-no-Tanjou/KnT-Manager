@@ -88,6 +88,26 @@ class MagicService implements IGetService
         return $this->buildInstances($values);
     }
 
+    public function simpleSearch(string $research): array {
+        $statement = $this->context->prepare(
+            "SELECT
+                        DISTINCT (MGC.ID) AS id,
+                        MGC.Name AS name,
+                        MGC.Description AS description
+                    FROM Magics MGC
+                    INNER JOIN LINK_ElemsMagics LEM ON MGC.ID = LEM.Magic
+                    INNER JOIN Elems ELM ON LEM.Elem = ELM.ID
+                    WHERE
+                        MGC.Name LIKE :search
+                        OR ELM.Name LIKE :search
+                    LIMIT 6"
+        );
+        $statement->execute(['search' => $research]);
+        $values = $statement->fetchAll();
+
+        return $this->buildInstances($values);
+    }
+
     public function getUsersCount(Magic $magic): int {
         $statement = $this->context->prepare(
             "SELECT COUNT(DISTINCT(Charac)) AS `count`
@@ -100,7 +120,7 @@ class MagicService implements IGetService
         return $count[0]['count'];
     }
 
-    function buildInstances(array $fetchedValues): array
+    public function buildInstances(array $fetchedValues): array
     {
         $magics = array();
         foreach($fetchedValues as $row) {

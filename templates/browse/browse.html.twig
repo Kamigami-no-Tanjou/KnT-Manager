@@ -1,0 +1,901 @@
+{% extends 'nav.html.twig' %}
+
+{% block page_content %}
+    <style>
+        /* For some unknown weird reason those class won't seem to work otherwise... */
+        .border-r {
+            border-right-width: 1px;
+        }
+        .rounded {
+            border-radius: 0.25rem;
+        }
+
+        .hover\:text-white:hover {
+            --tw-text-opacity: 1;
+            color: rgb(255 255 255 / var(--tw-text-opacity));
+        }
+
+        .hover\:bg-blue-600:hover {
+            --tw-bg-opacity: 1;
+            background-color: rgb(28 100 242 / var(--tw-bg-opacity));
+        }
+
+        .dark .dark\:hover\:bg-blue-500:hover {
+            --tw-bg-opacity: 1;
+            background-color: rgb(63 131 248 / var(--tw-bg-opacity));
+        }
+    </style>
+    <nav class="flex mb-4" aria-label="Breadcrumb">
+        <ol class="inline-flex items-center space-x-1 md:space-x-3">
+            <li class="inline-flex items-center">
+                <a href="/" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
+                    <svg aria-hidden="true" class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+                    Dashboard
+                </a>
+            </li>
+            <li aria-current="page">
+                <div class="flex items-center">
+                    <svg aria-hidden="true" class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                    <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400">Recherche</span>
+                </div>
+            </li>
+        </ol>
+    </nav>
+
+    <div class="mb-4 border-b border-gray-200 dark:border-gray-700 mx-1.5">
+        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
+            <li class="mr-2" role="presentation">
+                <button class="flex inline-block p-4 border-b-2 rounded-t-lg" id ="global-tab" data-tabs-target="#global" type="button" role="tab" aria-controls="general" aria-selected="false"
+                        style="line-height: 2rem">
+                    Recherche globale
+                </button>
+            </li>
+            <li class="mr-2" role="presentation">
+                <button class="flex inline-block p-4 border-b-2 rounded-t-lg" id ="characs-tab" data-tabs-target="#characs" type="button" role="tab" aria-controls="famtree" aria-selected="{% if searchType == "charac" %}true{% else %}false{% endif %}"
+                        style="line-height: 2rem">
+                    Personnages
+                </button>
+            </li>
+            <li class="mr-2" role="presentation">
+                <button class="flex inline-block p-4 border-b-2 rounded-t-lg" id ="magics-tab" data-tabs-target="#magics" type="button" role="tab" aria-controls="relation" aria-selected="{% if searchType == "magic" %}true{% else %}false{% endif %}"
+                        style="line-height: 2rem">
+                    Magies
+                </button>
+            </li>
+            <li class="mr-2" role="presentation">
+                <button class="flex inline-block p-4 border-b-2 rounded-t-lg" id ="maps-tab" data-tabs-target="#maps" type="button" role="tab" aria-controls="relation" aria-selected="{% if searchType == "map" %}true{% else %}false{% endif %}"
+                        style="line-height: 2rem">
+                    Cartes
+                </button>
+            </li>
+            <li class="mr-2" role="presentation">
+                <button class="flex inline-block p-4 border-b-2 rounded-t-lg" id ="nations-tab" data-tabs-target="#nations" type="button" role="tab" aria-controls="relation" aria-selected="{% if searchType == "nation" %}true{% else %}false{% endif %}"
+                        style="line-height: 2rem">
+                    Nations
+                </button>
+            </li>
+        </ul>
+    </div>
+
+    <div id="myTabContent">
+        <div class="p-4 rounded-lg bg-gray-100 dark:bg-gray-800" id="global" role="tabpanel" aria-labelledby="global-tab">
+            <form type="get">
+                <div class="flex">
+                    <div class="w-full flex flex-row flex-nowrap content-center justify-center items-center">
+                        <input type="search" name="search" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500 rounded-l-lg" placeholder="Rechercher" required
+                        {% if search is not null %}
+                            value="{{ search }}"
+                        {% endif %}>
+                        <button type="submit" class="p-2.5 text-sm font-medium text-white bg-blue-700 rounded-r-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-500">
+                            <svg aria-hidden="true" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                            <span class="sr-only">Search</span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Research results -->
+            {% if
+                result["characs"]|length == 0 and
+                result["magics"]|length == 0 and
+                result["maps"]|length == 0 and
+                result["nations"]|length == 0 and
+                result["leaders"]|length == 0
+            %}
+                <p class="mt-8 text-base text-gray-900 dark:text-white">Aucun résultat ne correspond à votre recherche...</p>
+            {% endif %}
+
+            {% if result["characs"]|length > 0 %}
+                <h3 class="text-2xl font-bold dark:text-white" style="margin: 2rem 0.75rem 0">Personnages</h3>
+                <div class="grid grid-cols-6 gap-3" style="margin: 0.75rem">
+
+                    {% for charac in result["characs"] %}
+                        <div class="flex flex-col justify-between w-full bg-gray-300 border border-gray-200 rounded-lg shadow dark:bg-gray-700 dark:border-transparent">
+                            <div class="flex flex-col justify-center">
+                                {% if hasPortrait[charac.getId()] %}
+                                    <img src="/characs/{{ charac.getId() }}/portrait" alt="{{ charac.getFirstNames() }}-portrait" class="w-full"
+                                         style="border-radius: 0.5rem"/>
+                                {% else %}
+                                    <p class="text-8xl self-center font-bold dark:text-white my-7">?</p>
+                                {% endif %}
+                            </div>
+
+                            <a class="text-base text-center hover:font-semibold text-gray-900 dark:text-white rounded-lg bg-white dark:bg-gray-600"
+                               style="padding: 1rem 0.75rem 0.75rem"
+                               href="/characs/{{ charac.getId() }}">
+                                {{ charac.getFirstNames() }} {{ charac.getLastNames() }}
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% if result["magics"]|length > 0 %}
+                <h3 class="text-2xl font-bold dark:text-white" style="margin: 2rem 0.75rem 0">Magies</h3>
+                <div class="grid grid-cols-6 gap-3" style="margin: 0.75rem">
+
+                    {% for magic in result["magics"] %}
+                        <div class="flex flex-col justify-between w-full bg-white border border gray-200 rounded-lg shadow dark:bg-gray-600 dark:border-gray-700">
+                            <div class="flex flex-row justify-center mt-8">
+                                {% for innerElem in magic.getElems() %}
+                                    <img src="/elems/{{ innerElem.getId() }}" alt="{{ innerElem.getId() }}"
+                                         class="h-6">
+                                {% endfor %}
+                            </div>
+                            <a class="text-base text-center hover:font-semibold text-gray-900 dark:text-white"
+                               style="padding: 1rem 0.75rem 0.75rem"
+                               href="/magics/{{ magic.getId() }}">
+                                {{ magic.getName() }}
+                            </a>
+                            <p class="text-sm text-center text-gray-900 dark:text-white max-h-24 text-ellipsis overflow-hidden mx-3 mb-3">
+                                {{ magic.getDescription() }}
+                            </p>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% if result["maps"]|length > 0 %}
+                <h3 class="text-2xl font-bold dark:text-white" style="margin: 2rem 0.75rem 0">Cartes</h3>
+                <div class="grid grid-cols-6 gap-3" style="margin: 0.75rem">
+
+                    {% for map in result["maps"] %}
+                        <div class="flex flex-col justify-between w-full bg-white border border gray-200 rounded-lg shadow dark:bg-gray-600 dark:border-gray-700">
+                            <img src="/maps/{{ map.getId() }}/image" alt="{{ map.getName() }}-map" class="w-full rounded-t-lg"/>
+                            <a class="text-base text-center hover:font-semibold text-gray-900 dark:text-white"
+                               style="padding: 1rem 0.75rem 0.75rem"
+                               href="/maps/{{ map.getId() }}">
+                                {{ map.getName() }}
+                            </a>
+                            {% if map.getEstablishmentDate() is not null or map.getExpiryDate() is not null %}
+                            <p class="text-sm text-center text-gray-900 dark:text-white mx-3 mb-3">
+                                {% if map.getEstablishmentDate() is not null and map.getExpiryDate() is not null %}
+                                    Valable du {{ functions.convertToCalendar(map.getEstablishmentDate(), viewCalendar).format('d/m/Y') }} au {{ functions.convertToCalendar(map.getExpiryDate(), viewCalendar).format('d/m/Y') }}.
+                                {% elseif map.getEstablishmentDate() is not null and map.getExpiryDate() is null %}
+                                    Valable depuis le {{ functions.convertToCalendar(map.getEstablishmentDate(), viewCalendar).format('d/m/Y') }}.
+                                {% elseif map.getEstablishmentDate() is null and map.getExpiryDate() is not null %}
+                                    Valable jusqu'au {{ functions.convertToCalendar(map.getExpiryDate(), viewCalendar).format('d/m/Y') }}.
+                                {% endif %}
+                            </p>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% if result["nations"]|length > 0 %}
+                <h3 class="text-2xl font-bold dark:text-white" style="margin: 2rem 0.75rem 0">Nations</h3>
+                <div class="grid grid-cols-6 gap-3" style="margin: 0.75rem">
+
+                    {% for nation in result["nations"] %}
+                        <div class="flex flex-col justify-between w-full bg-white border border gray-200 rounded-lg shadow dark:bg-gray-600 dark:border-gray-700">
+                            <a class="text-base text-center hover:font-semibold text-gray-900 dark:text-white"
+                               style="padding: 1rem 0.75rem 0.75rem"
+                               href="/nations/{{ nation.getId() }}">
+                                {{ nation.getName() }}
+                            </a>
+                            {% if nation.getDescription() != "" %}
+                            <p class="text-sm text-center text-gray-900 dark:text-white max-h-24 text-ellipsis overflow-hidden mx-3 mb-3">
+                                {{ nation.getDescription() }}
+                            </p>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% if result["leaders"]|length > 0 %}
+                <h3 class="text-2xl font-bold dark:text-white" style="margin: 2rem 0.75rem 0">Dirigeants</h3>
+                <div class="grid grid-cols-6 gap-3" style="margin: 0.75rem">
+
+                    {% for leader in result["leaders"] %}
+                        {% set charac = leader.getLeader() %}
+                        <div class="flex flex-col justify-between w-full bg-gray-300 border border-gray-200 rounded-lg shadow dark:bg-gray-700 dark:border-transparent">
+                            <div class="flex flex-col justify-center">
+                                {% if hasPortraitLeader[charac.getId()] %}
+                                    <img src="/characs/{{ charac.getId() }}/portrait" alt="{{ charac.getFirstNames() }}-portrait" class="w-full"
+                                         style="border-radius: 0.5rem"/>
+                                {% else %}
+                                    <p class="text-8xl self-center font-bold dark:text-white my-7">?</p>
+                                {% endif %}
+                            </div>
+
+                            <a class="text-base text-center hover:font-semibold text-gray-900 dark:text-white rounded-lg bg-white dark:bg-gray-600"
+                               style="padding: 1rem 0.75rem 0.75rem"
+                               href="/characs/{{ charac.getId() }}">
+                                {{ charac.getFirstNames() }} {{ charac.getLastNames() }}
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="p-4 rounded-lg bg-gray-100 dark:bg-gray-800" id="characs" role="tabpanel" aria-labelledby="characs-tab">
+            <form class="flex flex-row" type="get">
+                <input type="text" name="type" value="charac" class="hidden"/>
+                <div id="charac_filters" style="min-width: 24rem" class="border-r border-gray-200 dark:border-gray-600">
+                    <label class="relative inline-flex items-center mb-4 cursor-pointer">
+                        <input id="portrait-filter-switch" type="checkbox" value="true" class="sr-only peer">
+                        <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                        <span class="ml-3 text-sm font-medium font-semibold text-gray-900 dark:text-gray-300">Filtrer sur le portrait</span>
+                    </label>
+                    <div class="flex items-center ml-2 mb-2">
+                        <input disabled {% if get["charac-has-portrait"] is defined and get["charac-has-portrait"] == "true" %} checked {% endif %} id="has-portrait" type="radio" value="true" name="charac-has-portrait" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                        <label id="has-portrait-label" for="has-portrait" class="ml-2 text-sm font-medium text-gray-400 dark:text-gray-500">A un portrait</label>
+                    </div>
+                    <div class="flex items-center ml-2 mb-5">
+                        <input disabled {% if get["charac-has-portrait"] is not defined or (get["charac-has-portrait"] is defined and get["charac-has-portrait"] == "false") %} checked {% endif %} id="not-has-portrait" type="radio" value="false" name="charac-has-portrait" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                        <label id="not-has-portrait-label" for="not-has-portrait" class="ml-2 text-sm font-medium text-gray-400 dark:text-gray-500">N'a pas de portrait</label>
+                    </div>
+
+
+                    <div id="calendar-accordion" data-accordion="collapse" class="mr-3 mb-5">
+                        <h2 id="calendar-accordion-heading">
+                            <button type="button" class="flex items-center justify-between w-full p-3 text-sm font-medium font-semibold text-gray-900 dark:text-gray-300 text-left border border-gray-200 rounded-t-xl focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-600 dark:border-gray-700 bg-white dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600" data-accordion-target="#calendar-accordion-body" aria-expanded="false" aria-controls="calendar-accordion-body">
+                                <span>Filtrer sur le calendrier</span>
+                                <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"></path>
+                                </svg>
+                            </button>
+                        </h2>
+                        <div id="calendar-accordion-body" class="hidden" aria-labelledby="calendar-accordion-heading">
+                            <div class="px-5 py-3 rounded-b-lg border border-t-0 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-700">
+                                <button id="charac-calendar-filter-selection" onclick="switchSelection('charac-calendar-filter-selection')" type="button" class="mb-2 w-full text-blue-600 hover:text-white border border-blue-700 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xs px-3 py-2 text-center mr-2 dark:border-blue-500 dark:hover:border-blue-600 dark:text-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-600">Tout désélectionner</button>
+                                {% for calendar in headerCalendars %}
+                                    <div class="flex items-center mb-2">
+                                        <input
+                                            {% if searchType != "charac" or (get["charac-cal-" ~ calendar.getId()] is defined and get["charac-cal-" ~ calendar.getId()] == "true") %}
+                                                checked
+                                            {% endif %}
+                                            id="{{ calendar.getName() }}" type="checkbox" value="true" name="charac-cal-{{ calendar.getId() }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                        <label for="{{ calendar.getName() }}" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ calendar.getName() }}</label>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-row items-center mb-5">
+                        <span class="ml-2 mr-2 text-sm font-medium font-semibold text-gray-900 dark:text-gray-300">Vivant entre</span>
+                        <input name="charac-living-after" type="text" class="w-24 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                               placeholder="2000"
+                               {% if get["charac-living-after"] is defined %}
+                                value="{{ get["charac-living-after"] }}"
+                               {% endif %}
+                        >
+                        <span class="ml-2 mr-2 text-sm font-medium font-semibold text-gray-900 dark:text-gray-300">et</span>
+                        <input name="charac-living-before" type="text" class="w-24 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                               placeholder="2020"
+                               {% if get["charac-living-before"] is defined %}
+                                value="{{ get["charac-living-before"] }}"
+                               {% endif %}
+                        >
+                    </div>
+                    <div class="flex flex-row items-center mb-5">
+                        <span class="ml-2 mr-2 text-sm font-medium font-semibold text-gray-900 dark:text-gray-300">Potentiel entre</span>
+                        <input name="charac-potential-above" type="number" class="w-24 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                               placeholder="50"
+                               {% if get["charac-potential-above"] is defined %}
+                                value="{{ get["charac-potential-above"] }}"
+                               {% endif %}
+                        >
+                        <span class="ml-2 mr-2 text-sm font-medium font-semibold text-gray-900 dark:text-gray-300">et</span>
+                        <input name="charac-potential-below" type="number" class="w-24 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                               placeholder="100"
+                               {% if get["charac-potential-below"] is defined %}
+                                value="{{ get["charac-potential-below"] }}"
+                               {% endif %}
+                        >
+                    </div>
+
+                    <div id="class-accordion" data-accordion="collapse" class="mr-3 mb-5">
+                        <h2 id="class-accordion-heading">
+                            <button type="button" class="flex items-center justify-between w-full p-3 text-sm font-medium font-semibold text-gray-900 dark:text-gray-300 text-left border border-gray-200 rounded-t-xl focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-600 dark:border-gray-700 bg-white dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600" data-accordion-target="#class-accordion-body" aria-expanded="false" aria-controls="class-accordion-body">
+                                <span>Filtrer sur la classe</span>
+                                <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"></path>
+                                </svg>
+                            </button>
+                        </h2>
+                        <div id="class-accordion-body" class="hidden" aria-labelledby="class-accordion-heading">
+                            <div class="px-5 py-3 rounded-b-lg border border-t-0 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-700">
+                                <button id="charac-class-filter-selection" onclick="switchSelection('charac-class-filter-selection')" type="button" class="mb-2 w-full text-blue-600 hover:text-white border border-blue-700 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xs px-3 py-2 text-center mr-2 dark:border-blue-500 dark:hover:border-blue-600 dark:text-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-600">Tout désélectionner</button>
+                                {% for class in classes %}
+                                    <div class="flex items-center mb-2">
+                                        <input  {% if searchType != "charac" or (get["charac-class-" ~ class.getId()] is defined and get["charac-class-" ~ class.getId()] == "true") %}
+                                                    checked
+                                                {% endif %}
+                                                id="{{ class.getName() }}" type="checkbox" value="true" name="charac-class-{{ class.getId() }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                        <label for="{{ class.getName() }}" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ class.getName() }}</label>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <div id="sex-accordion" data-accordion="collapse" class="mr-3 mb-5">
+                        <h2 id="sex-accordion-heading">
+                            <button type="button" class="flex items-center justify-between w-full p-3 text-sm font-medium font-semibold text-gray-900 dark:text-gray-300 text-left border border-gray-200 rounded-t-xl focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-600 dark:border-gray-700 bg-white dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600" data-accordion-target="#sex-accordion-body" aria-expanded="false" aria-controls="sex-accordion-body">
+                                <span>Filtrer sur le sexe</span>
+                                <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"></path>
+                                </svg>
+                            </button>
+                        </h2>
+                        <div id="sex-accordion-body" class="hidden" aria-labelledby="sex-accordion-heading">
+                            <div class="px-5 py-3 rounded-b-lg border border-t-0 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-700">
+                                <button id="charac-sex-filter-selection" onclick="switchSelection('charac-sex-filter-selection')" type="button" class="mb-2 w-full text-blue-600 hover:text-white border border-blue-700 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xs px-3 py-2 text-center mr-2 dark:border-blue-500 dark:hover:border-blue-600 dark:text-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-600">Tout désélectionner</button>
+                                {% for sex in sexes %}
+                                    <div class="flex items-center mb-2">
+                                        <input {% if searchType != "charac" or (get["charac-sex-" ~ loop.index] is defined and get["charac-sex-" ~ loop.index] == "true") %}
+                                                checked
+                                               {% endif %}
+                                                id="{{ sex }}" type="checkbox" value="true" name="charac-sex-{{ loop.index }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                        <label for="{{ sex }}" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ sex }}</label>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <div id="gender-accordion" data-accordion="collapse" class="mr-3 mb-5">
+                        <h2 id="gender-accordion-heading">
+                            <button type="button" class="flex items-center justify-between w-full p-3 text-sm font-medium font-semibold text-gray-900 dark:text-gray-300 text-left border border-gray-200 rounded-t-xl focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-600 dark:border-gray-700 bg-white dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600" data-accordion-target="#gender-accordion-body" aria-expanded="false" aria-controls="gender-accordion-body">
+                                <span>Filtrer sur le genre</span>
+                                <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"></path>
+                                </svg>
+                            </button>
+                        </h2>
+                        <div id="gender-accordion-body" class="hidden" aria-labelledby="gender-accordion-heading">
+                            <div class="px-5 py-3 rounded-b-lg border border-t-0 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-700">
+                                <button id="charac-gender-filter-selection" onclick="switchSelection('charac-gender-filter-selection')" type="button" class="mb-2 w-full text-blue-600 hover:text-white border border-blue-700 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xs px-3 py-2 text-center mr-2 dark:border-blue-500 dark:hover:border-blue-600 dark:text-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-600">Tout désélectionner</button>
+                                {% for gender in genders %}
+                                    <div class="flex items-center mb-2">
+                                        <input  {% if searchType != "charac" or (get["charac-gender-" ~ loop.index] is defined and get["charac-gender-" ~ loop.index] == "true") %}
+                                                    checked
+                                                {% endif %}
+                                                id="{{ gender }}" type="checkbox" value="true" name="charac-gender-{{ loop.index }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                        <label for="{{ gender }}" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ gender }}</label>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <div id="nation-accordion" data-accordion="collapse" class="mr-3 mb-5">
+                        <h2 id="nation-accordion-heading">
+                            <button type="button" class="flex items-center justify-between w-full p-3 text-sm font-medium font-semibold text-gray-900 dark:text-gray-300 text-left border border-gray-200 rounded-t-xl focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-600 dark:border-gray-700 bg-white dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600" data-accordion-target="#nation-accordion-body" aria-expanded="false" aria-controls="nation-accordion-body">
+                                <span>Filtrer sur la nationalité</span>
+                                <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"></path>
+                                </svg>
+                            </button>
+                        </h2>
+                        <div id="nation-accordion-body" class="hidden" aria-labelledby="nation-accordion-heading">
+                            <div class="px-5 py-3 rounded-b-lg border border-t-0 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-700">
+                                <button id="charac-nation-filter-selection" onclick="switchSelection('charac-nation-filter-selection')" type="button" class="mb-2 w-full text-blue-600 hover:text-white border border-blue-700 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xs px-3 py-2 text-center mr-2 dark:border-blue-500 dark:hover:border-blue-600 dark:text-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-600">Tout désélectionner</button>
+                                {% for nation in nations %}
+                                    <div class="flex items-center mb-2">
+                                        <input  {% if searchType != "charac" or (get["charac-nat-" ~ nation.getId()] is defined and get["charac-nat-" ~ nation.getId()] == "true") %}
+                                                    checked
+                                                {% endif %}
+                                                id="nat-{{ nation.getName() }}" type="checkbox" value="true" name="charac-nat-{{ nation.getId() }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                        <label for="nat-{{ nation.getName() }}" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ nation.getName() }}</label>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-row items-center mb-5">
+                        <span class="ml-2 mr-2 text-sm font-medium font-semibold text-gray-900 dark:text-gray-300">Taille entre</span>
+                        <input name="charac-height-above" type="number" class="w-24 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                               placeholder="150"
+                                {% if get["charac-height-above"] is defined %}
+                                    value="{{ get["charac-height-above"] }}"
+                                {% endif %}
+                        >
+                        <span class="ml-2 mr-2 text-sm font-medium font-semibold text-gray-900 dark:text-gray-300">cm et</span>
+                        <input name="charac-height-below" type="number" class="w-24 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                               placeholder="200"
+                                {% if get["charac-height-below"] is defined %}
+                                    value="{{ get["charac-height-below"] }}"
+                                {% endif %}
+                        >
+
+                        <span class="ml-2 text-sm font-medium font-semibold text-gray-900 dark:text-gray-300">cm</span>
+                    </div>
+                    <div id="magic-accordion" data-accordion="collapse" class="mr-3 mb-5">
+                        <h2 id="magic-accordion-heading">
+                            <button type="button" class="flex items-center justify-between w-full p-3 text-sm font-medium font-semibold text-gray-900 dark:text-gray-300 text-left border border-gray-200 rounded-t-xl focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-600 dark:border-gray-700 bg-white dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600" data-accordion-target="#magic-accordion-body" aria-expanded="false" aria-controls="magic-accordion-body">
+                                <span>Filtrer sur les magies</span>
+                                <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"></path>
+                                </svg>
+                            </button>
+                        </h2>
+                        <div id="magic-accordion-body" class="hidden" aria-labelledby="magic-accordion-heading">
+                            <div class="px-5 py-3 rounded-b-lg border border-t-0 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-700">
+                                <button id="charac-magic-filter-selection" onclick="switchSelection('charac-magic-filter-selection')" type="button" class="mb-2 w-full text-blue-600 hover:text-white border border-blue-700 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xs px-3 py-2 text-center mr-2 dark:border-blue-500 dark:hover:border-blue-600 dark:text-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-600">Tout désélectionner</button>
+                                {% for magic in magics %}
+                                    <div class="flex items-center mb-2">
+                                        <input  {% if searchType != "charac" or (get["charac-mag-" ~ magic.getId()] is defined and get["charac-mag-" ~ magic.getId()] == "true") %}
+                                                    checked
+                                                {% endif %}
+                                                id="{{ magic.getName() }}" type="checkbox" value="true" name="charac-mag-{{ magic.getId() }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                        <label for="{{ magic.getName() }}" class="ml-2 mr-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ magic.getName() }}</label>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <div id="leader-accordion" data-accordion="collapse" class="mr-3 mb-5">
+                        <h2 id="leader-accordion-heading">
+                            <button type="button" class="flex items-center justify-between w-full p-3 text-sm font-medium font-semibold text-gray-900 dark:text-gray-300 text-left border border-gray-200 rounded-t-xl focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-600 dark:border-gray-700 bg-white dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600" data-accordion-target="#leader-accordion-body" aria-expanded="false" aria-controls="leader-accordion-body">
+                                <span>Filtrer sur les nations dirigées</span>
+                                <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"></path>
+                                </svg>
+                            </button>
+                        </h2>
+                        <div id="leader-accordion-body" class="hidden" aria-labelledby="leader-accordion-heading">
+                            <div class="px-5 py-3 rounded-b-lg border border-t-0 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-700">
+                                <button id="charac-leader-filter-selection" onclick="switchSelection('charac-leader-filter-selection')" type="button" class="mb-2 w-full text-blue-600 hover:text-white border border-blue-700 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xs px-3 py-2 text-center mr-2 dark:border-blue-500 dark:hover:border-blue-600 dark:text-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-600">Tout désélectionner</button>
+                                {% for nation in nations %}
+                                    <div class="flex items-center mb-2">
+                                        <input  {% if searchType != "charac" or (get["charac-led-" ~ nation.getId()] is defined and get["charac-led-" ~ nation.getId()] == "true") %}
+                                                    checked
+                                                {% endif %}
+                                                id="led-{{ nation.getName() }}" type="checkbox" value="true" name="charac-led-{{ nation.getId() }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                        <label for="led-{{ nation.getName() }}" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ nation.getName() }}</label>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <label class="relative inline-flex items-center mb-4 cursor-pointer">
+                        <input id="relation-filter-switch" type="checkbox" value="true" class="sr-only peer">
+                        <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                        <span class="ml-3 text-sm font-medium font-semibold text-gray-900 dark:text-gray-300">Filtrer sur les relations</span>
+                    </label>
+                    <div class="flex flex-row justify-between items-center">
+                        <div>
+                            <div class="flex items-center ml-2 mb-2">
+                                <input disabled
+                                       {% if get["charac-relation-type"] is not defined or (get["charac-relation-type"] is defined and get["charac-relation-type"] == "knows") %} checked {% endif %}
+                                       id="knows" type="radio" value="knows" name="charac-relation-type" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <label id="knows-label" for="knows" class="ml-2 text-sm font-medium text-gray-400 dark:text-gray-500">Connaît</label>
+                            </div>
+                            <div class="flex items-center ml-2 mb-2">
+                                <input disabled
+                                       {% if get["charac-relation-type"] is defined and get["charac-relation-type"] == "appreciates" %} checked {% endif %}
+                                       id="appreciates" type="radio" value="appreciates" name="charac-relation-type" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <label id="appreciates-label" for="appreciates" class="ml-2 text-sm font-medium text-gray-400 dark:text-gray-500">Apprécie</label>
+                            </div>
+                            <div class="flex items-center ml-2 mb-5">
+                                <input disabled
+                                       {% if get["charac-relation-type"] is defined and get["charac-relation-type"] == "not-appreciates" %} checked {% endif %}
+                                       id="not-appreciates" type="radio" value="not-appreciates" name="charac-relation-type" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <label id="not-appreciates-label" for="not-appreciates" class="ml-2 text-sm font-medium text-gray-400 dark:text-gray-500">N'apprécie pas</label>
+                            </div>
+                        </div>
+
+                        <select disabled id="relation-charac" name="charac-relation-with" class="mx-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                            <option value="0"
+                                    {% if get["charac-relation-with"] is not defined or (get["charac-relation-with"] is defined and get["charac-relation-with"] == "0") %} selected {% endif %}
+                            ></option>
+                            {% for smolCharac in characList %}
+                                <option value="{{ smolCharac.getId() }}"
+                                        {% if get["charac-relation-with"] is defined and get["charac-relation-with"] == smolCharac.getId() %} selected {% endif %}
+                                >{{ smolCharac.getFirstNames() }} {{ smolCharac.getLastNames }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div id="charac_results" class="w-full ml-4">
+                    <div class="flex">
+                        <div class="w-full flex flex-row flex-nowrap content-center justify-center items-center">
+                            <input type="search" name="search" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500 rounded-l-lg" placeholder="Rechercher"
+                                    {% if search is not null %}
+                                value="{{ search }}"
+                                    {% endif %}>
+                            <button type="submit" class="p-2.5 text-sm font-medium text-white bg-blue-700 rounded-r-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-500">
+                                <svg aria-hidden="true" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                                <span class="sr-only">Search</span>
+                            </button>
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-bold dark:text-white" style="margin: 2rem 0.5rem 0">Résultats</h3>
+
+                    {% if characResults|length == 0 %}
+                        <p class="mt-8 text-base text-gray-900 dark:text-white">Aucun résultat ne correspond à votre recherche...</p>
+                    {% else %}
+                        <div class="grid grid-cols-4 gap-3" style="margin: 0.75rem">
+
+                            {% for charac in characResults %}
+                                <div class="flex flex-col justify-between w-full bg-gray-300 border border-gray-200 rounded-lg shadow dark:bg-gray-700 dark:border-transparent">
+                                    <div class="flex flex-col justify-center">
+                                        {% if hasPortrait[charac.getId()] %}
+                                            <img src="/characs/{{ charac.getId() }}/portrait" alt="{{ charac.getFirstNames() }}-portrait" class="w-full"
+                                                 style="border-radius: 0.5rem"/>
+                                        {% else %}
+                                            <p class="text-8xl self-center font-bold dark:text-white my-7">?</p>
+                                        {% endif %}
+                                    </div>
+
+                                    <a class="text-base text-center hover:font-semibold text-gray-900 dark:text-white rounded-lg bg-white dark:bg-gray-600"
+                                       style="padding: 1rem 0.75rem 0.75rem"
+                                       href="/characs/{{ charac.getId() }}">
+                                        {{ charac.getFirstNames() }} {{ charac.getLastNames() }}
+                                    </a>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+
+        <div class="p-4 rounded-lg bg-gray-100 dark:bg-gray-800" id="magics" role="tabpanel" aria-labelledby="magics-tab">
+            <form class="flex flex-row" type="get">
+                <input type="text" name="type" value="magic" class="hidden"/>
+                <div id="magic-filters" style="min-width: 24rem" class="border-r border-gray-200 dark:border-gray-600">
+                    <div id="magic-element-accordion" data-accordion="collapse" class="mr-3">
+                        <h2 id="magic-element-accordion-heading">
+                            <button type="button" class="flex items-center justify-between w-full p-3 text-sm font-medium font-semibold text-gray-900 dark:text-gray-300 text-left border border-gray-200 rounded-t-xl focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-600 dark:border-gray-700 bg-white dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600" data-accordion-target="#magic-element-accordion-body" aria-expanded="false" aria-controls="magic-element-accordion-body">
+                                <span>Filtrer sur l'élément</span>
+                                <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"></path>
+                                </svg>
+                            </button>
+                        </h2>
+                        <div id="magic-element-accordion-body" class="hidden" aria-labelledby="magic-element-accordion-heading">
+                            <div class="px-5 py-3 rounded-b-lg border border-t-0 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-700">
+                                <button id="magic-element-filter-selection" onclick="switchSelection('magic-element-filter-selection')" type="button" class="mb-3 w-full text-blue-600 hover:text-white border border-blue-700 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xs px-3 py-2 text-center mr-2 dark:border-blue-500 dark:hover:border-blue-600 dark:text-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-600">Tout désélectionner</button>
+                                {% for element in elements %}
+                                    <div class="flex items-center mb-3">
+                                        <input
+                                                {% if searchType != "magic" or (get["magic-elem-" ~ element.getId()] is defined and get["magic-elem-" ~ element.getId()] == "true") %}
+                                                    checked
+                                                {% endif %}
+                                                id="{{ element.getName() }}" type="checkbox" value="true" name="magic-elem-{{ element.getId() }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                        <label for="{{ element.getName() }}" class="flex flex-row items-center ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                            <img src="/elems/{{ element.getId() }}" alt="{{ element.getId() }}" class="h-5 ml-1 mr-2">
+                                            {{ element.getName() }}
+                                        </label>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="magic-results" class="w-full ml-4">
+                    <div class="flex">
+                        <div class="w-full flex flex-row flex-nowrap content-center justify-center items-center">
+                            <input type="search" name="search" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500 rounded-l-lg" placeholder="Rechercher"
+                                    {% if search is not null %}
+                                value="{{ search }}"
+                                    {% endif %}>
+                            <button type="submit" class="p-2.5 text-sm font-medium text-white bg-blue-700 rounded-r-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-500">
+                                <svg aria-hidden="true" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                                <span class="sr-only">Search</span>
+                            </button>
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-bold dark:text-white" style="margin: 2rem 0.5rem 0">Résultats</h3>
+
+                    {% if magicResults|length == 0 %}
+                        <p class="mt-8 text-base text-gray-900 dark:text-white">Aucun résultat ne correspond à votre recherche...</p>
+                    {% else %}
+                        <div class="grid grid-cols-4 gap-3" style="margin: 0.75rem">
+
+                            {% for magic in magicResults %}
+                                <div class="flex flex-col justify-between w-full bg-white border border gray-200 rounded-lg shadow dark:bg-gray-600 dark:border-gray-700">
+                                    <div class="flex flex-row justify-center mt-8">
+                                        {% for innerElem in magic.getElems() %}
+                                            <img src="/elems/{{ innerElem.getId() }}" alt="{{ innerElem.getId() }}"
+                                                 class="h-6">
+                                        {% endfor %}
+                                    </div>
+                                    <a class="text-base text-center hover:font-semibold text-gray-900 dark:text-white"
+                                       style="padding: 1rem 0.75rem 0.75rem"
+                                       href="/magics/{{ magic.getId() }}">
+                                        {{ magic.getName() }}
+                                    </a>
+                                    <p class="text-sm text-center text-gray-900 dark:text-white max-h-24 text-ellipsis overflow-hidden mx-3 mb-3">
+                                        {{ magic.getDescription() }}
+                                    </p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+
+        <div class="p-4 rounded-lg bg-gray-100 dark:bg-gray-800" id="maps" role="tabpanel" aria-labelledby="maps-tab">
+            <form class="flex flex-row" type="get">
+                <input type="text" name="type" value="map" class="hidden"/>
+                <div id="map-filters" style="min-width: 24rem" class="border-r border-gray-200 dark:border-gray-600">
+                    <div id="map-nation-accordion" data-accordion="collapse" class="mr-3">
+                        <h2 id="map-nation-accordion-heading">
+                            <button type="button" class="flex items-center justify-between w-full p-3 text-sm font-medium font-semibold text-gray-900 dark:text-gray-300 text-left border border-gray-200 rounded-t-xl focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-600 dark:border-gray-700 bg-white dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600" data-accordion-target="#map-nation-accordion-body" aria-expanded="false" aria-controls="map-nation-accordion-body">
+                                <span>Filtrer sur la nation</span>
+                                <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"></path>
+                                </svg>
+                            </button>
+                        </h2>
+                        <div id="map-nation-accordion-body" class="hidden" aria-labelledby="map-nation-accordion-heading">
+                            <div class="px-5 py-3 rounded-b-lg border border-t-0 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-700">
+                                <button id="map-nation-filter-selection" onclick="switchSelection('map-nation-filter-selection')" type="button" class="mb-2 w-full text-blue-600 hover:text-white border border-blue-700 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xs px-3 py-2 text-center mr-2 dark:border-blue-500 dark:hover:border-blue-600 dark:text-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-600">Tout désélectionner</button>
+                                {% for nation in nations %}
+                                    <div class="flex items-center mb-2">
+                                        <input
+                                                {% if searchType != "map" or (get["map-nation-" ~ nation.getId()] is defined and get["map-nation-" ~ nation.getId()] == "true") %}
+                                                    checked
+                                                {% endif %}
+                                                id="map-{{ nation.getName() }}" type="checkbox" value="true" name="map-nation-{{ nation.getId() }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                        <label for="map-{{ nation.getName() }}" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                            {{ nation.getName() }}
+                                        </label>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="map-results" class="w-full ml-4">
+                    <div class="flex">
+                        <div class="w-full flex flex-row flex-nowrap content-center justify-center items-center">
+                            <input type="search" name="search" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500 rounded-l-lg" placeholder="Rechercher"
+                                    {% if search is not null %}
+                                value="{{ search }}"
+                                    {% endif %}>
+                            <button type="submit" class="p-2.5 text-sm font-medium text-white bg-blue-700 rounded-r-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-500">
+                                <svg aria-hidden="true" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                                <span class="sr-only">Search</span>
+                            </button>
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-bold dark:text-white" style="margin: 2rem 0.5rem 0">Résultats</h3>
+
+                    {% if mapResults|length == 0 %}
+                        <p class="mt-8 text-base text-gray-900 dark:text-white">Aucun résultat ne correspond à votre recherche...</p>
+                    {% else %}
+                        <div class="grid grid-cols-4 gap-3" style="margin: 0.75rem">
+
+                            {% for map in mapResults %}
+                                <div class="flex flex-col justify-between w-full bg-white border border gray-200 rounded-lg shadow dark:bg-gray-600 dark:border-gray-700">
+                                    <img src="/maps/{{ map.getId() }}/image" alt="{{ map.getName() }}-map" class="w-full rounded-t-lg"/>
+                                    <a class="text-base text-center hover:font-semibold text-gray-900 dark:text-white"
+                                       style="padding: 1rem 0.75rem 0.75rem"
+                                       href="/maps/{{ map.getId() }}">
+                                        {{ map.getName() }}
+                                    </a>
+                                    {% if map.getEstablishmentDate() is not null or map.getExpiryDate() is not null %}
+                                        <p class="text-sm text-center text-gray-900 dark:text-white mx-3 mb-3">
+                                            {% if map.getEstablishmentDate() is not null and map.getExpiryDate() is not null %}
+                                                Valable du {{ functions.convertToCalendar(map.getEstablishmentDate(), viewCalendar).format('d/m/Y') }} au {{ functions.convertToCalendar(map.getExpiryDate(), viewCalendar).format('d/m/Y') }}.
+                                            {% elseif map.getEstablishmentDate() is not null and map.getExpiryDate() is null %}
+                                                Valable depuis le {{ functions.convertToCalendar(map.getEstablishmentDate(), viewCalendar).format('d/m/Y') }}.
+                                            {% elseif map.getEstablishmentDate() is null and map.getExpiryDate() is not null %}
+                                                Valable jusqu'au {{ functions.convertToCalendar(map.getExpiryDate(), viewCalendar).format('d/m/Y') }}.
+                                            {% endif %}
+                                        </p>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+
+        <div class="p-4 rounded-lg bg-gray-100 dark:bg-gray-800" id="nations" role="tabpanel" aria-labelledby="nations-tab">
+            <form class="flex flex-row" type="get">
+                <input type="text" name="type" value="nation" class="hidden"/>
+                <div id="nation-filters" style="min-width: 24rem" class="border-r border-gray-200 dark:border-gray-600">
+                    <div class="flex flex-row items-center mb-5">
+                        <span class="ml-2 mr-2 text-sm font-medium font-semibold text-gray-900 dark:text-gray-300">Existant entre</span>
+                        <input name="nation-existing-after" type="text" class="w-24 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                               placeholder="1500"
+                                {% if get["nation-existing-after"] is defined %}
+                                    value="{{ get["nation-existing-after"] }}"
+                                {% endif %}
+                        >
+                        <span class="ml-2 mr-2 text-sm font-medium font-semibold text-gray-900 dark:text-gray-300">et</span>
+                        <input name="nation-existing-before" type="text" class="w-24 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                               placeholder="1900"
+                                {% if get["nation-existing-before"] is defined %}
+                                    value="{{ get["nation-existing-before"] }}"
+                                {% endif %}
+                        >
+                    </div>
+
+                    <div id="nation-calendar-accordion" data-accordion="collapse" class="mr-3">
+                        <h2 id="nation-calendar-accordion-heading">
+                            <button type="button" class="flex items-center justify-between w-full p-3 text-sm font-medium font-semibold text-gray-900 dark:text-gray-300 text-left border border-gray-200 rounded-t-xl focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-600 dark:border-gray-700 bg-white dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600" data-accordion-target="#nation-calendar-accordion-body" aria-expanded="false" aria-controls="nation-calendar-accordion-body">
+                                <span>Filtrer sur le calendrier</span>
+                                <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"></path>
+                                </svg>
+                            </button>
+                        </h2>
+                        <div id="nation-calendar-accordion-body" class="hidden" aria-labelledby="nation-calendar-accordion-heading">
+                            <div class="px-5 py-3 rounded-b-lg border border-t-0 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-700">
+                                <button id="nation-calendar-filter-selection" onclick="switchSelection('nation-calendar-filter-selection')" type="button" class="mb-2 w-full text-blue-600 hover:text-white border border-blue-700 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xs px-3 py-2 text-center mr-2 dark:border-blue-500 dark:hover:border-blue-600 dark:text-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-600">Tout désélectionner</button>
+                                {% for calendar in headerCalendars %}
+                                    <div class="flex items-center mb-2">
+                                        <input
+                                                {% if searchType != "nation" or (get["nation-cal-" ~ calendar.getId()] is defined and get["nation-cal-" ~ calendar.getId()] == "true") %}
+                                                    checked
+                                                {% endif %}
+                                                id="nation-{{ calendar.getName() }}" type="checkbox" value="true" name="nation-cal-{{ calendar.getId() }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                        <label for="nation-{{ calendar.getName() }}" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ calendar.getName() }}</label>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="nation-results" class="w-full ml-4">
+                    <div class="flex">
+                        <div class="w-full flex flex-row flex-nowrap content-center justify-center items-center">
+                            <input type="search" name="search" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500 rounded-l-lg" placeholder="Rechercher"
+                                    {% if search is not null %}
+                                value="{{ search }}"
+                                    {% endif %}>
+                            <button type="submit" class="p-2.5 text-sm font-medium text-white bg-blue-700 rounded-r-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-500">
+                                <svg aria-hidden="true" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                                <span class="sr-only">Search</span>
+                            </button>
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-bold dark:text-white" style="margin: 2rem 0.5rem 0">Résultats</h3>
+
+                    {% if nationResults|length == 0 %}
+                        <p class="mt-8 text-base text-gray-900 dark:text-white">Aucun résultat ne correspond à votre recherche...</p>
+                    {% else %}
+                        <div class="grid grid-cols-4 gap-3" style="margin: 0.75rem">
+
+                            {% for nation in nationResults %}
+                                <div class="flex flex-col justify-between w-full bg-white border border gray-200 rounded-lg shadow dark:bg-gray-600 dark:border-gray-700">
+                                    <a class="text-base text-center hover:font-semibold text-gray-900 dark:text-white"
+                                       style="padding: 1rem 0.75rem 0.75rem"
+                                       href="/nations/{{ nation.getId() }}">
+                                        {{ nation.getName() }}
+                                    </a>
+                                    {% if nation.getDescription() != "" %}
+                                        <p class="text-sm text-center text-gray-900 dark:text-white max-h-24 text-ellipsis overflow-hidden mx-3 mb-3">
+                                            {{ nation.getDescription() }}
+                                        </p>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+
+        <script type="application/javascript">
+            const portraitSwitch = document.getElementById("portrait-filter-switch");
+            const relationSwitch = document.getElementById("relation-filter-switch");
+
+            function applyEnabledStyle(label) {
+                label.classList.remove("text-gray-400");
+                label.classList.remove("dark:text-gray-500");
+
+                label.classList.add("text-gray-900");
+                label.classList.add("dark:text-gray-300");
+            }
+
+            function applyDisabledStyle(label) {
+                label.classList.remove("text-gray-900");
+                label.classList.remove("dark:text-gray-300");
+
+                label.classList.add("text-gray-400");
+                label.classList.add("dark:text-gray-500");
+            }
+
+            function enableFilter(filterElementsIds, filterLabelsIds) {
+                for (let i = 0; i < filterElementsIds.length; i++) {
+                    let element = document.getElementById(filterElementsIds[i]);
+                    element.disabled = false;
+                }
+
+                // Change the style (classes) for an enabled radio button
+                for (let i = 0; i < filterLabelsIds.length; i++) {
+                    let label = document.getElementById(filterLabelsIds[i]);
+                    applyEnabledStyle(label);
+                }
+            }
+
+            function disableFilter(filterElementsIds, filterLabelsIds) {
+                for (let i = 0; i < filterElementsIds.length; i++) {
+                    let element = document.getElementById(filterElementsIds[i]);
+                    element.disabled = true;
+                }
+
+                // Change the style (classes) for an enabled radio button
+                for (let i = 0; i < filterLabelsIds.length; i++) {
+                    let label = document.getElementById(filterLabelsIds[i]);
+                    applyDisabledStyle(label);
+                }
+            }
+
+            function findInput(parentNode) {
+                // This is a behaviour expected. If it is not correct, then the calling function should be
+                // changed, not this one.
+                for (let i = 0; i < parentNode.childElementCount; i++) {
+                    if (parentNode.children[i].tagName === "INPUT") {
+                        return parentNode.children[i];
+                    }
+                }
+            }
+
+            function switchSelection(buttonLabelId) {
+                // For simplicity, we will check or uncheck based on the label on the button.
+                let buttonLabel = document.getElementById(buttonLabelId);
+                let parent = buttonLabel.parentNode;
+
+                let valueToAffect = buttonLabel.innerText === "Tout sélectionner";
+
+                for (let i = 1; i < parent.childElementCount; i++) {
+                    let input = findInput(parent.children[i]);
+                    input.checked = valueToAffect;
+                }
+
+                if (!valueToAffect) {
+                    buttonLabel.innerText = "Tout sélectionner";
+                } else {
+                    buttonLabel.innerText = "Tout désélectionner";
+                }
+            }
+
+            portraitSwitch.addEventListener('change', () => {
+                if (portraitSwitch.checked) {
+                    enableFilter(["has-portrait", "not-has-portrait"], ["has-portrait-label", "not-has-portrait-label"]);
+                } else {
+                    disableFilter(["has-portrait", "not-has-portrait"], ["has-portrait-label", "not-has-portrait-label"]);
+                }
+            });
+
+            relationSwitch.addEventListener('change', () => {
+                if (relationSwitch.checked) {
+                    enableFilter(["knows", "appreciates", "not-appreciates", "relation-charac"], ["knows-label", "appreciates-label", "not-appreciates-label"]);
+                } else {
+                    disableFilter(["knows", "appreciates", "not-appreciates", "relation-charac"], ["knows-label", "appreciates-label", "not-appreciates-label"]);
+                }
+            });
+
+            {% if get["charac-has-portrait"] is defined %}
+            portraitSwitch.click();
+            {% endif %}
+            {% if get["charac-relation-type"] is defined and get["charac-relation-with"] is defined %}
+            relationSwitch.click();
+            {% endif %}
+        </script>
+    </div>
+{% endblock %}

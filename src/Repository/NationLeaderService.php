@@ -106,7 +106,40 @@ class NationLeaderService implements IGetService
         return $this->buildInstances($values);
     }
 
-    function buildInstances(array $fetchedValues): array
+    public function simpleSearch(string $research): array {
+        $statement = $this->context->prepare(
+            "SELECT
+                        DISTINCT (NTL.ID) AS id,
+                        NTL.Leader AS leaderId,
+                        NTL.Nation AS nationId,
+                        NTL.LeadStartDate AS leadStartDate,
+                        IFNULL(NTL.LeadEndDate, 'N/A') AS leadEndDate
+                   FROM NationsLeaders NTL
+                   INNER JOIN Characs CRC ON NTL.Leader = CRC.ID
+                   INNER JOIN Nations NTN ON NTL.Nation = NTN.ID
+                   INNER JOIN Calendars CDR ON CRC.Calendar = CDR.ID
+                   LEFT JOIN LINK_CharacsMagics LCM ON CRC.ID = LCM.Charac
+                   LEFT JOIN Magics MGC ON LCM.Magic = MGC.ID
+                   LEFT JOIN LINK_ElemsMagics LEM ON MGC.ID = LEM.Magic
+                   LEFT JOIN Elems ELM ON LEM.Elem = ELM.ID
+                   WHERE CRC.LastNames LIKE :search
+                       OR CRC.FirstNames LIKE :search
+                       OR CDR.Name LIKE :search
+                       OR DATE_FORMAT(CRC.Birthdate, '%d-%m-%Y') LIKE :search
+                       OR DATE_FORMAT(CRC.Deathdate, '%d-%m-%Y') LIKE :search
+                       OR CAST(CRC.MagicalPotential AS CHAR) LIKE :search
+                       OR NTN.Name LIKE :search
+                       OR MGC.Name LIKE :search
+                       OR ELM.Name LIKE :search
+                   LIMIT 6"
+        );
+        $statement->execute(['search' => $research]);
+        $values = $statement->fetchAll();
+
+        return $this->buildInstances($values);
+    }
+
+    public function buildInstances(array $fetchedValues): array
     {
         $nationLeaders = array();
         foreach($fetchedValues as $row) {
@@ -115,7 +148,6 @@ class NationLeaderService implements IGetService
             $nationLeader->setLeader($this->characService->getById($row['leaderId']));
             $nationLeader->setNation($this->nationService->getById($row['nationId']));
             $nationLeader->setLeadStartDate(new DateTime($row['leadStartDate']));
-            $nationLeader->setLeadEndDate(new DateTime($row['leadEndDate']));
             $nationLeader->setLeadEndDate(
                 $this->dateTimeService->getDateTime($row['leadEndDate'])
             );

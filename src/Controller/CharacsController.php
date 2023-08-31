@@ -8,6 +8,7 @@ use App\Repository\FamilyStatusService;
 use App\Repository\GenderService;
 use App\Repository\SexService;
 use App\Utils\DataInitialiser;
+use App\Utils\FamilyTreeService;
 use App\Utils\ParseService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,6 +21,7 @@ class CharacsController extends AbstractController
     private GenderService $genderService;
     private CharacRelationshipService $characRelationshipService;
     private FamilyStatusService $familyStatusService;
+    private FamilyTreeService $familyTreeService;
 
     private DataInitialiser $dataInitialiser;
 
@@ -29,6 +31,7 @@ class CharacsController extends AbstractController
                                 CharacRelationshipService $characRelationshipService,
                                 FamilyStatusService $familyStatusService,
                                 ParseService $parseService,
+                                FamilyTreeService $familyTreeService,
                                 DataInitialiser $dataInitialiser
     ) {
         $this->characService = $characService;
@@ -37,6 +40,7 @@ class CharacsController extends AbstractController
         $this->characRelationshipService = $characRelationshipService;
         $this->familyStatusService = $familyStatusService;
         $this->parseService = $parseService;
+        $this->familyTreeService = $familyTreeService;
 
         $this->dataInitialiser = $dataInitialiser;
     }
@@ -64,6 +68,8 @@ class CharacsController extends AbstractController
 
         $data['relationships'] = $this->characRelationshipService->getByCharac($data['charac']);
         $data['familyStatusService'] = $this->familyStatusService;
+
+        $data['familyTreeUrl'] = $this->familyTreeService->generateFamilyTreeLink($data['charac'], $this->characService);
 
         return $this->render('characs/infos.html.twig', $data);
     }

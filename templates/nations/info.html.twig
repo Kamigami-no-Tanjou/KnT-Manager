@@ -366,36 +366,38 @@
                     {% endfor %}
                 </div>
 
-                {% for map in maps %}
-                <div id="map-{{ loop.index }}" class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-700 dark:border-gray-600"
-                    style="width: fit-content; margin: 0 auto 1rem auto"
-                >
-                    <a href="/maps/{{ map.getId() }}">
-                        <img src="/maps/{{ map.getId() }}/image" alt="{{ map.getName() }}-map"
-                             style="border-radius: 0.5rem 0.5rem 0 0" />
-                    </a>
-                    <div class="p-5" style="padding: 1.25rem">
+                <h4 class="mb-2 text-xl font-bold dark:text-white">Cartes</h4>
+                <div class="grid grid-cols-3">
+                    {% for map in maps %}
+                    <div id="map-{{ loop.index }}" class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-700 dark:border-gray-600"
+                        style="width: fit-content; margin: 0 auto 1rem auto"
+                    >
                         <a href="/maps/{{ map.getId() }}">
-                            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ map.getName() }}</h5>
+                            <img src="/maps/{{ map.getId() }}/image" alt="{{ map.getName() }}-map" class="rounded-t-lg w-full"/>
                         </a>
-                        <p class="mb-3 font-normal text-gray-700 dark:text-gray-400" style="margin-bottom: 0.75rem">
-                            {% if map.getEstablishmentDate() is not null and map.getExpiryDate() is not null %}
-                                Valable du {{ functions.convertToCalendar(map.getEstablishmentDate(), viewCalendar).format('d/m/Y') }} au {{ functions.convertToCalendar(map.getExpiryDate(), viewCalendar).format('d/m/Y') }}.
-                            {% elseif map.getEstablishmentDate() is not null and map.getExpiryDate() is null %}
-                                Valable depuis le {{ functions.convertToCalendar(map.getEstablishmentDate(), viewCalendar).format('d/m/Y') }}.
-                            {% elseif map.getEstablishmentDate() is null and map.getExpiryDate() is not null %}
-                                Valable jusqu'au {{ functions.convertToCalendar(map.getExpiryDate(), viewCalendar).format('d/m/Y') }}.
-                            {% endif %}
-                        </p>
-                        <a href="/maps/{{ map.getId() }}" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                            style="padding: 0.5rem 0.75rem 0.5rem 0.75rem"
-                        >
-                            Consulter
-                            <svg aria-hidden="true" class="w-4 h-4 ml-2 -mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-                        </a>
+                        <div class="p-5" style="padding: 1.25rem">
+                            <a href="/maps/{{ map.getId() }}">
+                                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ map.getName() }}</h5>
+                            </a>
+                            <p class="mb-3 font-normal text-gray-700 dark:text-gray-400" style="margin-bottom: 0.75rem">
+                                {% if map.getEstablishmentDate() is not null and map.getExpiryDate() is not null %}
+                                    Valable du {{ functions.convertToCalendar(map.getEstablishmentDate(), viewCalendar).format('d/m/Y') }} au {{ functions.convertToCalendar(map.getExpiryDate(), viewCalendar).format('d/m/Y') }}.
+                                {% elseif map.getEstablishmentDate() is not null and map.getExpiryDate() is null %}
+                                    Valable depuis le {{ functions.convertToCalendar(map.getEstablishmentDate(), viewCalendar).format('d/m/Y') }}.
+                                {% elseif map.getEstablishmentDate() is null and map.getExpiryDate() is not null %}
+                                    Valable jusqu'au {{ functions.convertToCalendar(map.getExpiryDate(), viewCalendar).format('d/m/Y') }}.
+                                {% endif %}
+                            </p>
+                            <a href="/maps/{{ map.getId() }}" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                style="padding: 0.5rem 0.75rem 0.5rem 0.75rem"
+                            >
+                                Consulter
+                                <svg aria-hidden="true" class="w-4 h-4 ml-2 -mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                            </a>
+                        </div>
                     </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
             </div>
         </div>
         {% endif %}

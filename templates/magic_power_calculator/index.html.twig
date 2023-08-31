@@ -1,0 +1,218 @@
+{% extends 'nav.html.twig' %}
+
+{% block page_content %}
+    <script type="application/javascript">
+        function displayMore() {
+            let dspAmtInput = document.getElementById('dspAmt');
+            dspAmtInput.value = parseInt(dspAmtInput.value) + 2;
+
+            document.getElementById('freeForm').submit();
+        }
+    </script>
+
+    <nav class="flex mb-4" aria-label="Breadcrumb">
+        <ol class="inline-flex items-center space-x-1 md:space-x-3">
+            <li class="inline-flex items-center">
+                <a href="/" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
+                    <svg aria-hidden="true" class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+                    Dashboard
+                </a>
+            </li>
+            <li aria-current="page">
+                <div class="flex items-center">
+                    <svg aria-hidden="true" class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                    <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400">MagicPowerCalculator</span>
+                </div>
+            </li>
+        </ol>
+    </nav>
+
+    <div class="flex flex-row justify-between items-center">
+        <h1 class="text-3xl font-bold dark:text-white
+                       p-4">Magic Power Calculator<small class="ml-2 font-semibold text-gray-500 dark:text-gray-400">Calculateur de puissance magique</small></h1>
+        <a href="https://github.com/Kamigami-no-Tanjou/MagicPowerCalculator/releases">
+            <button class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button" style="padding: 0.5rem 0.5rem 0.5rem 0.5rem">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-6 h-6 mr-1.5">
+                    <path d="M10.75 2.75a.75.75 0 00-1.5 0v8.614L6.295 8.235a.75.75 0 10-1.09 1.03l4.25 4.5a.75.75 0 001.09 0l4.25-4.5a.75.75 0 00-1.09-1.03l-2.955 3.129V2.75z"></path>
+                    <path d="M3.5 12.75a.75.75 0 00-1.5 0v2.5A2.75 2.75 0 004.75 18h10.5A2.75 2.75 0 0018 15.25v-2.5a.75.75 0 00-1.5 0v2.5c0 .69-.56 1.25-1.25 1.25H4.75c-.69 0-1.25-.56-1.25-1.25v-2.5z"></path>
+                </svg>
+                Version lourde
+            </button>
+        </a>
+    </div>
+
+    <div class="mb-4 border-b border-gray-200 dark:border-gray-700 mx-1.5">
+        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
+            <li class="mr-2" role="presentation">
+                <button class="flex inline-block p-4 border-b-2 rounded-t-lg" id ="free-tab" data-tabs-target="#free" type="button" role="tab" aria-controls="free" aria-selected="false"
+                        style="line-height: 2rem">
+                    Libre
+                </button>
+            </li>
+            <li class="mr-2" role="presentation">
+                <button class="flex inline-block p-4 border-b-2 rounded-t-lg" id ="characs-tab" data-tabs-target="#characs" type="button" role="tab" aria-controls="characs" aria-selected="{% if charac is not null %}true{% else %}false{% endif %}"
+                        style="line-height: 2rem">
+                    Par personnage
+                </button>
+            </li>
+        </ul>
+    </div>
+
+    <div id="myTabContent">
+        <div class="p-4 rounded-lg bg-gray-100 dark:bg-gray-800" id="free" role="tabpanel" aria-labelledby="free-tab">
+            <div class="flex-auto relative overflow-x-auto sm:rounded-lg grid grid-cols-2 gap-4"
+                 style="margin: 0.5rem 1rem 0.5rem 0.75rem; flex: auto">
+                <div>
+                    <h3 class="text-xl font-bold dark:text-white"
+                        style="margin-bottom: 1rem">Données</h3>
+
+                    <form id="freeForm" method="get" action="" class="mx-4 grid grid-cols-2 gap-4 mb-2">
+                        <span class="text-gray-700 dark:text-gray-200">Potentiel magique</span>
+                        <input name="magicalPotential" type="number" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                               placeholder="70" required
+                                {% if magicalPotential is not null %}
+                                    value="{{ magicalPotential }}"
+                                {% endif %}
+                        >
+
+                        <span class="text-gray-700 dark:text-gray-200">Âge</span>
+                        <input name="age" type="number" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                               placeholder="20" required
+                                {% if age is not null %}
+                                    value="{{ age }}"
+                                {% endif %}
+                        >
+
+                        <input id="dspAmt" name="displayAmount" type="number" style="display: none" value="{{ displayAmount }}" required>
+
+                        <input type="submit" value="Calculer"
+                               class="cursor-pointer inline-flex justify-center col-span-full px-3 py-2 h-10 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                        >
+                    </form>
+                </div>
+
+                {% if freeResults|length > 0 %}
+                <div class="flex flex-col">
+                    <h3 class="text-xl font-bold dark:text-white"
+                        style="margin-bottom: 1rem">Résultat</h3>
+                    <ol class="relative border-l border-gray-200 dark:border-gray-700">
+                        {% if freeResults|last != freeResults|first %}
+                        <li class="mb-10 ml-4">
+                            <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
+                            <p class="mb-1 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">1ère magie</p>
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ freeResults|first }}<small class="ml-2 font-semibold text-gray-500 dark:text-gray-400">Übert</small></h3>
+                        </li>
+                        {% endif %}
+                        {% for result in freeResults %}
+                        {% if not loop.first and not loop.last %}
+                        <li class="mb-10 ml-4">
+                            <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
+                            <p class="mb-1 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">{{ loop.index }}ème magie</p>
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ result }}<small class="ml-2 font-semibold text-gray-500 dark:text-gray-400">Übert</small></h3>
+                        </li>
+                        {% endif %}
+                        {% endfor %}
+                        <li class="ml-4">
+                            <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
+                            <p class="mb-1 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">{{ freeResults|length }}ème magie</p>
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ freeResults|last }}<small class="ml-2 font-semibold text-gray-500 dark:text-gray-400">Übert</small></h3>
+                        </li>
+                    </ol>
+                    <button onclick="displayMore()" class="mx-auto mt-5 mb-1 inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:outline-none focus:ring-gray-200 focus:text-blue-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-700">Afficher plus
+                        <svg class="w-3 h-3 ml-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"></path>
+                        </svg>
+                    </button>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="p-4 rounded-lg bg-gray-100 dark:bg-gray-800" id="characs" role="tabpanel" aria-labelledby="characs-tab">
+            <div class="flex-auto relative overflow-x-auto sm:rounded-lg grid grid-cols-2 gap-4"
+                 style="margin: 0.5rem 1rem 0.5rem 0.75rem; flex: auto">
+                <div>
+                    <h3 class="text-xl font-bold dark:text-white"
+                        style="margin-bottom: 1rem">Données</h3>
+
+                    <form id="characForm" method="get" action="" class="mx-4 grid grid-cols-2 gap-4 mb-2">
+                        <span class="text-gray-700 dark:text-gray-200">Personnage</span>
+                        <select id="charac" name="charac" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                            <option value="0"
+                                    {% if charac is null %}
+                                    selected
+                                    {% endif %}
+                            ></option>
+                            {% for characItr in characs %}
+                                <option value="{{ characItr.getId() }}"
+                                        {% if charac is not null and charac.getId() == characItr.getId() %}
+                                        selected
+                                        {% endif %}
+                                >
+                                    {{ characItr.getFirstNames() }} {{ characItr.getLastNames }}
+                                </option>
+                            {% endfor %}
+                        </select>
+
+                        <span class="text-gray-700 dark:text-gray-200">Âge</span>
+                        <input name="age" type="number" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                               placeholder="20" required
+                                {% if age is not null %}
+                                    value="{{ age }}"
+                                {% endif %}
+                        >
+
+                        <input type="submit" value="Calculer"
+                               class="cursor-pointer inline-flex justify-center col-span-full px-3 py-2 h-10 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                        >
+                    </form>
+                </div>
+
+                {% if results|length > 0 %}
+                    <div class="flex flex-col">
+                        <h3 class="text-xl font-bold dark:text-white"
+                            style="margin-bottom: 1rem">Résultat</h3>
+                        <ol class="relative border-l border-gray-200 dark:border-gray-700">
+                            {% if results|last != results|first %}
+                            <li class="mb-10 ml-4">
+                                <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
+                                <p class="mb-1 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">1ère magie</p>
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ results|first }}<small class="ml-2 font-semibold text-gray-500 dark:text-gray-400">Übert</small></h3>
+                                <a href="/magics/{{ charac.getMagics()|first.getId() }}" class="hover:text-gray-500 text-gray-800 dark:hover:text-gray-300 dark:text-gray-100">
+                                    {{ charac.getMagics()|first.getName() }}
+                                </a>
+                            </li>
+                            {% endif %}
+                            {% for result in results %}
+                                {% if not loop.first and not loop.last %}
+                                    <li class="mb-10 ml-4">
+                                        <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
+                                        <p class="mb-1 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">{{ loop.index }}ème magie</p>
+                                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ result }}<small class="ml-2 font-semibold text-gray-500 dark:text-gray-400">Übert</small></h3>
+                                        <a href="/magics/{{ charac.getMagics()[loop.index].getId() }}" class="hover:text-gray-500 text-gray-800 dark:hover:text-gray-300 dark:text-gray-100">
+                                            {{ charac.getMagics()[loop.index].getName() }}
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                            <li class="ml-4">
+                                <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
+                                <p class="mb-1 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">{{ results|length }}ème magie</p>
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ results|last }}<small class="ml-2 font-semibold text-gray-500 dark:text-gray-400">Übert</small></h3>
+                                <a href="/magics/{{ charac.getMagics()|last.getId() }}" class="hover:text-gray-500 text-gray-800 dark:hover:text-gray-300 dark:text-gray-100">
+                                    {{ charac.getMagics()|last.getName() }}
+                                </a>
+                            </li>
+                        </ol>
+                    </div>
+                {% elseif charac is not null %}
+                    <div>
+                        <h3 class="text-xl font-bold dark:text-white"
+                            style="margin-bottom: 1rem">Résultat</h3>
+                        <p class="text-gray-700 dark:text-gray-200">Pas de données sur le potentiel magique de ce personnage, calcul impossible...</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

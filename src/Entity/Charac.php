@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Utils\PseudoEntities\Family;
 use DateTime;
 
 class Charac
@@ -24,6 +25,177 @@ class Charac
 
     private ?int $height;
     private ?string $hairColour;
+    private ?string $eyeColour;
+    private ?string $appearance;
+
+    private ?string $favoriteColour;
+    private ?string $thingsLoved;
+    private ?string $thingsHated;
+
+    private array $magics;
+
+    private ?Family $childrenFamily;
+    private ?Family $spouseFamily;
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLastNames(): string
+    {
+        return $this->lastNames;
+    }
+
+    /**
+     * @param string $lastNames
+     */
+    public function setLastNames(string $lastNames): void
+    {
+        $this->lastNames = $lastNames;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFirstNames(): string
+    {
+        return $this->firstNames;
+    }
+
+    /**
+     * @param string $firstNames
+     */
+    public function setFirstNames(string $firstNames): void
+    {
+        $this->firstNames = $firstNames;
+    }
+
+    /**
+     * @return ?string
+     */
+    public function getPortrait(): ?string
+    {
+        return $this->portrait;
+    }
+
+    /**
+     * @param ?string $portrait
+     */
+    public function setPortrait(?string $portrait): void
+    {
+        $this->portrait = $portrait;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getBirthdate(): DateTime
+    {
+        return $this->birthdate;
+    }
+
+    /**
+     * @param DateTime $birthdate
+     */
+    public function setBirthdate(DateTime $birthdate): void
+    {
+        $this->birthdate = $birthdate;
+    }
+
+    /**
+     * @return ?DateTime
+     */
+    public function getDeathdate(): ?DateTime
+    {
+        return $this->deathdate;
+    }
+
+    /**
+     * @param ?DateTime $deathdate
+     */
+    public function setDeathdate(?DateTime $deathdate): void
+    {
+        $this->deathdate = $deathdate;
+    }
+
+    /**
+     * @return ?_Class
+     */
+    public function getClass(): ?_Class
+    {
+        return $this->class;
+    }
+
+    /**
+     * @param ?_Class $class
+     */
+    public function setClass(?_Class $class): void
+    {
+        $this->class = $class;
+    }
+
+    /**
+     * @return Calendar
+     */
+    public function getCalendar(): Calendar
+    {
+        return $this->calendar;
+    }
+
+    /**
+     * @param Calendar $calendar
+     */
+    public function setCalendar(Calendar $calendar): void
+    {
+        $this->calendar = $calendar;
+    }
+
+    /**
+     * @return Nation
+     */
+    public function getOrigin(): Nation
+    {
+        return $this->origin;
+    }
+
+    /**
+     * @param Nation $origin
+     */
+    public function setOrigin(Nation $origin): void
+    {
+        $this->origin = $origin;
+    }
+
+    /**
+     * @return array
+     */
+    public function getMagics(): array
+    {
+        return $this->magics;
+    }
+
+    /**
+     * @param array $magics
+     */
+    public function setMagics(array $magics): void
+    {
+        $this->magics = $magics;
+    }
 
     /**
      * @return string|null
@@ -216,172 +388,36 @@ class Charac
     {
         $this->thingsHated = $thingsHated;
     }
-    private ?string $eyeColour;
-    private ?string $appearance;
-
-    private ?string $favoriteColour;
-    private ?string $thingsLoved;
-    private ?string $thingsHated;
-
-    private array $magics;
 
     /**
-     * @return int
+     * @return Family|null
      */
-    public function getId(): int
+    public function getChildrenFamily(): ?Family
     {
-        return $this->id;
+        return $this->childrenFamily;
     }
 
     /**
-     * @param int $id
+     * @param Family|null $childrenFamily
      */
-    public function setId(int $id): void
+    public function setChildrenFamily(?Family $childrenFamily): void
     {
-        $this->id = $id;
+        $this->childrenFamily = $childrenFamily;
     }
 
     /**
-     * @return string
+     * @return Family|null
      */
-    public function getLastNames(): string
+    public function getSpouseFamily(): ?Family
     {
-        return $this->lastNames;
+        return $this->spouseFamily;
     }
 
     /**
-     * @param string $lastNames
+     * @param Family|null $spouseFamily
      */
-    public function setLastNames(string $lastNames): void
+    public function setSpouseFamily(?Family $spouseFamily): void
     {
-        $this->lastNames = $lastNames;
-    }
-
-    /**
-     * @return string
-     */
-    public function getFirstNames(): string
-    {
-        return $this->firstNames;
-    }
-
-    /**
-     * @param string $firstNames
-     */
-    public function setFirstNames(string $firstNames): void
-    {
-        $this->firstNames = $firstNames;
-    }
-
-    /**
-     * @return ?string
-     */
-    public function getPortrait(): ?string
-    {
-        return $this->portrait;
-    }
-
-    /**
-     * @param ?string $portrait
-     */
-    public function setPortrait(?string $portrait): void
-    {
-        $this->portrait = $portrait;
-    }
-
-    /**
-     * @return DateTime
-     */
-    public function getBirthdate(): DateTime
-    {
-        return $this->birthdate;
-    }
-
-    /**
-     * @param DateTime $birthdate
-     */
-    public function setBirthdate(DateTime $birthdate): void
-    {
-        $this->birthdate = $birthdate;
-    }
-
-    /**
-     * @return ?DateTime
-     */
-    public function getDeathdate(): ?DateTime
-    {
-        return $this->deathdate;
-    }
-
-    /**
-     * @param ?DateTime $deathdate
-     */
-    public function setDeathdate(?DateTime $deathdate): void
-    {
-        $this->deathdate = $deathdate;
-    }
-
-    /**
-     * @return ?_Class
-     */
-    public function getClass(): ?_Class
-    {
-        return $this->class;
-    }
-
-    /**
-     * @param ?_Class $class
-     */
-    public function setClass(?_Class $class): void
-    {
-        $this->class = $class;
-    }
-
-    /**
-     * @return Calendar
-     */
-    public function getCalendar(): Calendar
-    {
-        return $this->calendar;
-    }
-
-    /**
-     * @param Calendar $calendar
-     */
-    public function setCalendar(Calendar $calendar): void
-    {
-        $this->calendar = $calendar;
-    }
-
-    /**
-     * @return Nation
-     */
-    public function getOrigin(): Nation
-    {
-        return $this->origin;
-    }
-
-    /**
-     * @param Nation $origin
-     */
-    public function setOrigin(Nation $origin): void
-    {
-        $this->origin = $origin;
-    }
-
-    /**
-     * @return array
-     */
-    public function getMagics(): array
-    {
-        return $this->magics;
-    }
-
-    /**
-     * @param array $magics
-     */
-    public function setMagics(array $magics): void
-    {
-        $this->magics = $magics;
+        $this->spouseFamily = $spouseFamily;
     }
 }

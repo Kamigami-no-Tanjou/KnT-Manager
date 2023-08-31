@@ -96,6 +96,9 @@ class CharacService implements IGetService
         $charac->setThingsHated($values[0]['thingsHated']);
         $charac->setMagics($this->getMagics($charac->getId()));
 
+        $charac->setChildrenFamily(null);
+        $charac->setSpouseFamily(null);
+
         return $charac;
     }
 
@@ -457,7 +460,254 @@ class CharacService implements IGetService
         return $this->buildInstances($values);
     }
 
-    function buildInstances(array $fetchedValues): array
+    public function getFather(Charac $charac): ?Charac {
+        $statement = $this->context->prepare(
+            "SELECT
+                        CRC.ID AS id,
+                        CRC.LastNames AS lastNames,
+                        CRC.FirstNames AS firstNames,
+                        CRC.Description AS description,
+                        CRC.Calendar AS calendarId,
+                        CRC.Birthdate AS birthdate,
+                        IFNULL(CRC.Deathdate, 'N/A') AS deathdate,
+                        CRC.MagicalPotential AS magicalPotential,
+                        CRC.Class AS classId,
+                        CRC.Sex AS sex,
+                        CRC.Gender AS gender,
+                        CRC.SexualOrientation AS sexualOrientation,
+                        CRC.Origin AS originId,
+                        
+                        -- Physical characteristics
+                        CRC.Height AS height,
+                        CRC.HairColour AS hairColour,
+                        CRC.EyeColour AS eyeColour,
+                        CRC.Appearance AS appearance,
+                        
+                        -- Taste
+                        CRC.FavoriteColour AS favoriteColour,
+                        CRC.ThingsLoved AS thingsLoved,
+                        CRC.ThingsHated AS thingsHated
+                   FROM CharacsRelationships CRS
+                   INNER JOIN Characs CRC ON CRS.FromCharac = CRC.ID
+                   WHERE CRS.FamilyStatus = 1
+                   AND CRS.TowardsCharac = :characId"
+        );
+        $statement->execute(['characId' => $charac->getId()]);
+        $values = $statement->fetchAll();
+
+        $results = $this->buildInstances($values); // This should contain 0 or 1 elements
+
+        return (sizeof($results) > 0) ? $results[0] : null;
+    }
+
+    public function getMother(Charac $charac): ?Charac {
+        $statement = $this->context->prepare(
+            "SELECT
+                        CRC.ID AS id,
+                        CRC.LastNames AS lastNames,
+                        CRC.FirstNames AS firstNames,
+                        CRC.Description AS description,
+                        CRC.Calendar AS calendarId,
+                        CRC.Birthdate AS birthdate,
+                        IFNULL(CRC.Deathdate, 'N/A') AS deathdate,
+                        CRC.MagicalPotential AS magicalPotential,
+                        CRC.Class AS classId,
+                        CRC.Sex AS sex,
+                        CRC.Gender AS gender,
+                        CRC.SexualOrientation AS sexualOrientation,
+                        CRC.Origin AS originId,
+                        
+                        -- Physical characteristics
+                        CRC.Height AS height,
+                        CRC.HairColour AS hairColour,
+                        CRC.EyeColour AS eyeColour,
+                        CRC.Appearance AS appearance,
+                        
+                        -- Taste
+                        CRC.FavoriteColour AS favoriteColour,
+                        CRC.ThingsLoved AS thingsLoved,
+                        CRC.ThingsHated AS thingsHated
+                   FROM CharacsRelationships CRS
+                   INNER JOIN Characs CRC ON CRS.FromCharac = CRC.ID
+                   WHERE CRS.FamilyStatus = 2
+                   AND CRS.TowardsCharac = :characId"
+        );
+        $statement->execute(['characId' => $charac->getId()]);
+        $values = $statement->fetchAll();
+
+        $results = $this->buildInstances($values); // This should contain 0 or 1 elements
+
+        return (sizeof($results) > 0) ? $results[0] : null;
+    }
+
+    public function getBrothersAndSisters(Charac $charac): array {
+        $statement = $this->context->prepare(
+            "SELECT
+                        CRC.ID AS id,
+                        CRC.LastNames AS lastNames,
+                        CRC.FirstNames AS firstNames,
+                        CRC.Description AS description,
+                        CRC.Calendar AS calendarId,
+                        CRC.Birthdate AS birthdate,
+                        IFNULL(CRC.Deathdate, 'N/A') AS deathdate,
+                        CRC.MagicalPotential AS magicalPotential,
+                        CRC.Class AS classId,
+                        CRC.Sex AS sex,
+                        CRC.Gender AS gender,
+                        CRC.SexualOrientation AS sexualOrientation,
+                        CRC.Origin AS originId,
+                        
+                        -- Physical characteristics
+                        CRC.Height AS height,
+                        CRC.HairColour AS hairColour,
+                        CRC.EyeColour AS eyeColour,
+                        CRC.Appearance AS appearance,
+                        
+                        -- Taste
+                        CRC.FavoriteColour AS favoriteColour,
+                        CRC.ThingsLoved AS thingsLoved,
+                        CRC.ThingsHated AS thingsHated
+                   FROM CharacsRelationships CRS
+                   INNER JOIN Characs CRC ON CRS.FromCharac = CRC.ID
+                   WHERE (CRS.FamilyStatus = 3 OR CRS.FamilyStatus = 4)
+                   AND CRS.TowardsCharac = :characId"
+        );
+        $statement->execute(['characId' => $charac->getId()]);
+        $values = $statement->fetchAll();
+
+        return $this->buildInstances($values);
+    }
+
+    public function getSpouse(Charac $charac): ?Charac {
+        $statement = $this->context->prepare(
+            "SELECT
+                        CRC.ID AS id,
+                        CRC.LastNames AS lastNames,
+                        CRC.FirstNames AS firstNames,
+                        CRC.Description AS description,
+                        CRC.Calendar AS calendarId,
+                        CRC.Birthdate AS birthdate,
+                        IFNULL(CRC.Deathdate, 'N/A') AS deathdate,
+                        CRC.MagicalPotential AS magicalPotential,
+                        CRC.Class AS classId,
+                        CRC.Sex AS sex,
+                        CRC.Gender AS gender,
+                        CRC.SexualOrientation AS sexualOrientation,
+                        CRC.Origin AS originId,
+                        
+                        -- Physical characteristics
+                        CRC.Height AS height,
+                        CRC.HairColour AS hairColour,
+                        CRC.EyeColour AS eyeColour,
+                        CRC.Appearance AS appearance,
+                        
+                        -- Taste
+                        CRC.FavoriteColour AS favoriteColour,
+                        CRC.ThingsLoved AS thingsLoved,
+                        CRC.ThingsHated AS thingsHated
+                   FROM CharacsRelationships CRS
+                   INNER JOIN Characs CRC ON CRS.FromCharac = CRC.ID
+                   WHERE (CRS.FamilyStatus = 21 OR CRS.FamilyStatus = 22)
+                   AND CRS.TowardsCharac = :characId"
+        );
+        $statement->execute(['characId' => $charac->getId()]);
+        $values = $statement->fetchAll();
+
+        $results = $this->buildInstances($values); // This should contain 0 or 1 elements
+
+        return (sizeof($results) > 0) ? $results[0] : null;
+    }
+
+    public function getChildren(Charac $charac): array {
+        $statement = $this->context->prepare(
+            "SELECT
+                        CRC.ID AS id,
+                        CRC.LastNames AS lastNames,
+                        CRC.FirstNames AS firstNames,
+                        CRC.Description AS description,
+                        CRC.Calendar AS calendarId,
+                        CRC.Birthdate AS birthdate,
+                        IFNULL(CRC.Deathdate, 'N/A') AS deathdate,
+                        CRC.MagicalPotential AS magicalPotential,
+                        CRC.Class AS classId,
+                        CRC.Sex AS sex,
+                        CRC.Gender AS gender,
+                        CRC.SexualOrientation AS sexualOrientation,
+                        CRC.Origin AS originId,
+                        
+                        -- Physical characteristics
+                        CRC.Height AS height,
+                        CRC.HairColour AS hairColour,
+                        CRC.EyeColour AS eyeColour,
+                        CRC.Appearance AS appearance,
+                        
+                        -- Taste
+                        CRC.FavoriteColour AS favoriteColour,
+                        CRC.ThingsLoved AS thingsLoved,
+                        CRC.ThingsHated AS thingsHated
+                   FROM CharacsRelationships CRS
+                   INNER JOIN Characs CRC ON CRS.FromCharac = CRC.ID
+                   WHERE (CRS.FamilyStatus = 5 OR CRS.FamilyStatus = 6)
+                   AND CRS.TowardsCharac = :characId"
+        );
+        $statement->execute(['characId' => $charac->getId()]);
+        $values = $statement->fetchAll();
+
+        return $this->buildInstances($values);
+    }
+
+    public function simpleSearch(string $research): array {
+        $statement = $this->context->prepare(
+            "SELECT
+                        DISTINCT(CRC.ID) AS id,
+                        CRC.LastNames AS lastNames,
+                        CRC.FirstNames AS firstNames,
+                        CRC.Description AS description,
+                        CRC.Calendar AS calendarId,
+                        CRC.Birthdate AS birthdate,
+                        IFNULL(CRC.Deathdate, 'N/A') AS deathdate,
+                        CRC.MagicalPotential AS magicalPotential,
+                        CRC.Class AS classId,
+                        CRC.Sex AS sex,
+                        CRC.Gender AS gender,
+                        CRC.SexualOrientation AS sexualOrientation,
+                        CRC.Origin AS originId,
+                        
+                        -- Physical characteristics
+                        CRC.Height AS height,
+                        CRC.HairColour AS hairColour,
+                        CRC.EyeColour AS eyeColour,
+                        CRC.Appearance AS appearance,
+                        
+                        -- Taste
+                        CRC.FavoriteColour AS favoriteColour,
+                        CRC.ThingsLoved AS thingsLoved,
+                        CRC.ThingsHated AS thingsHated
+                   FROM Characs CRC
+                   INNER JOIN Nations NTN ON CRC.Origin = NTN.ID
+                   INNER JOIN Calendars CDR ON CRC.Calendar = CDR.ID
+                   LEFT JOIN LINK_CharacsMagics LCM ON CRC.ID = LCM.Charac
+                   LEFT JOIN Magics MGC ON LCM.Magic = MGC.ID
+                   LEFT JOIN LINK_ElemsMagics LEM ON MGC.ID = LEM.Magic
+                   LEFT JOIN Elems ELM ON LEM.Elem = ELM.ID
+                   WHERE CRC.LastNames LIKE :search
+                       OR CRC.FirstNames LIKE :search
+                       OR CDR.Name LIKE :search
+                       OR DATE_FORMAT(CRC.Birthdate, '%d-%m-%Y') LIKE :search
+                       OR DATE_FORMAT(CRC.Deathdate, '%d-%m-%Y') LIKE :search
+                       OR CAST(CRC.MagicalPotential AS CHAR) LIKE :search
+                       OR NTN.Name LIKE :search
+                       OR MGC.Name LIKE :search
+                       OR ELM.Name LIKE :search
+                   LIMIT 6"
+        );
+        $statement->execute(['search' => $research]);
+        $values = $statement->fetchAll();
+
+        return $this->buildInstances($values);
+    }
+
+    public function buildInstances(array $fetchedValues): array
     {
         $characs = array();
         foreach($fetchedValues as $row) {
@@ -486,6 +736,10 @@ class CharacService implements IGetService
             $charac->setThingsLoved($row['thingsLoved']);
             $charac->setThingsHated($row['thingsHated']);
             $charac->setMagics($this->getMagics($charac->getId()));
+
+            $charac->setChildrenFamily(null);
+            $charac->setSpouseFamily(null);
+
             $characs[] = $charac;
         }
 

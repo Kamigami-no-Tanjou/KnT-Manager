@@ -16,6 +16,12 @@ class ServiceRegister
         // Adding ParseService
         $builder->register('parse.service', 'App\Utils\ParseService');
 
+        // Adding MagicPowerCalculatorService
+        $builder->register('magicpowercalculator.service', 'App\Utils\MagicPowerCalculatorService');
+
+        // Adding FamilyTreeService
+        $builder->register('familytree.service', 'App\Utils\FamilyTreeService');
+
         // Adding repository level services (DAO feeders)
         $builder->register('calendar.service', '\App\Repository\CalendarService');
         $builder->register('charac.service', '\App\Repository\CharacService');
@@ -31,6 +37,12 @@ class ServiceRegister
         $builder->register('nationleader.service', '\App\Repository\NationLeaderService');
         $builder->register('sex.service', 'App\Repository\SexService');
 
+        $builder->register('charac.querybuilder.service', 'App\Repository\QueryBuilders\CharacQueryBuilder');
+        $builder->register('magic.querybuilder.service', 'App\Repository\QueryBuilders\MagicQueryBuilder');
+        $builder->register('map.querybuilder.service', 'App\Repository\QueryBuilders\MapQueryBuilder');
+        $builder->register('nation.querybuilder.service', 'App\Repository\QueryBuilders\NationQueryBuilder');
+
+        $builder->register('browsing.service', '\App\Utils\BrowsingService');
         $builder->register('datainitialiser.service', '\App\Utils\DataInitialiser');
     }
 }

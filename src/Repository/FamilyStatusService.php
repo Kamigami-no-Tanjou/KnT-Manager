@@ -30,6 +30,8 @@ class FamilyStatusService
             FamilyStatus::Niece => "la nièce",
             FamilyStatus::Husband => "le mari",
             FamilyStatus::Wife => "la femme",
+            FamilyStatus::SonInLaw => "le beau-fils",
+            FamilyStatus::DaughterInLaw => "la belle-fille",
         };
     }
 
