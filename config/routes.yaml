@@ -97,3 +97,8 @@ browse:
     path: /browse/
     controller: App\Controller\BrowsingController::browse
     methods: GET|HEAD
+
+map:
+    path: /maps/{id}
+    controller: App\Controller\MapsController::mapInfo
+    methods: GET|HEAD

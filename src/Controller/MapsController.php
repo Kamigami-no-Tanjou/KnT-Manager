@@ -27,4 +27,12 @@ class MapsController extends AbstractController
 
         return new Response($map, 200, $headers);
     }
+
+    public function mapInfo(int $id) {
+        // Data retrieval
+        $data = $this->dataInitialiser->getBaseData();
+        $data["map"] = $this->mapService->getById($id);
+
+        return $this->render('maps/infos.html.twig', $data);
+    }
 }
