@@ -12,7 +12,11 @@ class FunctionContainer
     public function __construct(PDO $pdo) {
         $this->context = $pdo;
     }
-    public function convertToCalendar(DateTime $date, int $calendarId) {
+    public function convertToCalendar(DateTime $date, ?int $calendarId): DateTime {
+        if ($calendarId == null) {
+            $calendarId = 1;
+        }
+
         $statement = $this->context->prepare("SELECT YearFromDate(CONCAT(:y, '-01-01'), :c) AS year");
         $statement->execute([
             'y' => $date->format('Y'),
