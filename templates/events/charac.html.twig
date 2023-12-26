@@ -2,9 +2,11 @@
 
 {% set extraString = "" %}
 {% for extra in extras %}
-    {% set extraString = extraString ~ extra.getId() %}
-    {% if not loop.last %}
-        {% set extraString = extraString ~ "," %}
+    {% if extra is not null %}
+        {% set extraString = extraString ~ extra.getId() %}
+        {% if not loop.last %}
+            {% set extraString = extraString ~ "," %}
+        {% endif %}
     {% endif %}
 {% endfor %}
 
@@ -81,15 +83,15 @@
                     onclick="expandView(true)">
                 <span class="sr-only">Expand view</span>
                 <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd" d="M10.21 14.77a.75.75 0 01.02-1.06L14.168 10 10.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
-                    <path fill-rule="evenodd" d="M4.21 14.77a.75.75 0 01.02-1.06L8.168 10 4.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
+                    <path fill-rule="evenodd" d="M10.21 14.77a.75.75 0 01.02-1.06L14.168 10 10.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd"></path>
+                    <path fill-rule="evenodd" d="M4.21 14.77a.75.75 0 01.02-1.06L8.168 10 4.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd"></path>
                 </svg>
             </button>
             <button id="reduce-view-switch" aria-controls="expand-view" type="button" class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
                     onclick="expandView(false)" style="display: none">
                 <span class="sr-only">Reduce view</span>
                 <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd" d="M15.79 14.77a.75.75 0 01-1.06.02l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 111.04 1.08L11.832 10l3.938 3.71a.75.75 0 01.02 1.06zm-6 0a.75.75 0 01-1.06.02l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 111.04 1.08L5.832 10l3.938 3.71a.75.75 0 01.02 1.06z" clip-rule="evenodd" />
+                    <path fill-rule="evenodd" d="M15.79 14.77a.75.75 0 01-1.06.02l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 111.04 1.08L11.832 10l3.938 3.71a.75.75 0 01.02 1.06zm-6 0a.75.75 0 01-1.06.02l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 111.04 1.08L5.832 10l3.938 3.71a.75.75 0 01.02 1.06z" clip-rule="evenodd"></path>
                 </svg>
             </button>
         </div>
@@ -106,7 +108,7 @@
                     <button id="addCharacModalBtn" data-modal-toggle="addCharacModal" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button"
                             style="padding: 0.5rem 0.5rem 0.5rem 0.25rem">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-6 h-6">
-                            <path d="M10.75 6.75a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" />
+                            <path d="M10.75 6.75a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z"></path>
                         </svg>
                         Personnage
                     </button>
@@ -138,7 +140,7 @@
                         >
                             {{ charac.getFirstNames() }} {{ charac.getLastNames() }}
                         </th>
-                        {% for fmlCharac in family %}
+                        {% for fmlCharac in family %}{% if fmlCharac is not null %}
                         <th scope="col" class="px-6 py-3 text-center"
                             style="padding-left: 0.25rem; padding-right: 0.5rem;
                             {% if loop.last and extras|length == 0 %}
@@ -146,8 +148,8 @@
                             {% endif %}">
                             {{ fmlCharac.getFirstNames() }} {{ fmlCharac.getLastNames() }}
                         </th>
-                        {% endfor %}
-                        {% for extra in extras %}
+                        {% endif %}{% endfor %}
+                        {% for extra in extras %}{% if extra is not null %}
                         <th scope="col" class="text-center ex-{{ extra.getId() }} hover:bg-red-500"
                             {% if loop.last %}
                                 style="border-top-right-radius: 0.5rem"
@@ -157,7 +159,7 @@
                                 {{ extra.getFirstNames() }} {{ extra.getLastNames() }}
                             </button>
                         </th>
-                        {% endfor %}
+                        {% endif %}{% endfor %}
                     </tr>
                     </thead>
                     <tbody>
@@ -182,16 +184,16 @@
                                 <td class="text-center" style="padding: 0.5rem 0.25rem">
                                     {{ ages[event.getId()~"-"~charac.getId()] }}
                                 </td>
-                                {% for fmlCharac in family %}
+                                {% for fmlCharac in family %}{% if fmlCharac is not null %}
                                 <td class="text-center" style="padding: 0.5rem 0.5rem 0.5rem 0.25rem">
                                     {{ ages[event.getId()~"-"~fmlCharac.getId()] }}
                                 </td>
-                                {% endfor %}
-                                {% for extra in extras %}
+                                {% endif %}{% endfor %}
+                                {% for extra in extras %}{% if extra is not null %}
                                 <td class="text-center ex-{{ extra.getId() }}" style="padding: 0.5rem 0.5rem 0.5rem 0.25rem">
                                     {{ ages[event.getId()~"-"~extra.getId()] }}
                                 </td>
-                                {% endfor %}
+                                {% endif %}{% endfor %}
                             </tr>
                         {% endif %}
 
@@ -220,22 +222,22 @@
                             {% endif %}">
                                 {{ ages[event.getId()~"-"~charac.getId()] }}
                             </td>
-                            {% for fmlCharac in family %}
+                            {% for fmlCharac in family %}{% if fmlCharac is not null %}
                             <td class="px-6 py-4 text-center" style="padding: 0.5rem 0.5rem 0.5rem 0.25rem;
                             {% if loop.last and extras|length == 0 %}
                                     border-bottom-right-radius: 0.5rem;
                             {% endif %}">
                                 {{ ages[event.getId()~"-"~fmlCharac.getId()] }}
                             </td>
-                            {% endfor %}
-                            {% for extra in extras %}
+                            {% endif %}{% endfor %}
+                            {% for extra in extras %}{% if extra is not null %}
                             <td class="px-6 py-4 text-center ex-{{ extra.getId() }}" style="padding: 0.5rem 0.5rem 0.5rem 0.25rem;
                             {% if loop.last %}
                                     border-bottom-right-radius: 0.5rem;
                             {% endif %}">
                                 {{ ages[event.getId()~"-"~extra.getId()] }}
                             </td>
-                            {% endfor %}
+                            {% endif %}{% endfor %}
                         {% else %}
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 text-center whitespace-nowrap dark:text-white"
                                 colspan="{{ 5 + family|length + extras|length }}"

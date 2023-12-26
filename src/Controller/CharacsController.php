@@ -57,6 +57,10 @@ class CharacsController extends AbstractController
         // Data retrieval
         $data = $this->dataInitialiser->getBaseData();
         $data['charac'] = $this->characService->getById($id);
+        if ($data['charac'] == null) {
+            return $this->render("errors/404.html.twig", $data);
+        }
+
         $data['hasPortrait'] = $this->characService->hasPortrait($data['charac']);
 
         $data['characSex'] = $this->sexService->getSexName($data['charac']->getSex());

@@ -21,6 +21,10 @@ class MapsController extends AbstractController
 
     public function mapImage(int $id): Response {
         $map = $this->mapService->getMapById($id);
+        if ($map == null) {
+            return $this->render('errors/404.html.twig', $this->dataInitialiser->getBaseData());
+        }
+
         $headers = array(
             'Content-Type' => "image/png"
         );
@@ -32,6 +36,9 @@ class MapsController extends AbstractController
         // Data retrieval
         $data = $this->dataInitialiser->getBaseData();
         $data["map"] = $this->mapService->getById($id);
+        if ($data['map'] == null) {
+            return $this->render("errors/404.html.twig", $data);
+        }
 
         return $this->render('maps/infos.html.twig', $data);
     }

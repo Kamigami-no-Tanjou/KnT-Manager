@@ -46,6 +46,10 @@ class ElemController extends AbstractController
     public function displayImage(int $id): Response {
         // Data retrieval
         $imageBytes = $this->elemService->getIllustrationById($id);
+        if ($imageBytes == null) {
+            return $this->render('errors/404.html.twig', $this->dataInitialiser->getBaseData());
+        }
+
         $headers = array(
             'Content-Type' => 'image/png'
         );

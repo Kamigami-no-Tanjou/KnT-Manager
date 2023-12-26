@@ -3,6 +3,7 @@
 namespace App\Utils;
 
 use DateTime;
+use Exception;
 
 class DateTimeService
 {
@@ -14,6 +15,9 @@ class DateTimeService
         return new DateTime($value);
     }
 
+    /**
+     * @throws Exception
+     */
     public function parseDateTime(string $value): DateTime {
         $values = explode('-', $value);
 

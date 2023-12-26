@@ -23,7 +23,7 @@ class CharacRelationshipService implements IGetService
         $this->familyStatusService = $familyStatusService;
     }
 
-    public function getById(int $id): object
+    public function getById(int $id): ?CharacRelationship
     {
         $characRelationship = new CharacRelationship();
         $statement = $this->context->prepare(
@@ -39,6 +39,10 @@ class CharacRelationshipService implements IGetService
         );
         $statement->execute(['id' => $id]);
         $values = $statement->fetchAll();
+
+        if (count($values) < 1) {
+            return null;
+        }
 
         $characRelationship->setId($values[0]['id']);
         $characRelationship->setFromCharac($this->characService->getById($values[0]['fromCharacId']));

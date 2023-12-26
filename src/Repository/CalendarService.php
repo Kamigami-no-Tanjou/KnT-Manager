@@ -15,7 +15,7 @@ class CalendarService implements IGetService
         $this->context = $contextSrc->GetPDO();
     }
 
-    public function getById(int $id): Calendar
+    public function getById(int $id): ?Calendar
     {
         $calendar = new Calendar();
         $statement = $this->context->prepare(
@@ -29,6 +29,10 @@ class CalendarService implements IGetService
         );
         $statement->execute(['id' => $id]);
         $values = $statement->fetchAll();
+
+        if (count($values) < 1) {
+            return null;
+        }
 
         $calendar->setId($values[0]['id']);
         $calendar->setName($values[0]['name']);

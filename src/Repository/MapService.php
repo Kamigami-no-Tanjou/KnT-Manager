@@ -23,7 +23,7 @@ class MapService implements IGetService
         $this->dateTimeService = $dateTimeService;
     }
 
-    public function getById(int $id): object
+    public function getById(int $id): ?Map
     {
         $map = new Map();
         $statement = $this->context->prepare(
@@ -38,6 +38,10 @@ class MapService implements IGetService
         );
         $statement->execute(['id' => $id]);
         $values = $statement->fetchAll();
+
+        if (count($values) < 1) {
+            return null;
+        }
 
         $map->setId($values[0]['id']);
         $map->setName($values[0]['name']);
@@ -146,7 +150,7 @@ class MapService implements IGetService
         return $maps;
     }
 
-    public function getMapById(int $id): string {
+    public function getMapById(int $id): ?string {
         $statement = $this->context->prepare(
             "SELECT
                         Content AS content
@@ -155,6 +159,10 @@ class MapService implements IGetService
         );
         $statement->execute(['id' => $id]);
         $map = $statement->fetchAll();
+
+        if (count($map) < 1) {
+            return null;
+        }
 
         return $map[0]['content'];
     }

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Repository\CharacService;
 use App\Utils\DataInitialiser;
 use App\Utils\MagicPowerCalculatorService;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -28,6 +29,7 @@ class MagicPowerCalculatorController extends AbstractController
         // Data retrieval
         $data = $this->dataInitialiser->getBaseData();
         $data['characs'] = $this->characService->getAllIdAndNames();
+        $data['displayCharac'] = null;
 
         if (isset($_GET['magicalPotential']) && isset($_GET['age']) && isset($_GET['displayAmount'])) {
             $data['magicalPotential'] = $_GET['magicalPotential'];
@@ -35,16 +37,17 @@ class MagicPowerCalculatorController extends AbstractController
             $data['displayAmount'] = $_GET['displayAmount'];
             $data['charac'] = null;
 
-            $data['freeResults'] = $this->magicPowerCalculatorService->multipleMagicFunction($data['magicalPotential'], $data['age'], $data['displayAmount']);
+            $data['freeResults'] = $this->magicPowerCalculatorService->multipleMagicFunction(floatval($data['magicalPotential']), floatval($data['age']), intval($data['displayAmount']));
             $data['results'] = array();
         } elseif (isset($_GET['charac']) && isset($_GET['age'])) {
+            $data['displayCharac'] = true;
             $data['magicalPotential'] = null;
             $data['age'] = $_GET['age'];
             $data['displayAmount'] = 2;
             $data['charac'] = $this->characService->getById($_GET['charac']);
 
             $data['freeResults'] = array();
-            if ($data['charac']->getMagicalPotential() != null) {
+            if ($data['charac'] != null && $data['charac']->getMagicalPotential() != null) {
                 $data['results'] = $this->magicPowerCalculatorService->multipleMagicFunctionFromCharac($data['charac'], $data['age']);
             } else {
                 $data['results'] = array();

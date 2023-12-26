@@ -9,6 +9,7 @@ use App\Repository\CharacService;
 use App\Utils\DataInitialiser;
 use App\Utils\DateTimeService;
 use App\Utils\ParseService;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -39,21 +40,27 @@ class CharacEventsController extends AbstractController
         // Data retrieval
         $data = $this->dataInitialiser->getBaseData();
         $data['characs'] = $this->characService->getAllWithEvents();
+        $data['dateError'] = false;
 
         if (isset($_GET['from']) && isset($_GET['to'])) {
             $data['from'] = $_GET['from'];
             $data['to'] = $_GET['to'];
 
-            $dateTimeFrom = $this->dateTimeService->parseDateTime($data['from']);
-            $dateTimeTo = $this->dateTimeService->parseDateTime($data['to']);
-            $data['events'] = $this->characEventService->getByPeriod($dateTimeFrom, $dateTimeTo);
+            try {
+                $dateTimeFrom = $this->dateTimeService->parseDateTime($data['from']);
+                $dateTimeTo = $this->dateTimeService->parseDateTime($data['to']);
+                $data['events'] = $this->characEventService->getByPeriod($dateTimeFrom, $dateTimeTo);
 
-            foreach ($data['events'] as $event) {
-                /* @var $event CharacEvent */
-                $data['ages'][$event->getId().'-'.$event->getCharac()->getId()] = $this->dateTimeService->computeYearsAge(
-                    $event->getCharac()->getBirthdate(),
-                    $event->getEndingDate()
-                );
+                foreach ($data['events'] as $event) {
+                    /* @var $event CharacEvent */
+                    $data['ages'][$event->getId() . '-' . $event->getCharac()->getId()] = $this->dateTimeService->computeYearsAge(
+                        $event->getCharac()->getBirthdate(),
+                        $event->getEndingDate()
+                    );
+                }
+            } catch (Exception) {
+                $data['dateError'] = true;
+                $data['events'] = null;
             }
         } else {
             $data['from'] = null;
@@ -68,6 +75,10 @@ class CharacEventsController extends AbstractController
     {
         $data = $this->dataInitialiser->getBaseData();
         $data['charac'] = $this->characService->getById($characId);
+        if ($data['charac'] == null) {
+            return $this->render("errors/404.html.twig", $data);
+        }
+
         $data['family'] = $this->characService->getCharacFamily($data['charac']);
         $data['events'] = $this->characEventService->getByCharac($data['charac']);
 
@@ -104,9 +115,9 @@ class CharacEventsController extends AbstractController
 
             foreach($data['extras'] as $charac) {
                 /* @var $charac Charac */
-                if ($charac->getBirthdate() > $event->getEndingDate()) {
+                if ($charac != null && $charac->getBirthdate() > $event->getEndingDate()) {
                     $data['ages'][$event->getId() . '-' . $charac->getId()] = "";
-                } else {
+                } elseif ($charac != null) {
                     $data['ages'][$event->getId() . '-' . $charac->getId()] = $this->dateTimeService->computeYearsAge(
                         $charac->getBirthdate(),
                         $event->getEndingDate()

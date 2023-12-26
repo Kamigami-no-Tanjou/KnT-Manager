@@ -38,6 +38,9 @@ class MagicsController extends AbstractController
         // Data retrieval
         $data = $this->dataInitialiser->getBaseData();
         $data['magic'] = $this->magicService->getById($id);
+        if ($data['magic'] == null) {
+            return $this->render("errors/404.html.twig", $data);
+        }
 
         $data['users'] = $this->characService->getByMagic($data['magic']);
         $data['instinct'] = 0;
@@ -59,6 +62,9 @@ class MagicsController extends AbstractController
         // Data retrieval
         $data = $this->dataInitialiser->getBaseData();
         $data['magic'] = $this->magicService->getById($id);
+        if ($data['magic'] == null) {
+            return $this->render("errors/404.html.twig", $data);
+        }
 
         $data['instinctUsers'] = $this->characService->getByInstinctMagic($data['magic']);
 
@@ -69,6 +75,9 @@ class MagicsController extends AbstractController
         // Data retrieval
         $data = $this->dataInitialiser->getBaseData();
         $data['magic'] = $this->magicService->getById($id);
+        if ($data['magic'] == null) {
+            return $this->render("errors/404.html.twig", $data);
+        }
 
         $data['learntUsers'] = $this->characService->getByLearntMagic($data['magic']);
 

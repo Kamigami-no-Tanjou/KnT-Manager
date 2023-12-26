@@ -13,7 +13,7 @@ class ClassService implements IGetService
     public function __construct(PDOService $contextSrc) {
         $this->context = $contextSrc->GetPDO();
     }
-    public function getById(int $id): _Class {
+    public function getById(int $id): ?_Class {
         $class = new _Class();
         $statement = $this->context->prepare(
             "SELECT
@@ -24,6 +24,10 @@ class ClassService implements IGetService
         );
         $statement->execute(['id' => $id]);
         $values = $statement->fetchAll();
+
+        if (count($values) < 1) {
+            return null;
+        }
 
         $class->setId($values[0]['id']);
         $class->setName($values[0]['name']);

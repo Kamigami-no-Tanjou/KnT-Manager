@@ -14,7 +14,7 @@ class ElemService implements IGetService
         $this->context = $contextSrc->GetPDO();
     }
 
-    public function getById(int $id): Elem
+    public function getById(int $id): ?Elem
     {
         $elem = new Elem();
         $statement = $this->context->prepare(
@@ -26,6 +26,10 @@ class ElemService implements IGetService
         );
         $statement->execute(['id' => $id]);
         $values = $statement->fetchAll();
+
+        if (count($values) < 1) {
+            return null;
+        }
 
         $elem->setId($values[0]['id']);
         $elem->setName($values[0]['name']);
@@ -75,7 +79,7 @@ class ElemService implements IGetService
         return $elems;
     }
 
-    public function getIllustrationById(int $id): string {
+    public function getIllustrationById(int $id): ?string {
         $statement = $this->context->prepare(
             "SELECT
                         Illustration AS illustration
@@ -84,6 +88,10 @@ class ElemService implements IGetService
         );
         $statement->execute(['id' => $id]);
         $row = $statement->fetchAll();
+
+        if (count($row) < 1) {
+            return null;
+        }
 
         return $row[0]['illustration'];
     }

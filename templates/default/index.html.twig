@@ -2,103 +2,94 @@
 
 
 {% block page_content %}
-    <nav class="flex mb-4" aria-label="Breadcrumb">
+    <nav class="flex ml-6 lg:ml-0 mb-28 lg:mb-4" aria-label="Breadcrumb">
         <ol class="inline-flex items-center space-x-1 md:space-x-3">
             <li class="inline-flex items-center">
-                <a href="/" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
-                    <svg aria-hidden="true" class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+                <a href="/" class="inline-flex items-center text-3xl lg:text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
+                    <svg aria-hidden="true" class="w-10 h-10 lg:w-4 lg:h-4 mr-4 lg:mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
                     Dashboard
                 </a>
             </li>
         </ol>
     </nav>
 
-    <h1 class="mb-8 text-4xl font-bold tracking-tight text-gray-900 lg:font-extrabold lg:text-6xl lg:leading-none dark:text-white lg:mb-7">
+    <h1 class="mb-24 text-8xl text-center font-bold tracking-tight text-gray-900 lg:font-extrabold lg:text-6xl lg:leading-none dark:text-white lg:mb-7">
         Explorer l'univers de Kamigami no Tanjou
     </h1>
 
-    <div class="flex text-center">
-        <a href="/characs/" class="block w-full p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
-           style="padding: 1.5rem; margin-left: 0.75rem; margin-right: 0.75rem; margin-bottom: 1.5rem; max-width: 272px">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 m-3">
+        <a href="/characs/" class="block w-full p-6 text-center bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
             <!--img class="w-24 h-24 mb-3 rounded-full shadow-lg" src="/docs/images/people/profile-picture-3.jpg" alt="Bonnie image"/-->
-            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="text-gray-800 dark:text-white"
-                 style="max-width: 8rem; max-height: 8rem; margin-left: auto; margin-right: auto; margin-bottom: 0.75rem">
+            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                 class="text-gray-800 dark:text-white w-64 h-64 lg:w-32 lg:h-32 mx-auto mb-6 lg:mb-3">
                 <path d="M4.5 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM14.25 8.625a3.375 3.375 0 116.75 0 3.375 3.375 0 01-6.75 0zM1.5 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM17.25 19.128l-.001.144a2.25 2.25 0 01-.233.96 10.088 10.088 0 005.06-1.01.75.75 0 00.42-.643 4.875 4.875 0 00-6.957-4.611 8.586 8.586 0 011.71 5.157v.003z" />
             </svg>
-            <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">Personnages</h5>
-            <span class="text-sm text-gray-500 dark:text-gray-400">Voir les infos sur les personnages</span>
+            <h5 class="mb-5 lg:mb-1 text-5xl lg:text-xl font-medium text-gray-900 dark:text-white">Personnages</h5>
+            <span class="text-3xl lg:text-sm text-gray-500 dark:text-gray-400">Voir les infos sur les personnages</span>
         </a>
-        <a href="/events/" class="block w-full p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
-           style="padding: 1.5rem; margin-left: 0.75rem; margin-right: 0.75rem; margin-bottom: 1.5rem; max-width: 272px">
+        <a href="/events/" class="block w-full p-6 text-center bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
             <!--img class="w-24 h-24 mb-3 rounded-full shadow-lg" src="/docs/images/people/profile-picture-3.jpg" alt="Bonnie image"/-->
-            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="text-gray-800 dark:text-white"
-                 style="max-width: 8rem; max-height: 8rem; margin-left: auto; margin-right: auto; margin-bottom: 0.75rem">
+            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                 class="text-gray-800 dark:text-white w-64 h-64 lg:w-32 lg:h-32 mx-auto mb-6 lg:mb-3">
                 <path fill-rule="evenodd" d="M6.32 2.577a49.255 49.255 0 0111.36 0c1.497.174 2.57 1.46 2.57 2.93V21a.75.75 0 01-1.085.67L12 18.089l-7.165 3.583A.75.75 0 013.75 21V5.507c0-1.47 1.073-2.756 2.57-2.93z" clip-rule="evenodd" />
             </svg>
-            <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">Événements</h5>
-            <span class="text-sm text-gray-500 dark:text-gray-400">Voir les informations sur les événements à une période donnée</span>
+            <h5 class="mb-5 lg:mb-1 text-5xl lg:text-xl font-medium text-gray-900 dark:text-white">Événements</h5>
+            <span class="text-3xl lg:text-sm text-gray-500 dark:text-gray-400">Voir les informations sur les événements à une période donnée</span>
         </a>
-        <a href="/magics/" class="block w-full p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
-           style="padding: 1.5rem; margin-left: 0.75rem; margin-right: 0.75rem; margin-bottom: 1.5rem; max-width: 272px">
+        <a href="/magics/" class="block w-full p-6 text-center bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
             <!--img class="w-24 h-24 mb-3 rounded-full shadow-lg" src="/docs/images/people/profile-picture-3.jpg" alt="Bonnie image"/-->
-            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="text-gray-800 dark:text-white"
-                 style="max-width: 8rem; max-height: 8rem; margin-left: auto; margin-right: auto; margin-bottom: 0.75rem">
+            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                 class="text-gray-800 dark:text-white w-64 h-64 lg:w-32 lg:h-32 mx-auto mb-6 lg:mb-3">
                 <path fill-rule="evenodd" d="M9 4.5a.75.75 0 01.721.544l.813 2.846a3.75 3.75 0 002.576 2.576l2.846.813a.75.75 0 010 1.442l-2.846.813a3.75 3.75 0 00-2.576 2.576l-.813 2.846a.75.75 0 01-1.442 0l-.813-2.846a3.75 3.75 0 00-2.576-2.576l-2.846-.813a.75.75 0 010-1.442l2.846-.813A3.75 3.75 0 007.466 7.89l.813-2.846A.75.75 0 019 4.5zM18 1.5a.75.75 0 01.728.568l.258 1.036c.236.94.97 1.674 1.91 1.91l1.036.258a.75.75 0 010 1.456l-1.036.258c-.94.236-1.674.97-1.91 1.91l-.258 1.036a.75.75 0 01-1.456 0l-.258-1.036a2.625 2.625 0 00-1.91-1.91l-1.036-.258a.75.75 0 010-1.456l1.036-.258a2.625 2.625 0 001.91-1.91l.258-1.036A.75.75 0 0118 1.5zM16.5 15a.75.75 0 01.712.513l.394 1.183c.15.447.5.799.948.948l1.183.395a.75.75 0 010 1.422l-1.183.395c-.447.15-.799.5-.948.948l-.395 1.183a.75.75 0 01-1.422 0l-.395-1.183a1.5 1.5 0 00-.948-.948l-1.183-.395a.75.75 0 010-1.422l1.183-.395c.447-.15.799-.5.948-.948l.395-1.183A.75.75 0 0116.5 15z" clip-rule="evenodd" />
             </svg>
-            <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">Magies</h5>
-            <span class="text-sm text-gray-500 dark:text-gray-400">Voir les infos sur les magies répertoriées</span>
+            <h5 class="mb-5 lg:mb-1 text-5xl lg:text-xl font-medium text-gray-900 dark:text-white">Magies</h5>
+            <span class="text-3xl lg:text-sm text-gray-500 dark:text-gray-400">Voir les infos sur les magies répertoriées</span>
         </a>
-        <a href="/nations/" class="block w-full p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
-           style="padding: 1.5rem; margin-left: 0.75rem; margin-right: 0.75rem; margin-bottom: 1.5rem; max-width: 272px">
+        <a href="/nations/" class="block w-full p-6 text-center bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
             <!--img class="w-24 h-24 mb-3 rounded-full shadow-lg" src="/docs/images/people/profile-picture-3.jpg" alt="Bonnie image"/-->
-            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="text-gray-800 dark:text-white"
-                 style="max-width: 8rem; max-height: 8rem; margin-left: auto; margin-right: auto; margin-bottom: 0.75rem">
+            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                 class="text-gray-800 dark:text-white w-64 h-64 lg:w-32 lg:h-32 mx-auto mb-6 lg:mb-3">
                 <path fill-rule="evenodd" d="M11.54 22.351l.07.04.028.016a.76.76 0 00.723 0l.028-.015.071-.041a16.975 16.975 0 001.144-.742 19.58 19.58 0 002.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 00-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 002.682 2.282 16.975 16.975 0 001.145.742zM12 13.5a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" />
             </svg>
-            <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">Nations</h5>
-            <span class="text-sm text-gray-500 dark:text-gray-400">Voir les infos sur les pays du monde, qu'ils appartiennent au passé, au présent ou au futur</span>
+            <h5 class="mb-5 lg:mb-1 text-5xl lg:text-xl font-medium text-gray-900 dark:text-white">Nations</h5>
+            <span class="text-3xl lg:text-sm text-gray-500 dark:text-gray-400">Voir les infos sur les pays du monde, qu'ils appartiennent au passé, au présent ou au futur</span>
         </a>
-    </div>
-    <div class="flex text-center">
-        <a href="/classes/" class="block w-full p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
-           style="padding: 1.5rem; margin-left: 0.75rem; margin-right: 0.75rem; margin-bottom: 1.5rem; max-width: 272px">
+        <a href="/classes/" class="block w-full p-6 text-center bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
             <!--img class="w-24 h-24 mb-3 rounded-full shadow-lg" src="/docs/images/people/profile-picture-3.jpg" alt="Bonnie image"/-->
-            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="text-gray-800 dark:text-white"
-                 style="max-width: 8rem; max-height: 8rem; margin-left: auto; margin-right: auto; margin-bottom: 0.75rem">
+            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                 class="text-gray-800 dark:text-white w-64 h-64 lg:w-32 lg:h-32 mx-auto mb-6 lg:mb-3">
                 <path fill-rule="evenodd" d="M5.25 2.25a3 3 0 00-3 3v4.318a3 3 0 00.879 2.121l9.58 9.581c.92.92 2.39 1.186 3.548.428a18.849 18.849 0 005.441-5.44c.758-1.16.492-2.629-.428-3.548l-9.58-9.581a3 3 0 00-2.122-.879H5.25zM6.375 7.5a1.125 1.125 0 100-2.25 1.125 1.125 0 000 2.25z" clip-rule="evenodd" />
             </svg>
-            <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">Classes</h5>
-            <span class="text-sm text-gray-500 dark:text-gray-400">Voir les infos sur les classes de magie</span>
+            <h5 class="mb-5 lg:mb-1 text-5xl lg:text-xl font-medium text-gray-900 dark:text-white">Classes</h5>
+            <span class="text-3xl lg:text-sm text-gray-500 dark:text-gray-400">Voir les infos sur les classes de magie</span>
         </a>
-        <a href="/mpc/" class="block w-full p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
-           style="padding: 1.5rem; margin-left: 0.75rem; margin-right: 0.75rem; margin-bottom: 1.5rem; max-width: 272px">
+        <a href="/mpc/" class="block w-full p-6 text-center bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
             <!--img class="w-24 h-24 mb-3 rounded-full shadow-lg" src="/docs/images/people/profile-picture-3.jpg" alt="Bonnie image"/-->
-            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="text-gray-800 dark:text-white"
-                 style="max-width: 8rem; max-height: 8rem; margin-left: auto; margin-right: auto; margin-bottom: 0.75rem">
+            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                 class="text-gray-800 dark:text-white w-64 h-64 lg:w-32 lg:h-32 mx-auto mb-6 lg:mb-3">
                 <path fill-rule="evenodd" d="M19.253 2.292a.75.75 0 01.955.461A28.123 28.123 0 0121.75 12c0 3.266-.547 6.388-1.542 9.247a.75.75 0 11-1.416-.494c.94-2.7 1.458-5.654 1.458-8.753s-.519-6.054-1.458-8.754a.75.75 0 01.461-.954zm-14.227.013a.75.75 0 01.414.976A23.183 23.183 0 003.75 12c0 3.085.6 6.027 1.69 8.718a.75.75 0 01-1.39.563c-1.161-2.867-1.8-6-1.8-9.281 0-3.28.639-6.414 1.8-9.281a.75.75 0 01.976-.414zm4.275 5.052a1.5 1.5 0 012.21.803l.716 2.148L13.6 8.246a2.438 2.438 0 012.978-.892l.213.09a.75.75 0 11-.584 1.381l-.214-.09a.937.937 0 00-1.145.343l-2.021 3.033 1.084 3.255 1.445-.89a.75.75 0 11.786 1.278l-1.444.889a1.5 1.5 0 01-2.21-.803l-.716-2.148-1.374 2.062a2.437 2.437 0 01-2.978.892l-.213-.09a.75.75 0 01.584-1.381l.214.09a.938.938 0 001.145-.344l2.021-3.032-1.084-3.255-1.445.89a.75.75 0 11-.786-1.278l1.444-.89z" clip-rule="evenodd" />
             </svg>
-            <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">MagicPowerCalculator</h5>
-            <span class="text-sm text-gray-500 dark:text-gray-400">Calculer la puissance effective d'un personnage à un certain âge</span>
+            <h5 class="hidden lg:block mb-5 lg:mb-1 text-5xl lg:text-xl font-medium text-gray-900 dark:text-white">MagicPowerCalculator</h5>
+            <h5 class="lg:hidden mb-5 lg:mb-1 text-5xl lg:text-xl font-medium text-gray-900 dark:text-white">MPC</h5>
+            <span class="text-3xl lg:text-sm text-gray-500 dark:text-gray-400">Calculer la puissance effective d'un personnage à un certain âge</span>
         </a>
-        <a href="/elems/" class="block w-full p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
-           style="padding: 1.5rem; margin-left: 0.75rem; margin-right: 0.75rem; margin-bottom: 1.5rem; max-width: 272px">
+        <a href="/elems/" class="block w-full p-6 text-center bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
             <!--img class="w-24 h-24 mb-3 rounded-full shadow-lg" src="/docs/images/people/profile-picture-3.jpg" alt="Bonnie image"/-->
-            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="text-gray-800 dark:text-white"
-                 style="max-width: 8rem; max-height: 8rem; margin-left: auto; margin-right: auto; margin-bottom: 0.75rem">
+            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                 class="text-gray-800 dark:text-white w-64 h-64 lg:w-32 lg:h-32 mx-auto mb-6 lg:mb-3">
                 <path fill-rule="evenodd" d="M14.615 1.595a.75.75 0 01.359.852L12.982 9.75h7.268a.75.75 0 01.548 1.262l-10.5 11.25a.75.75 0 01-1.272-.71l1.992-7.302H3.75a.75.75 0 01-.548-1.262l10.5-11.25a.75.75 0 01.913-.143z" clip-rule="evenodd" />
             </svg>
-            <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">Éléments</h5>
-            <span class="text-sm text-gray-500 dark:text-gray-400">Voir les infos sur les éléments magiques</span>
+            <h5 class="mb-5 lg:mb-1 text-5xl lg:text-xl font-medium text-gray-900 dark:text-white">Éléments</h5>
+            <span class="text-3xl lg:text-sm text-gray-500 dark:text-gray-400">Voir les infos sur les éléments magiques</span>
         </a>
-        <a href="/leaders/" class="block w-full p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
-           style="padding: 1.5rem; margin-left: 0.75rem; margin-right: 0.75rem; margin-bottom: 1.5rem; max-width: 272px">
+        <a href="/leaders/" class="block w-full p-6 text-center bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
             <!--img class="w-24 h-24 mb-3 rounded-full shadow-lg" src="/docs/images/people/profile-picture-3.jpg" alt="Bonnie image"/-->
-            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="text-gray-800 dark:text-white"
-                 style="max-width: 8rem; max-height: 8rem; margin-left: auto; margin-right: auto; margin-bottom: 0.75rem">
+            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                 class="text-gray-800 dark:text-white w-64 h-64 lg:w-32 lg:h-32 mx-auto mb-6 lg:mb-3">
                 <path fill-rule="evenodd" d="M8.603 3.799A4.49 4.49 0 0112 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 013.498 1.307 4.491 4.491 0 011.307 3.497A4.49 4.49 0 0121.75 12a4.49 4.49 0 01-1.549 3.397 4.491 4.491 0 01-1.307 3.497 4.491 4.491 0 01-3.497 1.307A4.49 4.49 0 0112 21.75a4.49 4.49 0 01-3.397-1.549 4.49 4.49 0 01-3.498-1.306 4.491 4.491 0 01-1.307-3.498A4.49 4.49 0 012.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 011.307-3.497 4.49 4.49 0 013.497-1.307zm7.007 6.387a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" />
             </svg>
-            <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">Dirigeants</h5>
-            <span class="text-sm text-gray-500 dark:text-gray-400">Voir les infos sur les dirigeants des différentes nations</span>
+            <h5 class="mb-5 lg:mb-1 text-5xl lg:text-xl font-medium text-gray-900 dark:text-white">Dirigeants</h5>
+            <span class="text-3xl lg:text-sm text-gray-500 dark:text-gray-400">Voir les infos sur les dirigeants des différentes nations</span>
         </a>
     </div>
 {% endblock %}

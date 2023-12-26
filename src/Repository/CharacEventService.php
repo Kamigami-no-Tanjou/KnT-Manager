@@ -20,7 +20,7 @@ class CharacEventService implements IGetService
         $this->characService = $characService;
     }
 
-    public function getById(int $id): CharacEvent
+    public function getById(int $id): ?CharacEvent
     {
         $characEvent = new CharacEvent();
         $statement = $this->context->prepare(
@@ -35,6 +35,10 @@ class CharacEventService implements IGetService
         );
         $statement->execute(['id' => $id]);
         $values = $statement->fetchAll();
+
+        if (count($values) < 1) {
+            return null;
+        }
 
         $characEvent->setId($values[0]['id']);
         $characEvent->setStartingDate(new DateTime($values[0]['startingDate']));

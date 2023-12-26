@@ -22,7 +22,7 @@ class NationService implements IGetService
         $this->calendarService = $calendarService;
     }
 
-    public function getById(int $id): Nation
+    public function getById(int $id): ?Nation
     {
         $nation = new Nation();
         $statement = $this->context->prepare(
@@ -38,6 +38,10 @@ class NationService implements IGetService
         );
         $statement->execute(['id' => $id]);
         $values = $statement->fetchAll();
+
+        if (count($values) < 1) {
+            return null;
+        }
 
         $nation->setId($values[0]['id']);
         $nation->setName($values[0]['name']);

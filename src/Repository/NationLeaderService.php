@@ -27,7 +27,7 @@ class NationLeaderService implements IGetService
         $this->dateTimeService = $dateTimeService;
     }
 
-    public function getById(int $id): NationLeader
+    public function getById(int $id): ?NationLeader
     {
         $nationLeader = new NationLeader();
         $statement = $this->context->prepare(
@@ -42,6 +42,10 @@ class NationLeaderService implements IGetService
         );
         $statement->execute(['id' => $id]);
         $values = $statement->fetchAll();
+
+        if (count($values) < 1) {
+            return null;
+        }
 
         $nationLeader->setId($values[0]['id']);
         $nationLeader->setLeader($this->characService->getById($values[0]['leaderId']));

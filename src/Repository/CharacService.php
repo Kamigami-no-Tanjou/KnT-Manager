@@ -11,6 +11,7 @@ use App\Entity\Sexes;
 use App\Utils\DateTimeService;
 use App\Utils\PDOService;
 use DateTime;
+use Exception;
 use PDO;
 
 class CharacService implements IGetService
@@ -37,7 +38,7 @@ class CharacService implements IGetService
         $this->dateTimeService = $dateTimeService;
     }
 
-    public function getById(int $id): Charac
+    public function getById(int $id): ?Charac
     {
         $charac = new Charac();
         $statement = $this->context->prepare(
@@ -71,6 +72,10 @@ class CharacService implements IGetService
         );
         $statement->execute(['id' => $id]);
         $values = $statement->fetchAll();
+
+        if (count($values) < 1) {
+            return null;
+        }
 
         $charac->setId($values[0]['id']);
         $charac->setLastNames($values[0]['lastNames']);

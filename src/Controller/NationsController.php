@@ -47,6 +47,9 @@ class NationsController extends AbstractController
         // Data retrieval
         $data = $this->dataInitialiser->getBaseData();
         $data['nation'] = $this->nationService->getById($id);
+        if ($data['nation'] == null) {
+            return $this->render("errors/404.html.twig", $data);
+        }
 
         $data['leaders'] = $this->nationLeaderService->getByNation($data['nation']);
 

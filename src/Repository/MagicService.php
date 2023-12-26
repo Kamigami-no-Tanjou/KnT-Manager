@@ -19,7 +19,7 @@ class MagicService implements IGetService
         $this->elemService = $elemService;
     }
 
-    public function getById(int $id): Magic
+    public function getById(int $id): ?Magic
     {
         $magic = new Magic();
         $statement = $this->context->prepare(
@@ -32,6 +32,10 @@ class MagicService implements IGetService
         );
         $statement->execute(['id' => $id]);
         $values = $statement->fetchAll();
+
+        if (count($values) < 1) {
+            return null;
+        }
 
         $magic->setId($values[0]['id']);
         $magic->setName($values[0]['name']);

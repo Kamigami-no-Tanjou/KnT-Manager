@@ -64,48 +64,50 @@
             }
         </script>
         <nav class="bg-white px-2 sm:px-4 py-2.5 dark:bg-gray-900 fixed w-full z-20 top-0 left-0 border-b border-gray-200 dark:border-gray-600">
-            <div class="container flex flex-wrap items-center justify-between mx-auto">
-                <div class="flex md:order-1">
-                    <button data-drawer-target="drawer-navigation" data-drawer-toggle="drawer-navigation" aria-controls="drawer-navigation" type="button" class="inline-flex items-center p-2 mr-3 text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
+            <div class="lg:container flex lg:flex-wrap items-center justify-between lg:mx-auto">
+                <div class="flex items-center md:order-1">
+                    <button data-drawer-target="drawer-navigation" data-drawer-toggle="drawer-navigation" aria-controls="drawer-navigation" type="button" class="inline-flex items-center p-2 mr-6 lg:mr-3 text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
                         <span class="sr-only">Open sidebar</span>
-                        <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <svg class="w-20 h-20 lg:w-6 lg:h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                             <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
                         </svg>
                     </button>
                     <a href="/" class="flex items-center">
-                        <img src="https://media.discordapp.net/attachments/861918687426773002/888870846867845120/KnT_Dynamic_Logo.gif" class="h-6 mr-3 sm:h-9" alt="KnT Logo">
-                        <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">KnT Manager</span>
+                        <img src="https://media.discordapp.net/attachments/861918687426773002/888870846867845120/KnT_Dynamic_Logo.gif" class="lg:h-9 mr-4 lg:mr-3 sm:h-32" alt="KnT Logo">
+                        <span class="self-center text-7xl lg:text-xl font-semibold whitespace-nowrap dark:text-white">KnT Manager</span>
                     </a>
 
-                    <form id="calendarForm" class="flex items-center ml-6">
-                        <label for="calendarSelector" class="block mr-1 text-sm font-medium text-gray-900 dark:text-white">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-6 h-6">
-                                <path fill-rule="evenodd" d="M5.75 2a.75.75 0 01.75.75V4h7V2.75a.75.75 0 011.5 0V4h.25A2.75 2.75 0 0118 6.75v8.5A2.75 2.75 0 0115.25 18H4.75A2.75 2.75 0 012 15.25v-8.5A2.75 2.75 0 014.75 4H5V2.75A.75.75 0 015.75 2zm-1 5.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25v-6.5c0-.69-.56-1.25-1.25-1.25H4.75z" clip-rule="evenodd" />
-                            </svg>
-                        </label>
-                        <select id="calendarSelector" name="calendarSelector" onchange="setCalendar(this.value)" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            {% for calendar in headerCalendars %}
-                                <option value="{{ calendar.getId() }}" {% if viewCalendar == calendar.getId() %}selected{% endif %}>{{ calendar.getName() }}</option>
-                            {% endfor %}
-                        </select>
-                    </form>
+                    <div class="hidden lg:block">
+                        <form id="calendarForm" class="flex items-center ml-6">
+                            <label for="calendarSelector" class="block mr-1 text-sm font-medium text-gray-900 dark:text-white">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-6 h-6">
+                                    <path fill-rule="evenodd" d="M5.75 2a.75.75 0 01.75.75V4h7V2.75a.75.75 0 011.5 0V4h.25A2.75 2.75 0 0118 6.75v8.5A2.75 2.75 0 0115.25 18H4.75A2.75 2.75 0 012 15.25v-8.5A2.75 2.75 0 014.75 4H5V2.75A.75.75 0 015.75 2zm-1 5.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25v-6.5c0-.69-.56-1.25-1.25-1.25H4.75z" clip-rule="evenodd"></path>
+                                </svg>
+                            </label>
+                            <select id="calendarSelector" name="calendarSelector" onchange="setCalendar(this.value)" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                {% for calendar in headerCalendars %}
+                                    <option value="{{ calendar.getId() }}" {% if viewCalendar == calendar.getId() %}selected{% endif %}>{{ calendar.getName() }}</option>
+                                {% endfor %}
+                            </select>
+                        </form>
+                    </div>
                 </div>
                 <div class="flex md:order-2">
                     <button id="dark-theme-switch" aria-controls="change-theme" type="button" class="inline-flex items-center p-2 mr-3 text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
                             onclick="switchTheme('dark')">
                         <span class="sr-only">Change theme</span>
-                        <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <svg class="w-20 h-20 lg:w-6 lg:h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" d="M7.455 2.004a.75.75 0 01.26.77 7 7 0 009.958 7.967.75.75 0 011.067.853A8.5 8.5 0 116.647 1.921a.75.75 0 01.808.083z" clip-rule="evenodd" />
                         </svg>
                     </button>
                     <button id="light-theme-switch" aria-controls="change-theme" type="button" class="inline-flex items-center p-2 mr-3 text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
                             onclick="switchTheme('light')" style="display: none">
                         <span class="sr-only">Change theme</span>
-                        <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <svg class="w-20 h-20 lg:w-6 lg:h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                             <path d="M10 2a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 2zM10 15a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 15zM10 7a3 3 0 100 6 3 3 0 000-6zM15.657 5.404a.75.75 0 10-1.06-1.06l-1.061 1.06a.75.75 0 001.06 1.06l1.06-1.06zM6.464 14.596a.75.75 0 10-1.06-1.06l-1.06 1.06a.75.75 0 001.06 1.06l1.06-1.06zM18 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0118 10zM5 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 015 10zM14.596 15.657a.75.75 0 001.06-1.06l-1.06-1.061a.75.75 0 10-1.06 1.06l1.06 1.06zM5.404 6.464a.75.75 0 001.06-1.06l-1.06-1.06a.75.75 0 10-1.061 1.06l1.06 1.06z" />
                         </svg>
                     </button>
-                    <div class="relative md:block">
+                    <div class="hidden relative lg:block">
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                             <svg class="w-5 h-5 text-gray-500" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
                             <span class="sr-only">Search icon</span>
