@@ -1,7 +1,46 @@
 {% extends 'nav.html.twig' %}
 
 {% block page_content %}
-    <nav class="flex mb-4" aria-label="Breadcrumb">
+    <style>
+        .mb-14 {
+            margin-bottom: 3.5rem;
+        }
+
+        .mx-6 {
+            margin: 1.5rem 0;
+        }
+
+        .rounded-t-10xl {
+            border-top-left-radius: 5rem;
+            border-top-right-radius: 5rem;
+        }
+
+        .text-4\.5xl {
+            font-size: 2.5rem;
+            line-height: 3.15rem;
+        }
+
+        .text-10xl {
+            font-size: 12rem;
+            line-height: 1;
+        }
+
+        .swiper-pagination-bullet {
+            width: 1rem !important;
+            height: 1rem !important;
+        }
+
+        .swiper-pagination-bullets {
+            bottom: initial !important;
+        }
+    </style>
+    <!-- Link Swiper's CSS -->
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css"
+    />
+
+    <nav class="hidden lg:flex mb-4" aria-label="Breadcrumb">
         <ol class="inline-flex items-center space-x-1 md:space-x-3">
             <li class="inline-flex items-center">
                 <a href="/" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
@@ -24,10 +63,17 @@
         </ol>
     </nav>
 
-    <h3 class="text-3xl font-bold dark:text-white
+    <nav class="flex ml-6 mb-24 lg:hidden">
+        <a href="/nations/" class="inline-flex items-center text-3xl lg:text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
+            <svg aria-hidden="true" class="w-12 h-12 rotate-180 mr-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+            Liste des nations
+        </a>
+    </nav>
+
+    <h3 class="hidden lg:block text-3xl font-bold dark:text-white
                    p-4">Informations sur {{ nation.getName() }}</h3>
 
-    <div class="mb-4 border-b border-gray-200 dark:border-gray-700 mx-1.5">
+    <div class="hidden lg:block mb-4 border-b border-gray-200 dark:border-gray-700 mx-1.5">
         <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
             <li class="mr-2" role="presentation">
                 <button class="flex inline-block p-4 border-b-2 rounded-t-lg" id ="general-tab" data-tabs-target="#general" type="button" role="tab" aria-controls="general" aria-selected="false"
@@ -52,7 +98,7 @@
         </ul>
     </div>
 
-    <div id="myTabContent">
+    <div id="myTabContent" class="hidden lg:block">
         <div class="p-4 rounded-lg bg-gray-100 dark:bg-gray-800" id="general" role="tabpanel" aria-labelledby="general-tab">
             <div class="flex w-full">
                 {% if maps|length > 0 %}
@@ -402,4 +448,198 @@
         </div>
         {% endif %}
     </div>
+
+    <div class="lg:hidden">
+        <h3 class="text-7xl font-bold dark:text-white mb-14">{{ nation.getName() }}</h3>
+
+        <div class="absolute left-0 w-screen p-10 pt-10 rounded-t-10xl bg-gray-100 dark:bg-gray-800"
+             style="min-height: -webkit-fill-available"> <!-- Won't work for firefox, but honestly no one uses firefox on mobiles... -->
+            <div class="w-full">
+                <div class="mt-8 p-3 w-full">
+                    <div class="flex rounded-3xl bg-gray-300 dark:bg-gray-700 min-w-full mb-10" style="min-height: 20rem">
+                        {% if maps|length > 0 %}
+                            <img src="/maps/{{ maps[0].getId() }}/image" alt="{{ maps[0].getId() }}-map"
+                                 class="w-full rounded-3xl"/>
+                        {% else %}
+                            <p class="text-left text-4xl text-gray-900 dark:text-white min-w-full"
+                               style="align-self: center; text-align: center">
+                                Pas encore de carte pour ce pays...
+                            </p>
+                        {% endif %}
+                    </div>
+
+                    <h3 class="text-6xl font-medium text-gray-900 dark:text-gray-100 mb-8">Informations générales</h3>
+                    <div class="mb-14">
+                        <div class="grid grid-cols-2 gap-y-8 mb-8">
+                            <div>
+                                <h4 class="text-2xl font-thin dark:text-white">Avènement</h4>
+                                <p class="text-4.5xl text-gray-900 dark:text-gray-100">
+                                    {{ functions.convertToCalendar(nation.getFoundationDate(), viewCalendar).format('d/m/Y') }}
+                                </p>
+                            </div>
+
+                            <div class="ml-12">
+                                <h4 class="text-2xl font-thin dark:text-white">Terme</h4>
+                                <p class="text-4.5xl text-gray-900 dark:text-gray-100">
+                                    {% if nation.getDestructionDate() is not null %}
+                                        {{ functions.convertToCalendar(nation.getDestructionDate(), viewCalendar).format('d/m/Y') }}
+                                    {% else %}
+                                        Toujours existant
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+
+                        {% if nation.getDescription() is not null %}
+                            <h4 class="text-2xl font-thin dark:text-white">Description</h4>
+                            <p class="text-4.5xl text-gray-900 dark:text-gray-100 mb-8">
+                                {{ nation.getDescription() }}
+                            </p>
+                        {% endif %}
+                    </div>
+
+                    {% if (leaders|length + characs|length + maps|length) > 0 %}
+                        <div class="swiper">
+                            <div class="h-4 swiper-pagination"></div>
+                            <div class="swiper-wrapper pt-8 mb-14">
+                                {% if leaders|length > 0 %}
+                                    <div class="swiper-slide">
+                                        <h3 class="text-6xl font-medium text-gray-900 dark:text-gray-100 mb-6">Dirigeants</h3>
+                                        <div class="grid grid-cols-1 gap-8">
+                                            {% for leader in leaders %}
+                                                <div class="w-full p-6 bg-white border-2 border-gray-200 rounded-3xl shadow dark:bg-gray-700 dark:border-gray-700">
+                                                    <a href="/characs/{{ leader.getId() }}">
+                                                        <h5 class="text-5xl font-bold tracking-tight text-gray-900 dark:text-white">{{ leader.getLeader().getFirstNames() }} {{ leader.getLeader().getLastNames() }}</h5>
+                                                    </a>
+
+                                                    <div class="grid grid-cols-2 gap-y-8 mx-6">
+                                                        <div>
+                                                            <h4 class="text-2xl font-thin dark:text-white">Date de naissance</h4>
+                                                            <p class="text-4.5xl text-gray-900 dark:text-gray-100">
+                                                                {{ functions.convertToCalendar(leader.getLeader().getBirthdate(), viewCalendar).format('d/m/Y') }}
+                                                            </p>
+                                                        </div>
+
+                                                        <div>
+                                                            <h4 class="text-2xl font-thin dark:text-white">Date de mort</h4>
+                                                            <p class="text-4.5xl text-gray-900 dark:text-gray-100">
+                                                                {% if leader.getLeader().getDeathdate() is not null %}
+                                                                    {{ functions.convertToCalendar(leader.getLeader().getDeathdate(), viewCalendar).format('d/m/Y') }}
+                                                                {% else %}
+                                                                    Toujours vivant(e)
+                                                                {% endif %}
+                                                            </p>
+                                                        </div>
+
+
+                                                        <div>
+                                                            <h4 class="text-2xl font-thin dark:text-white">Début du règne</h4>
+                                                            <p class="text-4.5xl text-gray-900 dark:text-gray-100">
+                                                                {{ functions.convertToCalendar(leader.getLeadStartDate(), viewCalendar).format('d/m/Y') }}
+                                                            </p>
+                                                        </div>
+
+                                                        {% if leader.getLeadEndDate() is not null %}
+                                                            <div>
+                                                                <h4 class="text-2xl font-thin dark:text-white">Fin du règne</h4>
+                                                                <p class="text-4.5xl text-gray-900 dark:text-gray-100">
+                                                                    {{ functions.convertToCalendar(leader.getLeadEndDate(), viewCalendar).format('d/m/Y') }}
+                                                                </p>
+                                                            </div>
+                                                        {% endif %}
+                                                    </div>
+
+                                                    <a href="/characs/{{ leader.getLeader().getId() }}" class="inline-flex items-center justify-center w-full mt-2 px-3 py-3 text-4.5xl text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-8 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                                        Consulter
+                                                        <svg class="w-6 h-6 ml-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"></path>
+                                                        </svg>
+                                                    </a>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                {% endif %}
+
+                                {% if characs|length > 0 %}
+                                    <div class="swiper-slide">
+                                        <h3 class="text-6xl font-medium text-gray-900 dark:text-gray-100 mb-6">Liste des personnages</h3>
+                                        <div class="grid grid-cols-1 gap-8">
+                                            {% for charac in characs %}
+                                                <div class="w-full p-6 bg-white border-2 border-gray-200 rounded-3xl shadow dark:bg-gray-700 dark:border-gray-700">
+                                                    <div class="flex flex-row justify-between items-center mb-6">
+                                                        <a href="/characs/{{ charac.getId() }}">
+                                                            <h5 class="text-5xl font-bold tracking-tight text-gray-900 dark:text-white">{{ charac.getFirstNames() }} {{ charac.getLastNames() }}</h5>
+                                                        </a>
+
+                                                        <a href="/nations/{{ charac.getOrigin().getId() }}">
+                                                            <h6 class="text-5xl"><small class="font-semibold text-gray-500 dark:text-gray-400">{{ charac.getOrigin().getName() }}</small></h6>
+                                                        </a>
+                                                    </div>
+
+                                                    {% if charac.getMagics()|length > 0 %}<h6 class="mb-6 text-4xl font-semibold text-gray-700 dark:text-gray-400">Magie(s) :</h6>{% endif %}
+                                                    {% for magic in charac.getMagics() %}
+                                                        <div class="ml-6 mb-6">
+                                                            <a href="/magics/{{ magic.getId() }}" class="text-4xl font-normal text-gray-700 dark:text-gray-400">{{ magic.getName() }}</a>
+                                                        </div>
+                                                    {% endfor %}
+
+                                                    <a href="/characs/{{ charac.getId() }}" class="inline-flex items-center justify-center w-full mt-2 px-3 py-3 text-4.5xl text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-8 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                                        Consulter
+                                                        <svg class="w-6 h-6 ml-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"></path>
+                                                        </svg>
+                                                    </a>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                {% endif %}
+
+                                {% if maps|length > 0 %}
+                                    <div class="swiper-slide">
+                                        <h3 class="text-6xl font-medium text-gray-900 dark:text-gray-100 mb-6">Cartes du pays</h3>
+                                        <div class="grid grid-cols-1 gap-8">
+                                            {% for map in maps %}
+                                                <div class="w-full bg-white border-2 border-gray-200 rounded-3xl shadow dark:bg-gray-700 dark:border-gray-700">
+                                                    <a href="/maps/{{ map.getId() }}">
+                                                        <img src="/maps/{{ map.getId() }}/image" alt="{{ map.getName() }}-map" class="rounded-t-3xl w-full"/>
+                                                    </a>
+
+                                                    <div class="p-6">
+                                                        <a href="/maps/{{ map.getId() }}">
+                                                            <h5 class="text-5xl font-bold tracking-tight text-gray-900 dark:text-white">{{ map.getName() }}</h5>
+                                                        </a>
+
+                                                        <a href="/maps/{{ map.getId() }}" class="inline-flex items-center justify-center w-full mt-8 px-3 py-3 text-4.5xl text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-8 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                                            Consulter
+                                                            <svg class="w-6 h-6 ml-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"></path>
+                                                            </svg>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+
+    <!-- Initialize Swiper -->
+    <script>
+        var swiper = new Swiper(".swiper", {
+            pagination: {
+                el: ".swiper-pagination"
+            }
+        });
+    </script>
 {% endblock %}

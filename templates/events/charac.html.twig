@@ -16,6 +16,7 @@
             {{ extraString }}
         ];
 
+        // Won't be used for mobile devices
         function expandView(shouldExpand) {
 
             let expand = document.getElementById('expand-view-switch');
@@ -37,14 +38,15 @@
             }
         }
 
-        function removeCharac(characClass) {
+        function removeCharac(characClass, mobile = false) {
             let characCols = document.getElementsByClassName(characClass);
             for (let i = characCols.length-1; i >= 0; i--) characCols[i].remove();
 
             let index = extras.indexOf(characClass.substring(3));
             extras.splice(index, 1);
 
-            let extrasField = document.getElementById("extras")
+            let extraId = mobile? "mobile-extras": "extras";
+            let extrasField = document.getElementById(extraId);
             let extraString = "";
             for (let i = 0; i < extras.length; i++) {
                 extraString += "," + extras[i];
@@ -52,7 +54,7 @@
             extrasField.value = extraString.substring(1);
         }
     </script>
-    <div class="flex flex-wrap items-center justify-between">
+    <div class="hidden lg:flex flex-wrap items-center justify-between">
         <div class="md:order-1 mb-4">
             <nav class="flex" aria-label="Breadcrumb">
                 <ol class="inline-flex items-center space-x-1 md:space-x-3">
@@ -97,7 +99,21 @@
         </div>
     </div>
 
-    <div class="p-4 rounded-lg bg-gray-100 dark:bg-gray-800" id="period" role="tabpanel" aria-labelledby="period-tab">
+    <nav class="flex justify-between ml-6 mb-24 lg:hidden">
+        <a href="/characs/{{ charac.getId() }}" class="inline-flex items-center text-3xl lg:text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
+            <svg aria-hidden="true" class="w-12 h-12 rotate-180 mr-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+            {{ charac.getFirstNames() }} {{ charac.getLastNames() }}
+        </a>
+
+        <button id="mobile-addCharacModalBtn" data-modal-toggle="mobile-addCharacModal" class="mr-8 inline-flex items-center pr-6 pl-4 py-4 text-3xl font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-8 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-12 h-12">
+                <path d="M10.75 6.75a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z"></path>
+            </svg>
+            Personnage
+        </button>
+    </nav>
+
+    <div class="hidden lg:block p-4 rounded-lg bg-gray-100 dark:bg-gray-800" id="period" role="tabpanel" aria-labelledby="period-tab">
         <div class="flex-auto relative sm:rounded-lg"
              style="margin: 0.5rem 1rem 0 0.75rem; flex: auto">
             <div class="flex flex-wrap items-center justify-between">
@@ -253,6 +269,60 @@
         </div>
     </div>
 
+    <div class="lg:hidden">
+        <h3 class="text-7xl font-bold dark:text-white mb-14">Événements pour {{ charac.getFirstNames() }} {{ charac.getLastNames() }}</h3>
+
+        <div class="absolute left-0 w-screen p-10 pt-10 rounded-t-10xl bg-gray-100 dark:bg-gray-800 overflow-hidden"
+             style="min-height: -webkit-fill-available"> <!-- Won't work for firefox, but honestly no one uses firefox on mobiles... -->
+            {% for event in events %}
+                <div class="flex flex-col justify-between w-full bg-white border border-gray-200 rounded-3xl shadow dark:bg-gray-700 dark:border-gray-600 mb-8">
+                    <ul class="hidden text-4xl font-medium text-center text-gray-500 divide-x divide-gray-200 rounded-t-lg sm:flex dark:divide-gray-600 dark:text-gray-400 border-t border-gray-200 dark:border-gray-600" id="mobile-fullWidthTab" data-tabs-toggle="#mobile-fullWidthTabContent" role="tablist">
+                        <li class="w-full">
+                            <button id="mobile-preview-description-tab-{{ event.getId() }}" data-tabs-target="#mobile-preview-description-{{ event.getId() }}" type="button" role="tab" aria-controls="mobile-preview-description-{{ event.getId() }}" aria-selected="true" class="inline-block w-full p-8 rounded-tl-3xl bg-gray-50 hover:bg-gray-100 focus:outline-none dark:bg-gray-700 dark:hover:bg-gray-600">Description</button>
+                        </li>
+                        <li class="w-full">
+                            <button id="mobile-preview-details-tab-{{ event.getId() }}" data-tabs-target="#mobile-preview-details-{{ event.getId() }}" type="button" role="tab" aria-controls="mobile-preview-details-{{ event.getId() }}" aria-selected="false" class="inline-block w-full p-8 rounded-tr-3xl bg-gray-50 hover:bg-gray-100 focus:outline-none dark:bg-gray-700 dark:hover:bg-gray-600">Détails</button>
+                        </li>
+                    </ul>
+                    <div class="p-8 rounded-lg">
+                        <div class="flex flex-row justify-between items-center mb-6">
+                            <h6 class="text-5xl"><small class="font-semibold text-gray-500 dark:text-gray-400">{{ functions.convertToCalendar(event.getStartingDate(), viewCalendar).format('d/m/Y') }}</small></h6>
+
+                            <h6 class="text-5xl"><small class="font-semibold text-gray-500 dark:text-gray-400">{{ functions.convertToCalendar(event.getEndingDate(), viewCalendar).format('d/m/Y') }}</small></h6>
+                        </div>
+                        <div id="mobile-preview-description-{{ event.getId() }}" role="tabpanel" aria-labelledby="mobile-preview-description-tab-{{ event.getId() }}">
+                            <p class="text-4xl font-normal text-gray-600 dark:text-gray-400 mb-6">{{ event.getDescription() }}</p>
+                        </div>
+                        <div id="mobile-preview-details-{{ event.getId() }}" role="tabpanel" aria-labelledby="mobile-preview-details-{{ event.getId() }}">
+                            <h5 class="text-5xl mb-2  font-bold tracking-tight text-gray-900 dark:text-white">Lié à</h5>
+                            <p class="text-4xl font-normal text-gray-600 dark:text-gray-400">{{ event.getCharac().getFirstNames() }} {{ event.getCharac().getLastNames() }} ({{ ages[event.getId()~"-"~event.getCharac().getId()] }} ans)</p>
+
+                            <h5 class="text-5xl mt-4 mb-2 font-bold tracking-tight text-gray-900 dark:text-white">Autres personnages</h5>
+                            {% for fmlCharac in family %}{% if fmlCharac is not null %}
+                                <p class="text-4xl font-normal text-gray-600 dark:text-gray-400">{{ fmlCharac.getFirstNames() }} {{ fmlCharac.getLastNames() }}
+                                    {% if ages[event.getId()~"-"~fmlCharac.getId()] != "" %}
+                                        ({{ ages[event.getId()~"-"~fmlCharac.getId()] }} ans)
+                                    {% else %}
+                                        (pas encore né.e)
+                                    {% endif %}
+                                </p>
+                            {% endif %}{% endfor %}
+                            {% for extra in extras %}{% if extra is not null %}
+                                <button type="button" onclick="removeCharac('ex-{{ extra.getId() }}', true)" class="ex-{{ extra.getId() }} text-4xl font-normal text-gray-600 dark:text-gray-400 rounded-3xl focus:bg-red-500">{{ extra.getFirstNames() }} {{ extra.getLastNames() }}
+                                    {% if ages[event.getId()~"-"~extra.getId()] != "" %}
+                                        ({{ ages[event.getId()~"-"~extra.getId()] }} ans)
+                                    {% else %}
+                                        (pas encore né.e)
+                                    {% endif %}
+                                </button>
+                            {% endif %}{% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
     <div id="addCharacModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full">
         <div class="relative p-4 w-full h-full md:h-auto"
             style="max-width: 768px">
@@ -285,6 +355,45 @@
                     <button type="submit" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                         <svg class="mr-1 -ml-1 w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
                             style="margin-right: 0.25rem">
+                            <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path>
+                        </svg>
+                        Ajouter
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="mobile-addCharacModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full">
+        <div class="relative p-4 w-full h-full md:h-auto">
+            <!-- Modal content -->
+            <div class="relative p-10 bg-white rounded-lg shadow dark:bg-gray-800">
+                <!-- Modal header -->
+                <div class="flex justify-between items-center pb-8 mb-4 rounded-t border-b dark:border-gray-600">
+                    <h3 class="text-6xl font-semibold text-gray-900 dark:text-white">
+                        Ajouter un personnage
+                    </h3>
+                    <button type="button" class="flex justify-center text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-3xl p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white focus:ring-8 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-900" data-modal-toggle="mobile-addCharacModal">
+                        <svg aria-hidden="true" class="w-16 h-16" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                        <span class="sr-only">Close modal</span>
+                    </button>
+                </div>
+                <!-- Modal body -->
+                <form method="get" action="">
+                    <input id="mobile-extras" type="text" name="extra" value="{{ extraString }}"
+                           style="display: none">
+                    <div class="mb-8">
+                        <label for="charac" class="block mb-4 text-3xl font-medium text-gray-900 dark:text-white">Personnage</label>
+                        <select id="charac" name="new" class="bg-gray-50 border border-gray-300 text-gray-900 text-3xl rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                            <option value="0" selected=""></option>
+                            {% for smolCharac in characList %}
+                                <option value="{{ smolCharac.getId() }}">{{ smolCharac.getFirstNames() }} {{ smolCharac.getLastNames }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="inline-flex items-center pr-6 pl-4 py-4 text-3xl font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-8 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                        <svg class="mr-1 -ml-1 w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
+                             style="margin-right: 0.25rem">
                             <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path>
                         </svg>
                         Ajouter

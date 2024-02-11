@@ -1,0 +1,947 @@
+{% extends 'nav.html.twig' %}
+
+{% block page_content %}
+    <style>
+        .mb-14 {
+            margin-bottom: 3.5rem;
+        }
+
+        .mt-36 {
+            margin-top: 9rem;
+        }
+
+        .rounded-t-10xl {
+            border-top-left-radius: 5rem;
+            border-top-right-radius: 5rem;
+        }
+
+        .text-4\.5xl {
+            font-size: 2.5rem;
+            line-height: 3.15rem;
+        }
+
+        .w-18 {
+            width: 4.5rem;
+        }
+
+        .swiper-pagination-bullet {
+            width: 1rem !important;
+            height: 1rem !important;
+        }
+
+        .swiper-pagination-bullets {
+            bottom: initial !important;
+        }
+    </style>
+    <!-- Link Swiper's CSS -->
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css"
+    />
+
+    <nav class="flex ml-6 mb-24 lg:hidden">
+        <a href="/" class="inline-flex items-center text-3xl lg:text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
+            <svg aria-hidden="true" class="w-12 h-12 rotate-180 mr-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+            Retour au Dashboard
+        </a>
+    </nav>
+
+    <h3 class="text-7xl font-bold dark:text-white mb-14">Recherche avancée</h3>
+
+    <div class="absolute left-0 w-screen p-10 pt-10 rounded-t-10xl bg-gray-100 dark:bg-gray-800"
+         style="min-height: -webkit-fill-available"> <!-- Won't work for firefox, but honestly no one uses firefox on mobiles... -->
+        <div class="swiper">
+            <div class="h-4 swiper-pagination"></div>
+            <div class="swiper-wrapper w-full">
+                <div id="characs-slide" class="swiper-slide w-full mt-8">
+                    <h4 class="text-6xl font-bold tracking-tight text-gray-900 dark:text-white mb-14">Rechercher parmi les personnages</h4>
+                    <form method="get" action="" class="mb-24">
+                        <div class="hidden">
+                            <input type="text" name="type" value="charac"/>
+                            <input disabled id="has-portrait-hidden" name="charac-has-portrait" value="true" type="radio" {% if get["charac-has-portrait"] is defined and get["charac-has-portrait"] == "true" %} checked {% endif %}/>
+                            <input disabled id="not-has-portrait-hidden" name="charac-has-portrait" value="false" type="radio" {% if get["charac-has-portrait"] is not defined or (get["charac-has-portrait"] is defined and get["charac-has-portrait"] == "false") %} checked {% endif %}/>
+                            {% for calendar in headerCalendars %}<input id="{{ calendar.getName()|replace({'\'': "_"}) }}-hidden" name="charac-cal-{{ calendar.getId() }}" value="true" type="checkbox" {% if searchType != "charac" or (get["charac-cal-" ~ calendar.getId()] is defined and get["charac-cal-" ~ calendar.getId()] == "true") %} checked {% endif %}/>{% endfor %}
+                            <input id="charac-living-after-hidden" name="charac-living-after" type="text" {% if get["charac-living-after"] is defined %} value="{{ get["charac-living-after"] }}" {% endif %}/>
+                            <input id="charac-living-before-hidden" name="charac-living-before" type="text" {% if get["charac-living-before"] is defined %} value="{{ get["charac-living-before"] }}" {% endif %}/>
+                            <input id="charac-potential-above-hidden" name="charac-potential-above" type="number" {% if get["charac-potential-above"] is defined %} value="{{ get["charac-potential-above"] }}" {% endif %}/>
+                            <input id="charac-potential-below-hidden" name="charac-potential-below" type="number" {% if get["charac-potential-below"] is defined %} value="{{ get["charac-potential-below"] }}" {% endif %}/>
+                            {% for class in classes %}<input id="{{ class.getName()|replace({'\'': "_"}) }}-hidden" name="charac-class-{{ class.getId() }}" value="true" type="checkbox" {% if searchType != "charac" or (get["charac-class-" ~ class.getId()] is defined and get["charac-class-" ~ class.getId()] == "true") %} checked {% endif %}/>{% endfor %}
+                            {% for sex in sexes %}<input id="{{ sex|replace({'\'': "_"}) }}-hidden" name="charac-sex-{{ loop.index }}" value="true" type="checkbox" {% if searchType != "charac" or (get["charac-sex-" ~ loop.index] is defined and get["charac-sex-" ~ loop.index] == "true") %} checked {% endif %}/>{% endfor %}
+                            {% for gender in genders %}<input id="{{ gender|replace({'\'': "_"}) }}-hidden" name="charac-gender-{{ loop.index }}" value="true" type="checkbox" {% if searchType != "charac" or (get["charac-gender-" ~ loop.index] is defined and get["charac-gender-" ~ loop.index] == "true") %} checked {% endif %}/>{% endfor %}
+                            {% for nation in nations %}<input id="nat-{{ nation.getName()|replace({'\'': "_"}) }}-hidden" name="charac-nat-{{ nation.getId() }}" value="true" type="checkbox" {% if searchType != "charac" or (get["charac-nat-" ~ nation.getId()] is defined and get["charac-nat-" ~ nation.getId()] == "true") %} checked {% endif %}/>{% endfor %}
+                            <input id="charac-height-above-hidden" name="charac-height-above" type="number" {% if get["charac-height-above"] is defined %} value="{{ get["charac-height-above"] }}" {% endif %}/>
+                            <input id="charac-height-below-hidden" name="charac-height-below" type="number" {% if get["charac-height-below"] is defined %} value="{{ get["charac-height-below"] }}" {% endif %}/>
+                            {% for magic in magics %}<input id="{{ magic.getName()|replace({'\'': "_"}) }}-hidden" name="charac-mag-{{ magic.getId() }}" value="true" type="checkbox" {% if searchType != "charac" or (get["charac-mag-" ~ magic.getId()] is defined and get["charac-mag-" ~ magic.getId()] == "true") %} checked {% endif %}/>{% endfor %}
+                            {% for nation in nations %}<input id="led-{{ nation.getName()|replace({'\'': "_"}) }}-hidden" name="charac-led-{{ nation.getId() }}" value="true" type="checkbox" {% if searchType != "charac" or (get["charac-led-" ~ nation.getId()] is defined and get["charac-led-" ~ nation.getId()] == "true") %} checked {% endif %}/>{% endfor %}
+                            <input disabled id="knows-hidden" name="charac-relation-type" value="knows" type="radio" {% if get["charac-relation-type"] is not defined or (get["charac-relation-type"] is defined and get["charac-relation-type"] == "knows") %} checked {% endif %}/>
+                            <input disabled id="appreciates-hidden" name="charac-relation-type" value="appreciates" type="radio" {% if get["charac-relation-type"] is defined and get["charac-relation-type"] == "appreciates" %} checked {% endif %}/>
+                            <input disabled id="not-appreciates-hidden" name="charac-relation-type" value="not-appreciates" type="radio" {% if get["charac-relation-type"] is defined and get["charac-relation-type"] == "not-appreciates" %} checked {% endif %}/>
+                            <select disabled id="relation-charac-hidden" name="charac-relation-with">
+                                <!-- default --><option value="0"{% if get["charac-relation-with"] is not defined or (get["charac-relation-with"] is defined and get["charac-relation-with"] == "0") %} selected {% endif %}></option>
+                                {% for smolCharac in characList %}<option value="{{ smolCharac.getId() }}"{% if get["charac-relation-with"] is defined and get["charac-relation-with"] == smolCharac.getId() %} selected {% endif %}>{{ smolCharac.getFirstNames() }} {{ smolCharac.getLastNames }}</option>{% endfor %}
+                            </select>
+                        </div>
+                        <input name="search" type="text" class="block w-full p-5 mb-10 text-4xl text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-4 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                               placeholder="Rechercher..."
+                                {% if search is not null %}
+                                    value="{{ search }}"
+                                {% endif %}
+                        >
+
+                        <input type="submit" value="Rechercher"
+                               class="w-full mb-8 p-4 text-4xl font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-8 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                        >
+
+                        <button data-drawer-target="drawer-charac-filters" data-drawer-toggle="drawer-charac-filters" aria-controls="drawer-charac-filters" type="button" class="w-full inline-flex items-center justify-center p-4 text-4xl font-medium text-gray-900 bg-white border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:outline-none focus:ring-gray-200 focus:text-blue-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-700">
+                            <svg class="w-8 h-8 mr-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M10 3.75a2 2 0 1 0-4 0 2 2 0 0 0 4 0ZM17.25 4.5a.75.75 0 0 0 0-1.5h-5.5a.75.75 0 0 0 0 1.5h5.5ZM5 3.75a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5a.75.75 0 0 1 .75.75ZM4.25 17a.75.75 0 0 0 0-1.5h-1.5a.75.75 0 0 0 0 1.5h1.5ZM17.25 17a.75.75 0 0 0 0-1.5h-5.5a.75.75 0 0 0 0 1.5h5.5ZM9 10a.75.75 0 0 1-.75.75h-5.5a.75.75 0 0 1 0-1.5h5.5A.75.75 0 0 1 9 10ZM17.25 10.75a.75.75 0 0 0 0-1.5h-1.5a.75.75 0 0 0 0 1.5h1.5ZM14 10a2 2 0 1 0-4 0 2 2 0 0 0 4 0ZM10 16.25a2 2 0 1 0-4 0 2 2 0 0 0 4 0Z" />
+                            </svg>
+                            Affiner la recherche
+                        </button>
+                    </form>
+
+
+                    {% if characResults|length < 1 %}
+                        <p class="mt-8 text-4xl text-gray-900 dark:text-white">Aucun résultat ne correspond à votre recherche...</p>
+                    {% else %}
+                        <div class="grid grid-cols-1 gap-8">
+                            {% for charac in characResults %}
+                                <div class="w-full p-6 bg-white border-2 border-gray-200 rounded-3xl shadow dark:bg-gray-700 dark:border-gray-700">
+                                    <div class="flex flex-row justify-between items-center mb-6">
+                                        <a href="/characs/{{ charac.getId() }}">
+                                            <h5 class="text-5xl font-bold tracking-tight text-gray-900 dark:text-white">{{ charac.getFirstNames() }} {{ charac.getLastNames() }}</h5>
+                                        </a>
+
+                                        <a href="/nations/{{ charac.getOrigin().getId() }}">
+                                            <h6 class="text-5xl"><small class="font-semibold text-gray-500 dark:text-gray-400">{{ charac.getOrigin().getName() }}</small></h6>
+                                        </a>
+                                    </div>
+
+                                    {% if charac.getMagics()|length > 0 %}<h6 class="mb-6 text-4xl font-semibold text-gray-700 dark:text-gray-400">Magie(s) :</h6>{% endif %}
+                                    {% for magic in charac.getMagics() %}
+                                        <div class="ml-6 mb-6">
+                                            <a href="/magics/{{ magic.getId() }}" class="text-4xl font-normal text-gray-700 dark:text-gray-400">{{ magic.getName() }}</a>
+                                        </div>
+                                    {% endfor %}
+
+                                    <a href="/characs/{{ charac.getId() }}" class="inline-flex items-center justify-center w-full mt-2 px-3 py-3 text-4xl font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-8 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                        Consulter
+                                        <svg class="w-6 h-6 ml-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"></path>
+                                        </svg>
+                                    </a>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div id="magics-slide" class="swiper-slide w-full mt-8">
+                    <h4 class="text-6xl font-bold tracking-tight text-gray-900 dark:text-white mb-14">Rechercher parmi les magies</h4>
+                    <form method="get" action="" class="mb-24">
+                        <div class="hidden">
+                            <input type="text" name="type" value="magic"/>
+                            {% for element in elements %}<input id="{{ element.getName() }}-hidden" name="magic-elem-{{ element.getId() }}" value="true" type="checkbox" {% if searchType != "magic" or (get["magic-elem-" ~ element.getId()] is defined and get["magic-elem-" ~ element.getId()] == "true") %} checked {% endif %}/>{% endfor %}
+                        </div>
+                        <input name="search" type="text" class="block w-full p-5 mb-10 text-4xl text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-4 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                               placeholder="Rechercher..."
+                                {% if search is not null %}
+                                    value="{{ search }}"
+                                {% endif %}
+                        >
+
+                        <input type="submit" value="Rechercher"
+                               class="w-full mb-8 p-4 text-4xl font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-8 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                        >
+
+                        <button data-drawer-target="drawer-magic-filters" data-drawer-toggle="drawer-magic-filters" aria-controls="drawer-magic-filters" type="button" class="w-full inline-flex items-center justify-center p-4 text-4xl font-medium text-gray-900 bg-white border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:outline-none focus:ring-gray-200 focus:text-blue-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-700">
+                            <svg class="w-8 h-8 mr-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M10 3.75a2 2 0 1 0-4 0 2 2 0 0 0 4 0ZM17.25 4.5a.75.75 0 0 0 0-1.5h-5.5a.75.75 0 0 0 0 1.5h5.5ZM5 3.75a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5a.75.75 0 0 1 .75.75ZM4.25 17a.75.75 0 0 0 0-1.5h-1.5a.75.75 0 0 0 0 1.5h1.5ZM17.25 17a.75.75 0 0 0 0-1.5h-5.5a.75.75 0 0 0 0 1.5h5.5ZM9 10a.75.75 0 0 1-.75.75h-5.5a.75.75 0 0 1 0-1.5h5.5A.75.75 0 0 1 9 10ZM17.25 10.75a.75.75 0 0 0 0-1.5h-1.5a.75.75 0 0 0 0 1.5h1.5ZM14 10a2 2 0 1 0-4 0 2 2 0 0 0 4 0ZM10 16.25a2 2 0 1 0-4 0 2 2 0 0 0 4 0Z" />
+                            </svg>
+                            Affiner la recherche
+                        </button>
+                    </form>
+
+                    {% if magicResults|length < 1 %}
+                        <p class="mt-8 text-4xl text-gray-900 dark:text-white">Aucun résultat ne correspond à votre recherche...</p>
+                    {% else %}
+                        <div class="grid grid-cols-1 gap-8">
+                            {% for magic in magicResults %}
+                                <div class="w-full p-6 bg-white border-2 border-gray-200 rounded-3xl shadow dark:bg-gray-700 dark:border-gray-700">
+                                    <div class="flex flex-row justify-between items-center mb-6">
+                                        <div>
+                                            <a href="/magics/{{ magic.getId() }}">
+                                                <h5 class="text-5xl font-bold tracking-tight text-gray-900 dark:text-white">{{ magic.getName() }}</h5>
+                                            </a>
+                                        </div>
+
+                                        <div class="flex flex-row mb-4">
+                                            {% for innerElem in magic.getElems() %}
+                                                <img src="/elems/{{ innerElem.getId() }}" alt="{{ innerElem.getId() }}" class="w-16 h-16">
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <p class="text-4xl font-normal text-gray-600 dark:text-gray-400 mb-6">{{ magic.getDescription() }}</p>
+
+                                    <a href="/magics/{{ magic.getId() }}" class="inline-flex items-center justify-center w-full mt-2 px-3 py-3 text-4.5xl text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-8 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                        Consulter
+                                        <svg class="w-6 h-6 ml-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"></path>
+                                        </svg>
+                                    </a>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div id="maps-slide" class="swiper-slide w-full mt-8">
+                    <h4 class="text-6xl font-bold tracking-tight text-gray-900 dark:text-white mb-14">Rechercher parmi les cartes</h4>
+                    <form method="get" action="" class="mb-24">
+                        <div class="hidden">
+                            <input type="text" name="type" value="map" class="hidden"/>
+                            {% for nation in nations %}<input id="map-{{ nation.getName()|replace({'\'': "_"}) }}-hidden" type="checkbox" value="true" name="map-nation-{{ nation.getId() }}" {% if searchType != "map" or (get["map-nation-" ~ nation.getId()] is defined and get["map-nation-" ~ nation.getId()] == "true") %} checked {% endif %}/>{% endfor %}
+                        </div>
+                        <input name="search" type="text" class="block w-full p-5 mb-10 text-4xl text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-4 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                               placeholder="Rechercher..."
+                                {% if search is not null %}
+                                    value="{{ search }}"
+                                {% endif %}
+                        >
+
+                        <input type="submit" value="Rechercher"
+                               class="w-full mb-8 p-4 text-4xl font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-8 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                        >
+
+                        <button data-drawer-target="drawer-map-filters" data-drawer-toggle="drawer-map-filters" aria-controls="drawer-map-filters" type="button" class="w-full inline-flex items-center justify-center p-4 text-4xl font-medium text-gray-900 bg-white border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:outline-none focus:ring-gray-200 focus:text-blue-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-700">
+                            <svg class="w-8 h-8 mr-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M10 3.75a2 2 0 1 0-4 0 2 2 0 0 0 4 0ZM17.25 4.5a.75.75 0 0 0 0-1.5h-5.5a.75.75 0 0 0 0 1.5h5.5ZM5 3.75a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5a.75.75 0 0 1 .75.75ZM4.25 17a.75.75 0 0 0 0-1.5h-1.5a.75.75 0 0 0 0 1.5h1.5ZM17.25 17a.75.75 0 0 0 0-1.5h-5.5a.75.75 0 0 0 0 1.5h5.5ZM9 10a.75.75 0 0 1-.75.75h-5.5a.75.75 0 0 1 0-1.5h5.5A.75.75 0 0 1 9 10ZM17.25 10.75a.75.75 0 0 0 0-1.5h-1.5a.75.75 0 0 0 0 1.5h1.5ZM14 10a2 2 0 1 0-4 0 2 2 0 0 0 4 0ZM10 16.25a2 2 0 1 0-4 0 2 2 0 0 0 4 0Z" />
+                            </svg>
+                            Affiner la recherche
+                        </button>
+                    </form>
+
+                    {% if mapResults|length < 1 %}
+                        <p class="mt-8 text-4xl text-gray-900 dark:text-white">Aucun résultat ne correspond à votre recherche...</p>
+                    {% else %}
+                        <div class="grid grid-cols-1 gap-8">
+                            {% for map in mapResults %}
+                                <div class="w-full bg-white border-2 border-gray-200 rounded-3xl shadow dark:bg-gray-700 dark:border-gray-700">
+                                    <a href="/maps/{{ map.getId() }}">
+                                        <img src="/maps/{{ map.getId() }}/image" alt="{{ map.getName() }}-map" class="rounded-t-3xl w-full"/>
+                                    </a>
+
+                                    <div class="p-6">
+                                        <a href="/maps/{{ map.getId() }}">
+                                            <h5 class="text-5xl font-bold tracking-tight text-gray-900 dark:text-white">{{ map.getName() }}</h5>
+                                        </a>
+
+                                        <a href="/maps/{{ map.getId() }}" class="inline-flex items-center justify-center w-full mt-8 px-3 py-3 text-4.5xl text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-8 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                            Consulter
+                                            <svg class="w-6 h-6 ml-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"></path>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div id="nations-slide" class="swiper-slide w-full mt-8">
+                    <h4 class="text-6xl font-bold tracking-tight text-gray-900 dark:text-white mb-14">Rechercher parmi les nations</h4>
+                    <form method="get" action="" class="mb-24">
+                        <div class="hidden">
+                            <input type="text" name="type" value="nation"/>
+                            <input id="nation-existing-after-hidden" name="nation-existing-after" type="text" {% if get["nation-existing-after"] is defined %} value="{{ get["nation-existing-after"] }}" {% endif %}/>
+                            <input id="nation-existing-before-hidden" name="nation-existing-before" type="text" {% if get["nation-existing-before"] is defined %} value="{{ get["nation-existing-before"] }}" {% endif %}/>
+                            {% for calendar in headerCalendars %}<input id="nation-{{ calendar.getName()|replace({'\'': "_"}) }}-hidden" type="checkbox" value="true" name="nation-cal-{{ calendar.getId() }}" {% if searchType != "nation" or (get["nation-cal-" ~ calendar.getId()] is defined and get["nation-cal-" ~ calendar.getId()] == "true") %} checked {% endif %}/>{% endfor %}
+                        </div>
+                        <input name="search" type="text" class="block w-full p-5 mb-10 text-4xl text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-4 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                               placeholder="Rechercher..."
+                                {% if search is not null %}
+                                    value="{{ search }}"
+                                {% endif %}
+                        >
+
+                        <input type="submit" value="Rechercher"
+                               class="w-full mb-8 p-4 text-4xl font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-8 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                        >
+
+                        <button data-drawer-target="drawer-nation-filters" data-drawer-toggle="drawer-nation-filters" aria-controls="drawer-nation-filters" type="button" class="w-full inline-flex items-center justify-center p-4 text-4xl font-medium text-gray-900 bg-white border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:outline-none focus:ring-gray-200 focus:text-blue-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-700">
+                            <svg class="w-8 h-8 mr-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M10 3.75a2 2 0 1 0-4 0 2 2 0 0 0 4 0ZM17.25 4.5a.75.75 0 0 0 0-1.5h-5.5a.75.75 0 0 0 0 1.5h5.5ZM5 3.75a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5a.75.75 0 0 1 .75.75ZM4.25 17a.75.75 0 0 0 0-1.5h-1.5a.75.75 0 0 0 0 1.5h1.5ZM17.25 17a.75.75 0 0 0 0-1.5h-5.5a.75.75 0 0 0 0 1.5h5.5ZM9 10a.75.75 0 0 1-.75.75h-5.5a.75.75 0 0 1 0-1.5h5.5A.75.75 0 0 1 9 10ZM17.25 10.75a.75.75 0 0 0 0-1.5h-1.5a.75.75 0 0 0 0 1.5h1.5ZM14 10a2 2 0 1 0-4 0 2 2 0 0 0 4 0ZM10 16.25a2 2 0 1 0-4 0 2 2 0 0 0 4 0Z" />
+                            </svg>
+                            Affiner la recherche
+                        </button>
+                    </form>
+
+                    {% if nationResults|length < 1 %}
+                        <p class="mt-8 text-4xl text-gray-900 dark:text-white">Aucun résultat ne correspond à votre recherche...</p>
+                    {% else %}
+                        <div class="grid grid-cols-1 gap-8">
+                            {% for nation in nationResults %}
+                                <div class="w-full p-6 bg-white border-2 border-gray-200 rounded-3xl shadow dark:bg-gray-700 dark:border-gray-700">
+                                    <div>
+                                        <a href="/nations/{{ nation.getId() }}">
+                                            <h5 class="text-5xl font-bold tracking-tight text-gray-900 dark:text-white">{{ nation.getName() }}</h5>
+                                        </a>
+                                    </div>
+                                    <div class="flex flex-row justify-between items-center mb-6">
+                                        <h6 class="text-5xl"><small class="font-semibold text-gray-500 dark:text-gray-400">{{ functions.convertToCalendar(nation.getFoundationDate(), viewCalendar).format('d/m/Y') }}</small></h6>
+
+                                        <h6 class="text-5xl"><small class="font-semibold text-gray-500 dark:text-gray-400">{% if nation.getDestructionDate() is not null %}{{ functions.convertToCalendar(nation.getDestructionDate(), viewCalendar).format('d/m/Y') }}{% else %}Existe toujours{% endif %}</small></h6>
+                                    </div>
+                                    <div>
+                                        <p class="text-4xl font-normal text-gray-600 dark:text-gray-400 mb-6">{{ nation.getDescription() }}</p>
+                                    </div>
+
+                                    <a href="/nations/{{ nation.getId() }}" class="inline-flex items-center justify-center w-full mt-2 px-3 py-3 text-4.5xl text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-8 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                        Consulter
+                                        <svg class="w-6 h-6 ml-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"></path>
+                                        </svg>
+                                    </a>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+
+    <!-- Initialize Swiper -->
+    <script>
+        const swiper = new Swiper(".swiper", {
+            pagination: {
+                el: ".swiper-pagination"
+            },
+
+            {% if searchType != "charac" %}
+            on: {
+                afterInit: function() {
+                    {% if searchType == "magic" %}
+                        this.slideTo(1, 0, false);
+                    {% elseif searchType == "map" %}
+                        this.slideTo(2, 0, false);
+                    {% elseif searchType == "nation" %}
+                        this.slideTo(3, 0, false);
+                    {% endif %}
+                }
+            }
+            {% endif %}
+        });
+
+        {% if get["charac-has-portrait"] is defined %}
+        portraitSwitch.click();
+        {% endif %}
+        {% if get["charac-relation-type"] is defined and get["charac-relation-with"] is defined %}
+        relationSwitch.click();
+        {% endif %}
+    </script>
+{% endblock %}
+
+
+{% block other_drawers %}
+    <div id="drawer-charac-filters" class="fixed top-0 left-0 z-40 h-screen p-8 overflow-y-auto transition-transform -translate-x-full bg-white w-screen lg:w-96 dark:bg-gray-800" tabindex="-1" aria-labelledby="drawer-charac-filters-label">
+        <button type="button" data-drawer-hide="drawer-charac-filters" aria-controls="drawer-charac-filters" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 absolute top-2.5 right-2.5 inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" >
+            <svg aria-hidden="true" class="w-16 h-16 lg:w-5 lg:h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+            <span class="sr-only">Close menu</span>
+        </button>
+
+        <h5 class="text-5xl my-12 font-bold tracking-tight text-gray-900 dark:text-white">Filtres pour les personnages</h5>
+
+        <label class="relative inline-flex items-center mb-8 cursor-pointer">
+            <input id="portrait-filter-switch" type="checkbox" value="true" class="sr-only peer">
+            <div class="w-18 h-10 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-8 after:w-8 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+            <span class="ml-6 text-3xl font-medium font-semibold text-gray-900 dark:text-gray-300">Filtrer sur le portrait</span>
+        </label>
+        <div class="flex items-center ml-4 mb-4">
+            <input disabled {% if get["charac-has-portrait"] is defined and get["charac-has-portrait"] == "true" %} checked {% endif %} id="has-portrait" type="radio" value="true" name="charac-has-portrait" class="w-8 h-8 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-4 dark:bg-gray-700 dark:border-gray-600">
+            <label id="has-portrait-label" for="has-portrait" class="ml-4 text-3xl font-medium text-gray-400 dark:text-gray-500">A un portrait</label>
+        </div>
+        <div class="flex items-center ml-4 mb-10">
+            <input disabled {% if get["charac-has-portrait"] is not defined or (get["charac-has-portrait"] is defined and get["charac-has-portrait"] == "false") %} checked {% endif %} id="not-has-portrait" type="radio" value="false" name="charac-has-portrait" class="w-8 h-8 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-4 dark:bg-gray-700 dark:border-gray-600">
+            <label id="not-has-portrait-label" for="not-has-portrait" class="ml-4 text-3xl font-medium text-gray-400 dark:text-gray-500">N'a pas de portrait</label>
+        </div>
+
+
+        <div id="calendar-accordion" data-accordion="collapse" class="mb-10">
+            <h2 id="calendar-accordion-heading">
+                <button type="button" class="flex items-center justify-between w-full p-6 text-3xl font-medium font-semibold text-gray-900 dark:text-gray-300 text-left border-2 border-gray-200 rounded-t-2xl focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-600 dark:border-gray-700 bg-white dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600" data-accordion-target="#calendar-accordion-body" aria-expanded="false" aria-controls="calendar-accordion-body">
+                    <span>Filtrer sur le calendrier</span>
+                    <svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"></path>
+                    </svg>
+                </button>
+            </h2>
+            <div id="calendar-accordion-body" class="hidden" aria-labelledby="calendar-accordion-heading">
+                <div class="px-10 py-6 rounded-b-2xl border-2 border-t-0 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-700">
+                    <button id="charac-calendar-filter-selection" onclick="switchSelection('charac-calendar-filter-selection')" type="button" class="mb-8 mt-3 w-full text-blue-600 hover:text-white border border-blue-700 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-2xl px-6 py-4 text-center mr-4 dark:border-blue-500 dark:hover:border-blue-600 dark:text-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-600">Tout désélectionner</button>
+                    {% for calendar in headerCalendars %}
+                        <div class="flex items-center mb-4">
+                            <input
+                                    {% if searchType != "charac" or (get["charac-cal-" ~ calendar.getId()] is defined and get["charac-cal-" ~ calendar.getId()] == "true") %}
+                                        checked
+                                    {% endif %}
+                                    id="{{ calendar.getName()|replace({'\'': "_"}) }}" type="checkbox" value="true" name="charac-cal-{{ calendar.getId() }}" class="w-8 h-8 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-4 dark:bg-gray-700 dark:border-gray-600">
+                            <label for="{{ calendar.getName()|replace({'\'': "_"}) }}" class="ml-4 text-3xl font-medium text-gray-900 dark:text-gray-300">{{ calendar.getName() }}</label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-row items-center mb-10">
+            <span class="ml-4 mr-4 text-3xl font-medium font-semibold text-gray-900 dark:text-gray-300">Vivant entre</span>
+            <input id="charac-living-after" name="charac-living-after" type="text" class="w-48 bg-gray-50 border border-gray-300 text-gray-900 text-3xl rounded-lg focus:ring-blue-500 focus:ring-4 focus:border-blue-500 block p-5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                   placeholder="2000"
+                    {% if get["charac-living-after"] is defined %}
+                        value="{{ get["charac-living-after"] }}"
+                    {% endif %}
+            >
+            <span class="ml-4 mr-4 text-3xl font-medium font-semibold text-gray-900 dark:text-gray-300">et</span>
+            <input id="charac-living-before" name="charac-living-before" type="text" class="w-48 bg-gray-50 border border-gray-300 text-gray-900 text-3xl rounded-lg focus:ring-blue-500 focus:ring-4 focus:border-blue-500 block p-5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                   placeholder="2020"
+                    {% if get["charac-living-before"] is defined %}
+                        value="{{ get["charac-living-before"] }}"
+                    {% endif %}
+            >
+        </div>
+        <div class="flex flex-row items-center mb-10">
+            <span class="ml-4 mr-4 text-3xl font-medium font-semibold text-gray-900 dark:text-gray-300">Potentiel entre</span>
+            <input id="charac-potential-above" name="charac-potential-above" type="number" class="w-48 bg-gray-50 border border-gray-300 text-gray-900 text-3xl rounded-lg focus:ring-blue-500 focus:ring-4 focus:border-blue-500 block p-5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                   placeholder="50"
+                    {% if get["charac-potential-above"] is defined %}
+                        value="{{ get["charac-potential-above"] }}"
+                    {% endif %}
+            >
+            <span class="ml-4 mr-4 text-3xl font-medium font-semibold text-gray-900 dark:text-gray-300">et</span>
+            <input id="charac-potential-below" name="charac-potential-below" type="number" class="w-48 bg-gray-50 border border-gray-300 text-gray-900 text-3xl rounded-lg focus:ring-blue-500 focus:ring-4 focus:border-blue-500 block p-5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                   placeholder="100"
+                    {% if get["charac-potential-below"] is defined %}
+                        value="{{ get["charac-potential-below"] }}"
+                    {% endif %}
+            >
+        </div>
+
+        <div id="class-accordion" data-accordion="collapse" class="mb-10">
+            <h2 id="class-accordion-heading">
+                <button type="button" class="flex items-center justify-between w-full p-6 text-3xl font-medium font-semibold text-gray-900 dark:text-gray-300 text-left border-2 border-gray-200 rounded-t-2xl focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-600 dark:border-gray-700 bg-white dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600" data-accordion-target="#class-accordion-body" aria-expanded="false" aria-controls="class-accordion-body">
+                    <span>Filtrer sur la classe</span>
+                    <svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"></path>
+                    </svg>
+                </button>
+            </h2>
+            <div id="class-accordion-body" class="hidden" aria-labelledby="class-accordion-heading">
+                <div class="px-10 py-6 rounded-b-2xl border-2 border-t-0 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-700">
+                    <button id="charac-class-filter-selection" onclick="switchSelection('charac-class-filter-selection')" type="button" class="mb-8 mt-3 w-full text-blue-600 hover:text-white border border-blue-700 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-2xl px-6 py-4 text-center mr-4 dark:border-blue-500 dark:hover:border-blue-600 dark:text-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-600">Tout désélectionner</button>
+                    {% for class in classes %}
+                        <div class="flex items-center mb-4">
+                            <input {% if searchType != "charac" or (get["charac-class-" ~ class.getId()] is defined and get["charac-class-" ~ class.getId()] == "true") %}
+                                checked
+                            {% endif %}
+                                    id="{{ class.getName()|replace({'\'': "_"}) }}" type="checkbox" value="true" name="charac-class-{{ class.getId() }}" class="w-8 h-8 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-4 dark:bg-gray-700 dark:border-gray-600">
+                            <label for="{{ class.getName()|replace({'\'': "_"}) }}" class="ml-4 text-3xl font-medium text-gray-900 dark:text-gray-300">{{ class.getName() }}</label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div id="sex-accordion" data-accordion="collapse" class="mb-10">
+            <h2 id="sex-accordion-heading">
+                <button type="button" class="flex items-center justify-between w-full p-6 text-3xl font-medium font-semibold text-gray-900 dark:text-gray-300 text-left border-2 border-gray-200 rounded-t-2xl focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-600 dark:border-gray-700 bg-white dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600" data-accordion-target="#sex-accordion-body" aria-expanded="false" aria-controls="sex-accordion-body">
+                    <span>Filtrer sur le sexe</span>
+                    <svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"></path>
+                    </svg>
+                </button>
+            </h2>
+            <div id="sex-accordion-body" class="hidden" aria-labelledby="sex-accordion-heading">
+                <div class="px-10 py-6 rounded-b-2xl border-2 border-t-0 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-700">
+                    <button id="charac-sex-filter-selection" onclick="switchSelection('charac-sex-filter-selection')" type="button" class="mb-8 mt-3 w-full text-blue-600 hover:text-white border border-blue-700 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-2xl px-6 py-4 text-center mr-4 dark:border-blue-500 dark:hover:border-blue-600 dark:text-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-600">Tout désélectionner</button>
+                    {% for sex in sexes %}
+                        <div class="flex items-center mb-4">
+                            <input {% if searchType != "charac" or (get["charac-sex-" ~ loop.index] is defined and get["charac-sex-" ~ loop.index] == "true") %}
+                                checked
+                            {% endif %}
+                                        id="{{ sex|replace({'\'': "_"}) }}" type="checkbox" value="true" name="charac-sex-{{ loop.index }}" class="w-8 h-8 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-4 dark:bg-gray-700 dark:border-gray-600">
+                            <label for="{{ sex|replace({'\'': "_"}) }}" class="ml-4 text-3xl font-medium text-gray-900 dark:text-gray-300">{{ sex }}</label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div id="gender-accordion" data-accordion="collapse" class="mb-10">
+            <h2 id="gender-accordion-heading">
+                <button type="button" class="flex items-center justify-between w-full p-6 text-3xl font-medium font-semibold text-gray-900 dark:text-gray-300 text-left border-2 border-gray-200 rounded-t-2xl focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-600 dark:border-gray-700 bg-white dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600" data-accordion-target="#gender-accordion-body" aria-expanded="false" aria-controls="gender-accordion-body">
+                    <span>Filtrer sur le genre</span>
+                    <svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"></path>
+                    </svg>
+                </button>
+            </h2>
+            <div id="gender-accordion-body" class="hidden" aria-labelledby="gender-accordion-heading">
+                <div class="px-10 py-6 rounded-b-2xl border-2 border-t-0 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-700">
+                    <button id="charac-gender-filter-selection" onclick="switchSelection('charac-gender-filter-selection')" type="button" class="mb-8 mt-3 w-full text-blue-600 hover:text-white border border-blue-700 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-2xl px-6 py-4 text-center mr-4 dark:border-blue-500 dark:hover:border-blue-600 dark:text-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-600">Tout désélectionner</button>
+                    {% for gender in genders %}
+                        <div class="flex items-center mb-4">
+                            <input  {% if searchType != "charac" or (get["charac-gender-" ~ loop.index] is defined and get["charac-gender-" ~ loop.index] == "true") %}
+                                checked
+                            {% endif %}
+                                    id="{{ gender|replace({'\'': "_"}) }}" type="checkbox" value="true" name="charac-gender-{{ loop.index }}" class="w-8 h-8 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-4 dark:bg-gray-700 dark:border-gray-600">
+                            <label for="{{ gender|replace({'\'': "_"}) }}" class="ml-4 text-3xl font-medium text-gray-900 dark:text-gray-300">{{ gender }}</label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div id="nation-accordion" data-accordion="collapse" class="mb-10">
+            <h2 id="nation-accordion-heading">
+                <button type="button" class="flex items-center justify-between w-full p-6 text-3xl font-medium font-semibold text-gray-900 dark:text-gray-300 text-left border-2 border-gray-200 rounded-t-2xl focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-600 dark:border-gray-700 bg-white dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600" data-accordion-target="#nation-accordion-body" aria-expanded="false" aria-controls="nation-accordion-body">
+                    <span>Filtrer sur la nationalité</span>
+                    <svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"></path>
+                    </svg>
+                </button>
+            </h2>
+            <div id="nation-accordion-body" class="hidden" aria-labelledby="nation-accordion-heading">
+                <div class="px-10 py-6 rounded-b-2xl border-2 border-t-0 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-700">
+                    <button id="charac-nation-filter-selection" onclick="switchSelection('charac-nation-filter-selection')" type="button" class="mb-8 mt-3 w-full text-blue-600 hover:text-white border border-blue-700 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-2xl px-6 py-4 text-center mr-4 dark:border-blue-500 dark:hover:border-blue-600 dark:text-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-600">Tout désélectionner</button>
+                    {% for nation in nations %}
+                        <div class="flex items-center mb-4">
+                            <input  {% if searchType != "charac" or (get["charac-nat-" ~ nation.getId()] is defined and get["charac-nat-" ~ nation.getId()] == "true") %}
+                                checked
+                            {% endif %}
+                                    id="nat-{{ nation.getName()|replace({'\'': "_"}) }}" type="checkbox" value="true" name="charac-nat-{{ nation.getId() }}" class="w-8 h-8 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-4 dark:bg-gray-700 dark:border-gray-600">
+                            <label for="nat-{{ nation.getName()|replace({'\'': "_"}) }}" class="ml-4 text-3xl font-medium text-gray-900 dark:text-gray-300">{{ nation.getName() }}</label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-row items-center mb-10">
+            <span class="ml-4 mr-4 text-3xl font-medium font-semibold text-gray-900 dark:text-gray-300">Taille entre</span>
+            <input id="charac-height-above" name="charac-height-above" type="number" class="w-48 bg-gray-50 border border-gray-300 text-gray-900 text-3xl rounded-lg focus:ring-blue-500 focus:ring-4 focus:border-blue-500 block p-5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                   placeholder="150"
+                    {% if get["charac-height-above"] is defined %}
+                        value="{{ get["charac-height-above"] }}"
+                    {% endif %}
+            >
+            <span class="ml-4 mr-4 text-3xl font-medium font-semibold text-gray-900 dark:text-gray-300">cm et</span>
+            <input id="charac-height-below" name="charac-height-below" type="number" class="w-48 bg-gray-50 border border-gray-300 text-gray-900 text-3xl rounded-lg focus:ring-blue-500 focus:ring-4 focus:border-blue-500 block p-5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                   placeholder="200"
+                    {% if get["charac-height-below"] is defined %}
+                        value="{{ get["charac-height-below"] }}"
+                    {% endif %}
+            >
+
+            <span class="ml-4 text-3xl font-medium font-semibold text-gray-900 dark:text-gray-300">cm</span>
+        </div>
+        <div id="magic-accordion" data-accordion="collapse" class="mb-10">
+            <h2 id="magic-accordion-heading">
+                <button type="button" class="flex items-center justify-between w-full p-6 text-3xl font-medium font-semibold text-gray-900 dark:text-gray-300 text-left border-2 border-gray-200 rounded-t-2xl focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-600 dark:border-gray-700 bg-white dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600" data-accordion-target="#magic-accordion-body" aria-expanded="false" aria-controls="magic-accordion-body">
+                    <span>Filtrer sur les magies</span>
+                    <svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"></path>
+                    </svg>
+                </button>
+            </h2>
+            <div id="magic-accordion-body" class="hidden" aria-labelledby="magic-accordion-heading">
+                <div class="px-10 py-6 rounded-b-2xl border-2 border-t-0 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-700">
+                    <button id="charac-magic-filter-selection" onclick="switchSelection('charac-magic-filter-selection')" type="button" class="mb-8 mt-3 w-full text-blue-600 hover:text-white border border-blue-700 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-2xl px-6 py-4 text-center mr-4 dark:border-blue-500 dark:hover:border-blue-600 dark:text-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-600">Tout désélectionner</button>
+                    {% for magic in magics %}
+                        <div class="flex items-center mb-4">
+                            <input  {% if searchType != "charac" or (get["charac-mag-" ~ magic.getId()] is defined and get["charac-mag-" ~ magic.getId()] == "true") %}
+                                checked
+                            {% endif %}
+                                    id="{{ magic.getName()|replace({'\'': "_"}) }}" type="checkbox" value="true" name="charac-mag-{{ magic.getId() }}" class="w-8 h-8 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-4 dark:bg-gray-700 dark:border-gray-600">
+                            <label for="{{ magic.getName()|replace({'\'': "_"}) }}" class="ml-4 mr-4 text-3xl font-medium text-gray-900 dark:text-gray-300">{{ magic.getName() }}</label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div id="leader-accordion" data-accordion="collapse" class="mb-10">
+            <h2 id="leader-accordion-heading">
+                <button type="button" class="flex items-center justify-between w-full p-6 text-3xl font-medium font-semibold text-gray-900 dark:text-gray-300 text-left border-2 border-gray-200 rounded-t-2xl focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-600 dark:border-gray-700 bg-white dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600" data-accordion-target="#leader-accordion-body" aria-expanded="false" aria-controls="leader-accordion-body">
+                    <span>Filtrer sur les nations dirigées</span>
+                    <svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"></path>
+                    </svg>
+                </button>
+            </h2>
+            <div id="leader-accordion-body" class="hidden" aria-labelledby="leader-accordion-heading">
+                <div class="px-10 py-6 rounded-b-2xl border-2 border-t-0 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-700">
+                    <button id="charac-leader-filter-selection" onclick="switchSelection('charac-leader-filter-selection')" type="button" class="mb-8 mt-3 w-full text-blue-600 hover:text-white border border-blue-700 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-2xl px-6 py-4 text-center mr-4 dark:border-blue-500 dark:hover:border-blue-600 dark:text-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-600">Tout désélectionner</button>
+                    {% for nation in nations %}
+                        <div class="flex items-center mb-4">
+                            <input  {% if searchType != "charac" or (get["charac-led-" ~ nation.getId()] is defined and get["charac-led-" ~ nation.getId()] == "true") %}
+                                checked
+                            {% endif %}
+                                    id="led-{{ nation.getName()|replace({'\'': "_"}) }}" type="checkbox" value="true" name="charac-led-{{ nation.getId() }}" class="w-8 h-8 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-4 dark:bg-gray-700 dark:border-gray-600">
+                            <label for="led-{{ nation.getName()|replace({'\'': "_"}) }}" class="ml-4 text-3xl font-medium text-gray-900 dark:text-gray-300">{{ nation.getName() }}</label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <label class="relative inline-flex items-center mb-8 cursor-pointer">
+            <input id="relation-filter-switch" type="checkbox" value="true" class="sr-only peer">
+            <div class="w-18 h-10 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-8 after:w-8 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+            <span class="ml-6 text-3xl font-medium font-semibold text-gray-900 dark:text-gray-300">Filtrer sur les relations</span>
+        </label>
+        <div class="flex flex-row justify-between items-center mb-10">
+            <div>
+                <div class="flex items-center ml-4">
+                    <input disabled
+                            {% if get["charac-relation-type"] is not defined or (get["charac-relation-type"] is defined and get["charac-relation-type"] == "knows") %} checked {% endif %}
+                           id="knows" type="radio" value="knows" name="charac-relation-type" class="w-8 h-8 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-4 dark:bg-gray-700 dark:border-gray-600">
+                    <label id="knows-label" for="knows" class="ml-4 text-3xl font-medium text-gray-400 dark:text-gray-500 whitespace-nowrap">Connaît</label>
+                </div>
+                <div class="flex items-center ml-4 mt-4 mb-4">
+                    <input disabled
+                            {% if get["charac-relation-type"] is defined and get["charac-relation-type"] == "appreciates" %} checked {% endif %}
+                           id="appreciates" type="radio" value="appreciates" name="charac-relation-type" class="w-8 h-8 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-4 dark:bg-gray-700 dark:border-gray-600">
+                    <label id="appreciates-label" for="appreciates" class="ml-4 text-3xl font-medium text-gray-400 dark:text-gray-500 whitespace-nowrap">Apprécie</label>
+                </div>
+                <div class="flex items-center ml-4">
+                    <input disabled
+                            {% if get["charac-relation-type"] is defined and get["charac-relation-type"] == "not-appreciates" %} checked {% endif %}
+                           id="not-appreciates" type="radio" value="not-appreciates" name="charac-relation-type" class="w-8 h-8 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-4 dark:bg-gray-700 dark:border-gray-600">
+                    <label id="not-appreciates-label" for="not-appreciates" class="ml-4 text-3xl font-medium text-gray-400 dark:text-gray-500 whitespace-nowrap">N'apprécie pas</label>
+                </div>
+            </div>
+
+            <select disabled id="relation-charac" name="charac-relation-with" class="mx-6 bg-gray-50 border border-gray-300 text-gray-900 text-3xl rounded-lg focus:ring-primary-500 focus:ring-4 focus:border-primary-500 block w-full p-5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                <option value="0"
+                        {% if get["charac-relation-with"] is not defined or (get["charac-relation-with"] is defined and get["charac-relation-with"] == "0") %} selected {% endif %}
+                ></option>
+                {% for smolCharac in characList %}
+                    <option value="{{ smolCharac.getId() }}"
+                            {% if get["charac-relation-with"] is defined and get["charac-relation-with"] == smolCharac.getId() %} selected {% endif %}
+                    >{{ smolCharac.getFirstNames() }} {{ smolCharac.getLastNames }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <button onclick="applyCharacFilters()" type="button" data-drawer-hide="drawer-charac-filters" aria-controls="drawer-charac-filters" class="w-full inline-flex items-center justify-center mt-4 p-4 text-4xl font-medium text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-8 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+            <svg class="w-10 h-10 mr-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" />
+            </svg>
+            Appliquer les filtres
+        </button>
+    </div>
+
+    <div id="drawer-magic-filters" class="fixed top-0 left-0 z-40 h-screen p-8 overflow-y-auto transition-transform -translate-x-full bg-white w-screen lg:w-96 dark:bg-gray-800" tabindex="-1" aria-labelledby="drawer-magic-filters-label">
+        <button type="button" data-drawer-hide="drawer-magic-filters" aria-controls="drawer-magic-filters" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 absolute top-2.5 right-2.5 inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" >
+            <svg aria-hidden="true" class="w-16 h-16 lg:w-5 lg:h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+            <span class="sr-only">Close menu</span>
+        </button>
+
+        <h5 class="text-5xl my-12 font-bold tracking-tight text-gray-900 dark:text-white">Filtres pour les magies</h5>
+
+        <div id="magic-element-accordion" data-accordion="collapse" class="mb-10">
+            <h2 id="magic-element-accordion-heading">
+                <button type="button" class="flex items-center justify-between w-full p-6 text-3xl font-medium font-semibold text-gray-900 dark:text-gray-300 text-left border-2 border-gray-200 rounded-t-2xl focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-600 dark:border-gray-700 bg-white dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600" data-accordion-target="#magic-element-accordion-body" aria-expanded="false" aria-controls="magic-element-accordion-body">
+                    <span>Filtrer sur l'élément</span>
+                    <svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"></path>
+                    </svg>
+                </button>
+            </h2>
+            <div id="magic-element-accordion-body" class="hidden" aria-labelledby="magic-element-accordion-heading">
+                <div class="px-10 py-6 rounded-b-2xl border-2 border-t-0 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-700">
+                    <button id="magic-element-filter-selection" onclick="switchSelection('magic-element-filter-selection')" type="button" class="mb-8 mt-3 w-full text-blue-600 hover:text-white border border-blue-700 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-2xl px-6 py-4 text-center mr-4 dark:border-blue-500 dark:hover:border-blue-600 dark:text-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-600">Tout désélectionner</button>
+                    {% for element in elements %}
+                        <div class="flex items-center mb-4">
+                            <input
+                                    {% if searchType != "magic" or (get["magic-elem-" ~ element.getId()] is defined and get["magic-elem-" ~ element.getId()] == "true") %}
+                                        checked
+                                    {% endif %}
+                                    id="{{ element.getName() }}" type="checkbox" value="true" name="magic-elem-{{ element.getId() }}" class="w-8 h-8 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-4 dark:bg-gray-700 dark:border-gray-600">
+                            <label for="{{ element.getName() }}" class="flex flex-row items-center ml-4 text-3xl font-medium text-gray-900 dark:text-gray-300">
+                                <img src="/elems/{{ element.getId() }}" alt="{{ element.getId() }}" class="h-10 ml-2 mr-4">
+                                {{ element.getName() }}
+                            </label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <button onclick="applyMagicFilters()" type="button" data-drawer-hide="drawer-magic-filters" aria-controls="drawer-magic-filters" class="w-full inline-flex items-center justify-center mt-4 p-4 text-4xl font-medium text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-8 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+            <svg class="w-10 h-10 mr-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" />
+            </svg>
+            Appliquer les filtres
+        </button>
+    </div>
+
+    <div id="drawer-map-filters" class="fixed top-0 left-0 z-40 h-screen p-8 overflow-y-auto transition-transform -translate-x-full bg-white w-screen lg:w-96 dark:bg-gray-800" tabindex="-1" aria-labelledby="drawer-map-filters-label">
+        <button type="button" data-drawer-hide="drawer-map-filters" aria-controls="drawer-map-filters" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 absolute top-2.5 right-2.5 inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" >
+            <svg aria-hidden="true" class="w-16 h-16 lg:w-5 lg:h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+            <span class="sr-only">Close menu</span>
+        </button>
+
+        <h5 class="text-5xl my-12 font-bold tracking-tight text-gray-900 dark:text-white">Filtres pour les cartes</h5>
+
+        <div id="map-nation-accordion" data-accordion="collapse" class="mb-10">
+            <h2 id="map-nation-accordion-heading">
+                <button type="button" class="flex items-center justify-between w-full p-6 text-3xl font-medium font-semibold text-gray-900 dark:text-gray-300 text-left border-2 border-gray-200 rounded-t-2xl focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-600 dark:border-gray-700 bg-white dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600" data-accordion-target="#map-nation-accordion-body" aria-expanded="false" aria-controls="map-nation-accordion-body">
+                    <span>Filtrer sur la nation</span>
+                    <svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"></path>
+                    </svg>
+                </button>
+            </h2>
+            <div id="map-nation-accordion-body" class="hidden" aria-labelledby="map-nation-accordion-heading">
+                <div class="px-10 py-6 rounded-b-2xl border-2 border-t-0 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-700">
+                    <button id="map-nation-filter-selection" onclick="switchSelection('map-nation-filter-selection')" type="button" class="mb-8 mt-3 w-full text-blue-600 hover:text-white border border-blue-700 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-2xl px-6 py-4 text-center mr-4 dark:border-blue-500 dark:hover:border-blue-600 dark:text-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-600">Tout désélectionner</button>
+                    {% for nation in nations %}
+                        <div class="flex items-center mb-4">
+                            <input
+                                    {% if searchType != "map" or (get["map-nation-" ~ nation.getId()] is defined and get["map-nation-" ~ nation.getId()] == "true") %}
+                                        checked
+                                    {% endif %}
+                                    id="map-{{ nation.getName() }}" type="checkbox" value="true" name="map-nation-{{ nation.getId() }}" class="w-8 h-8 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-4 dark:bg-gray-700 dark:border-gray-600">
+                            <label for="map-{{ nation.getName() }}" class="ml-4 text-3xl font-medium text-gray-900 dark:text-gray-300">
+                                {{ nation.getName() }}
+                            </label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <button onclick="applyMapFilters()" type="button" data-drawer-hide="drawer-map-filters" aria-controls="drawer-map-filters" class="w-full inline-flex items-center justify-center mt-4 p-4 text-4xl font-medium text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-8 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+            <svg class="w-10 h-10 mr-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" />
+            </svg>
+            Appliquer les filtres
+        </button>
+    </div>
+
+    <div id="drawer-nation-filters" class="fixed top-0 left-0 z-40 h-screen p-8 overflow-y-auto transition-transform -translate-x-full bg-white w-screen lg:w-96 dark:bg-gray-800" tabindex="-1" aria-labelledby="drawer-nation-filters-label">
+        <button type="button" data-drawer-hide="drawer-nation-filters" aria-controls="drawer-nation-filters" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 absolute top-2.5 right-2.5 inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" >
+            <svg aria-hidden="true" class="w-16 h-16 lg:w-5 lg:h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+            <span class="sr-only">Close menu</span>
+        </button>
+
+        <h5 class="text-5xl my-12 font-bold tracking-tight text-gray-900 dark:text-white">Filtres pour les nations</h5>
+
+        <div class="flex flex-row items-center mb-10">
+            <span class="ml-4 mr-4 text-3xl font-medium font-semibold text-gray-900 dark:text-gray-300">Existant entre</span>
+            <input id="nation-existing-after" name="nation-existing-after" type="text" class="w-48 bg-gray-50 border border-gray-300 text-gray-900 text-3xl rounded-lg focus:ring-blue-500 focus:ring-4 focus:border-blue-500 block p-5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                   placeholder="1500"
+                    {% if get["nation-existing-after"] is defined %}
+                        value="{{ get["nation-existing-after"] }}"
+                    {% endif %}
+            >
+            <span class="ml-4 mr-4 text-3xl font-medium font-semibold text-gray-900 dark:text-gray-300">et</span>
+            <input id="nation-existing-before" name="nation-existing-before" type="text" class="w-48 bg-gray-50 border border-gray-300 text-gray-900 text-3xl rounded-lg focus:ring-blue-500 focus:ring-4 focus:border-blue-500 block p-5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                   placeholder="1900"
+                    {% if get["nation-existing-before"] is defined %}
+                        value="{{ get["nation-existing-before"] }}"
+                    {% endif %}
+            >
+        </div>
+
+        <div id="nation-calendar-accordion" data-accordion="collapse" class="mb-10">
+            <h2 id="nation-calendar-accordion-heading">
+                <button type="button" class="flex items-center justify-between w-full p-6 text-3xl font-medium font-semibold text-gray-900 dark:text-gray-300 text-left border-2 border-gray-200 rounded-t-2xl focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-600 dark:border-gray-700 bg-white dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600" data-accordion-target="#nation-calendar-accordion-body" aria-expanded="false" aria-controls="nation-calendar-accordion-body">
+                    <span>Filtrer sur le calendrier</span>
+                    <svg data-accordion-icon class="w-6 h-6 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"></path>
+                    </svg>
+                </button>
+            </h2>
+            <div id="nation-calendar-accordion-body" class="hidden" aria-labelledby="nation-calendar-accordion-heading">
+                <div class="px-10 py-6 rounded-b-2xl border-2 border-t-0 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-700">
+                    <button id="nation-calendar-filter-selection" onclick="switchSelection('nation-calendar-filter-selection')" type="button" class="mb-8 mt-3 w-full text-blue-600 hover:text-white border border-blue-700 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-2xl px-6 py-4 text-center mr-4 dark:border-blue-500 dark:hover:border-blue-600 dark:text-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-600">Tout désélectionner</button>
+                    {% for calendar in headerCalendars %}
+                        <div class="flex items-center mb-4">
+                            <input
+                                    {% if searchType != "nation" or (get["nation-cal-" ~ calendar.getId()] is defined and get["nation-cal-" ~ calendar.getId()] == "true") %}
+                                        checked
+                                    {% endif %}
+                                    id="nation-{{ calendar.getName()|replace({'\'': "_"}) }}" type="checkbox" value="true" name="nation-cal-{{ calendar.getId() }}" class="w-8 h-8 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-4 dark:bg-gray-700 dark:border-gray-600">
+                            <label for="nation-{{ calendar.getName()|replace({'\'': "_"}) }}" class="ml-4 text-3xl font-medium text-gray-900 dark:text-gray-300">{{ calendar.getName() }}</label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <button onclick="applyNationFilters()" type="button" data-drawer-hide="drawer-nation-filters" aria-controls="drawer-nation-filters" class="w-full inline-flex items-center justify-center mt-4 p-4 text-4xl font-medium text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-8 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+            <svg class="w-10 h-10 mr-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" />
+            </svg>
+            Appliquer les filtres
+        </button>
+    </div>
+
+    <script type="application/javascript">
+        const portraitSwitch = document.getElementById("portrait-filter-switch");
+        const relationSwitch = document.getElementById("relation-filter-switch");
+
+        function applyEnabledStyle(label) {
+            label.classList.remove("text-gray-400");
+            label.classList.remove("dark:text-gray-500");
+
+            label.classList.add("text-gray-900");
+            label.classList.add("dark:text-gray-300");
+        }
+
+        function applyDisabledStyle(label) {
+            label.classList.remove("text-gray-900");
+            label.classList.remove("dark:text-gray-300");
+
+            label.classList.add("text-gray-400");
+            label.classList.add("dark:text-gray-500");
+        }
+
+        function enableFilter(filterElementsIds, filterLabelsIds) {
+            for (let i = 0; i < filterElementsIds.length; i++) {
+                let element = document.getElementById(filterElementsIds[i]);
+                if (element != null) {
+                    element.disabled = false;
+                }
+            }
+
+            // Change the style (classes) for an enabled radio button
+            for (let i = 0; i < filterLabelsIds.length; i++) {
+                let label = document.getElementById(filterLabelsIds[i]);
+                if (label != null) {
+                    applyEnabledStyle(label);
+                }
+            }
+        }
+
+        function disableFilter(filterElementsIds, filterLabelsIds) {
+            for (let i = 0; i < filterElementsIds.length; i++) {
+                let element = document.getElementById(filterElementsIds[i]);
+                if (element != null) {
+                    element.disabled = true;
+                }
+            }
+
+            // Change the style (classes) for an enabled radio button
+            for (let i = 0; i < filterLabelsIds.length; i++) {
+                let label = document.getElementById(filterLabelsIds[i]);
+                if (label != null) {
+                    applyDisabledStyle(label);
+                }
+            }
+        }
+
+        function findInput(parentNode) {
+            // This is a behaviour expected. If it is not correct, then the calling function should be
+            // changed, not this one.
+            for (let i = 0; i < parentNode.childElementCount; i++) {
+                if (parentNode.children[i].tagName === "INPUT") {
+                    return parentNode.children[i];
+                }
+            }
+        }
+
+        function switchSelection(buttonLabelId) {
+            // For simplicity, we will check or uncheck based on the label on the button.
+            let buttonLabel = document.getElementById(buttonLabelId);
+            let parent = buttonLabel.parentNode;
+
+            let valueToAffect = buttonLabel.innerText === "Tout sélectionner";
+
+            for (let i = 1; i < parent.childElementCount; i++) {
+                let input = findInput(parent.children[i]);
+                input.checked = valueToAffect;
+            }
+
+            if (!valueToAffect) {
+                buttonLabel.innerText = "Tout sélectionner";
+            } else {
+                buttonLabel.innerText = "Tout désélectionner";
+            }
+        }
+
+        function applyCharacFilters() {
+            document.getElementById("has-portrait-hidden").checked = document.getElementById("has-portrait").checked;
+            document.getElementById("not-has-portrait-hidden").checked = document.getElementById("not-has-portrait").checked;
+            {% for calendar in headerCalendars %}
+                document.getElementById("{{ calendar.getName()|replace({'\'': "_"}) }}-hidden").checked = document.getElementById("{{ calendar.getName()|replace({'\'': "_"}) }}").checked;
+            {% endfor %}
+            document.getElementById("charac-living-after-hidden").value = document.getElementById("charac-living-after").value;
+            document.getElementById("charac-living-before-hidden").value = document.getElementById("charac-living-before").value;
+            document.getElementById("charac-potential-above-hidden").value = document.getElementById("charac-potential-above").value;
+            document.getElementById("charac-potential-below-hidden").value = document.getElementById("charac-potential-below").value;
+            {% for class in classes %}
+                document.getElementById("{{ class.getName()|replace({'\'': "_"}) }}-hidden").checked = document.getElementById("{{ class.getName()|replace({'\'': "_"}) }}").checked;
+            {% endfor %}
+            {% for sex in sexes %}
+                document.getElementById("{{ sex|replace({'\'': "_"}) }}-hidden").checked = document.getElementById("{{ sex|replace({'\'': "_"}) }}").checked;
+            {% endfor %}
+            {% for gender in genders %}
+                document.getElementById("{{ gender|replace({'\'': "_"}) }}-hidden").checked = document.getElementById("{{ gender|replace({'\'': "_"}) }}").checked;
+            {% endfor %}
+            {% for nation in nations %}
+                document.getElementById("nat-{{ nation.getName()|replace({'\'': "_"}) }}-hidden").checked = document.getElementById("nat-{{ nation.getName()|replace({'\'': "_"}) }}").checked;
+            {% endfor %}
+            document.getElementById("charac-height-above-hidden").value = document.getElementById("charac-height-above").value;
+            document.getElementById("charac-height-below-hidden").value = document.getElementById("charac-height-below").value;
+            {% for magic in magics %}
+                document.getElementById("{{ magic.getName()|replace({'\'': "_"}) }}-hidden").checked = document.getElementById("{{ magic.getName()|replace({'\'': "_"}) }}").checked;
+            {% endfor %}
+            {% for nation in nations %}
+                document.getElementById("led-{{ nation.getName()|replace({'\'': "_"}) }}-hidden").checked = document.getElementById("led-{{ nation.getName()|replace({'\'': "_"}) }}").checked;
+            {% endfor %}
+            document.getElementById("knows-hidden").checked = document.getElementById("knows").checked;
+            document.getElementById("appreciates-hidden").checked = document.getElementById("appreciates").checked;
+            document.getElementById("not-appreciates-hidden").checked = document.getElementById("not-appreciates").checked;
+            document.getElementById("relation-charac-hidden").value = document.getElementById("relation-charac").value;
+        }
+
+        function applyMagicFilters() {
+            {% for element in elements %}
+                document.getElementById("{{ element.getName() }}-hidden").checked = document.getElementById("{{ element.getName() }}").checked;
+            {% endfor %}
+        }
+
+        function applyMapFilters() {
+            {% for nation in nations %}
+                document.getElementById("map-{{ nation.getName()|replace({'\'': "_"}) }}-hidden").checked = document.getElementById("map-{{ nation.getName()|replace({'\'': "_"}) }}").checked;
+            {% endfor %}
+        }
+
+        function applyNationFilters() {
+            document.getElementById("nation-existing-before-hidden").value = document.getElementById("nation-existing-before").value;
+            document.getElementById("nation-existing-after-hidden").value = document.getElementById("nation-existing-after").value;
+            {% for calendar in headerCalendars %}
+                document.getElementById("nation-{{ calendar.getName()|replace({'\'': "_"}) }}-hidden").checked = document.getElementById("nation-{{ calendar.getName()|replace({'\'': "_"}) }}").checked;
+            {% endfor %}
+        }
+
+        portraitSwitch.addEventListener('change', () => {
+            if (portraitSwitch.checked) {
+                enableFilter(["has-portrait", "not-has-portrait", "has-portrait-hidden", "not-has-portrait-hidden"], ["has-portrait-label", "not-has-portrait-label"]);
+            } else {
+                disableFilter(["has-portrait", "not-has-portrait", "has-portrait-hidden", "not-has-portrait-hidden"], ["has-portrait-label", "not-has-portrait-label"]);
+            }
+        });
+
+        relationSwitch.addEventListener('change', () => {
+            if (relationSwitch.checked) {
+                enableFilter(["knows", "appreciates", "not-appreciates", "relation-charac", "knows-hidden", "appreciates-hidden", "not-appreciates-hidden", "relation-charac-hidden"], ["knows-label", "appreciates-label", "not-appreciates-label"]);
+            } else {
+                disableFilter(["knows", "appreciates", "not-appreciates", "relation-charac", "knows-hidden", "appreciates-hidden", "not-appreciates-hidden", "relation-charac-hidden"], ["knows-label", "appreciates-label", "not-appreciates-label"]);
+            }
+        });
+    </script>
+{% endblock %}

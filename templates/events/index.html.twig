@@ -355,7 +355,7 @@
     <div class="lg:hidden">
         <h3 class="text-7xl font-bold dark:text-white mb-14">Événements</h3>
 
-        <div class="absolute left-0 w-screen p-10 pt-10 rounded-t-10xl bg-gray-100 dark:bg-gray-800"
+        <div class="absolute left-0 w-screen p-10 pt-10 rounded-t-10xl bg-gray-100 dark:bg-gray-800 overflow-hidden"
              style="min-height: -webkit-fill-available"> <!-- Won't work for firefox, but honestly no one uses firefox on mobiles... -->
             <div class="p-3">
                 {# warning #}
@@ -419,16 +419,19 @@
                                             <button id="mobile-preview-details-tab-{{ event.getId() }}" data-tabs-target="#mobile-preview-details-{{ event.getId() }}" type="button" role="tab" aria-controls="mobile-preview-details-{{ event.getId() }}" aria-selected="false" class="inline-block w-full p-8 rounded-tr-3xl bg-gray-50 hover:bg-gray-100 focus:outline-none dark:bg-gray-700 dark:hover:bg-gray-600">Détails</button>
                                         </li>
                                     </ul>
-                                    <div class="hidden p-8 rounded-lg" id="mobile-preview-description-{{ event.getId() }}" role="tabpanel" aria-labelledby="mobile-preview-description-tab-{{ event.getId() }}">
+                                    <div class="p-8 rounded-lg">
                                         <div class="flex flex-row justify-between items-center mb-6">
                                             <h6 class="text-5xl"><small class="font-semibold text-gray-500 dark:text-gray-400">{{ functions.convertToCalendar(event.getStartingDate(), viewCalendar).format('d/m/Y') }}</small></h6>
 
                                             <h6 class="text-5xl"><small class="font-semibold text-gray-500 dark:text-gray-400">{{ functions.convertToCalendar(event.getEndingDate(), viewCalendar).format('d/m/Y') }}</small></h6>
                                         </div>
-                                        <p class="text-4xl font-normal text-gray-600 dark:text-gray-400 mb-6">{{ event.getDescription() }}</p>
-                                    </div>
-                                    <div class="hidden p-8 rounded-lg" id="mobile-preview-details-{{ event.getId() }}" role="tabpanel" aria-labelledby="mobile-preview-details-{{ event.getId() }}">
-                                        <p class="text-4.5xl text-gray-900 dark:text-white"></p>
+                                        <div id="mobile-preview-description-{{ event.getId() }}" role="tabpanel" aria-labelledby="mobile-preview-description-tab-{{ event.getId() }}">
+                                            <p class="text-4xl font-normal text-gray-600 dark:text-gray-400 mb-6">{{ event.getDescription() }}</p>
+                                        </div>
+                                        <div id="mobile-preview-details-{{ event.getId() }}" role="tabpanel" aria-labelledby="mobile-preview-details-{{ event.getId() }}">
+                                            <h5 class="text-5xl font-bold tracking-tight text-gray-900 dark:text-white">Lié à</h5>
+                                            <p class="text-4xl font-normal text-gray-600 dark:text-gray-400">{{ event.getCharac().getFirstNames() }} {{ event.getCharac().getLastNames() }} ({{ ages[event.getId()~"-"~event.getCharac().getId()] }} ans)</p>
+                                        </div>
                                     </div>
                                 </div>
                             {% endfor %}
@@ -440,7 +443,7 @@
     </div>
 
     <!-- Swiper JS -->
-    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
     <!-- Initialize Swiper -->
     <script>

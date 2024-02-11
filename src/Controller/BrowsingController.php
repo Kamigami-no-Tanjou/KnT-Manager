@@ -52,16 +52,12 @@ class BrowsingController extends AbstractController
         $this->dataInitialiser = $dataInitialiser;
     }
 
-    public function browse(): Response {
-        // Data retrieval
-        $data = $this->dataInitialiser->getBaseData();
-        if (isset($_GET["search"])) {
-            $data["search"] = $_GET["search"];
-        } else {
-            $data["search"] = "";
-        }
+    private function prepareSearchInput(): string {
+        return $_GET["search"] ?? "";
+    }
 
-        $data["result"] = $this->browser->browse($data["search"]); // Has to be done in any case
+    private function getAdvancedResults(string $search): array {
+        $data = array();
         $data["hasPortrait"] = array();
         $data["hasPortraitLeader"] = array();
 
@@ -71,20 +67,12 @@ class BrowsingController extends AbstractController
 
         if (isset($_GET["type"])) {
             $searchType = SearchType::from($_GET["type"]);
-            $data[$searchType->value . "Results"] = $this->browser->browseAdvanced($searchType, $data["search"], $_GET);
+            $data[$searchType->value . "Results"] = $this->browser->browseAdvanced($searchType, $search, $_GET);
             $data["searchType"] = $searchType->value;
         } else {
             $data["searchType"] = SearchType::None->value;
         }
 
-        foreach ($data["result"]["characs"] as $charac) {
-            /* @var $charac Charac */
-            $data["hasPortrait"][$charac->getId()] = $this->characService->hasPortrait($charac);
-        }
-        foreach ($data["result"]["leaders"] as $leader) {
-            /* @var $leader NationLeader */
-            $data["hasPortraitLeader"][$leader->getLeader()->getId()] = $this->characService->hasPortrait($leader->getLeader());
-        }
         foreach ($data[SearchType::Charac->value . "Results"] as $charac) {
             /* @var $charac Charac */
             $data["hasPortrait"][$charac->getId()] = $this->characService->hasPortrait($charac);
@@ -109,6 +97,35 @@ class BrowsingController extends AbstractController
 
         $data["get"] = $_GET;
 
+        return $data;
+    }
+
+    public function browse(): Response {
+        // Data retrieval
+        $data = $this->dataInitialiser->getBaseData();
+        $data["search"] = $this->prepareSearchInput();
+
+        $data["result"] = $this->browser->browse($data["search"]); // Has to be done in any case
+        $data = array_merge($data, $this->getAdvancedResults($data["search"]));
+
+        foreach ($data["result"]["characs"] as $charac) {
+            /* @var $charac Charac */
+            $data["hasPortrait"][$charac->getId()] = $this->characService->hasPortrait($charac);
+        }
+        foreach ($data["result"]["leaders"] as $leader) {
+            /* @var $leader NationLeader */
+            $data["hasPortraitLeader"][$leader->getLeader()->getId()] = $this->characService->hasPortrait($leader->getLeader());
+        }
+
         return $this->render("browse/browse.html.twig", $data);
+    }
+
+    public function mobileBrowse(): Response {
+        // Data retrieval
+        $data = $this->dataInitialiser->getBaseData();
+        $data["search"] = $this->prepareSearchInput();
+
+        $data = array_merge($data, $this->getAdvancedResults($data["search"]));
+        return $this->render("browse/advanced.html.twig", $data);
     }
 }

@@ -98,6 +98,11 @@ browse:
     controller: App\Controller\BrowsingController::browse
     methods: GET|HEAD
 
+mobile_browse_advanced:
+    path: /browse/advanced/
+    controller: App\Controller\BrowsingController::mobileBrowse
+    methods: GET|HEAD
+
 map:
     path: /maps/{id}
     controller: App\Controller\MapsController::mapInfo

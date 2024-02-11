@@ -43,15 +43,15 @@ class MagicsController extends AbstractController
         }
 
         $data['users'] = $this->characService->getByMagic($data['magic']);
-        $data['instinct'] = 0;
-        $data['learned'] = 0;
+        $data['instinct'] = array();
+        $data['learned'] = array();
 
         foreach($data['users'] as $user) {
             /* @var $user Charac */
             if ($user->getMagics()[0]->getId() == $data['magic']->getId()) {
-                $data['instinct']++;
+                $data['instinct'][] = $user;
             } else {
-                $data['learned']++;
+                $data['learned'][] = $user;
             }
         }
 

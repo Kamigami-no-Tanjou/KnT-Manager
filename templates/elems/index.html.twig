@@ -1,7 +1,37 @@
 {% extends 'nav.html.twig' %}
 
 {% block page_content %}
-    <nav class="flex mb-4" aria-label="Breadcrumb">
+    <style>
+        .mb-14 {
+            margin-bottom: 3.5rem;
+        }
+
+        .rounded-t-10xl {
+            border-top-left-radius: 5rem;
+            border-top-right-radius: 5rem;
+        }
+
+        .text-4\.5xl {
+            font-size: 2.5rem;
+            line-height: 3.15rem;
+        }
+
+        .swiper-pagination-bullet {
+            width: 1rem !important;
+            height: 1rem !important;
+        }
+
+        .swiper-pagination-bullets {
+            bottom: initial !important;
+        }
+    </style>
+    <!-- Link Swiper's CSS -->
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css"
+    />
+
+    <nav class="hidden lg:flex mb-4" aria-label="Breadcrumb">
         <ol class="inline-flex items-center space-x-1 md:space-x-3">
             <li class="inline-flex items-center">
                 <a href="/" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
@@ -18,7 +48,14 @@
         </ol>
     </nav>
 
-    <div class="mb-4 border-b border-gray-200 dark:border-gray-700 mx-1.5">
+    <nav class="flex ml-6 mb-24 lg:hidden">
+        <a href="/" class="inline-flex items-center text-3xl lg:text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
+            <svg aria-hidden="true" class="w-12 h-12 rotate-180 mr-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+            Retour au Dashboard
+        </a>
+    </nav>
+
+    <div class="hidden lg:block mb-4 border-b border-gray-200 dark:border-gray-700 mx-1.5">
         <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
             {% for elem in elems %}
                 <li class="mr-2" role="presentation">
@@ -32,7 +69,7 @@
             {% endfor %}
         </ul>
     </div>
-    <div id="myTabContent">
+    <div id="myTabContent" class="hidden lg:block">
         {% for elem in elems %}
             <div class="hidden p-4 rounded-lg bg-gray-100 dark:bg-gray-800" id="{{ elem.getName() }}" role="tabpanel" aria-labelledby="{{ elem.getName() }}-tab">
                 <h3 class="text-3xl font-bold dark:text-white">Magies de l'élément {{ elem.getName() }}</h3>
@@ -139,4 +176,65 @@
             </div>
         {% endfor %}
     </div>
+
+    <div class="lg:hidden">
+        <h3 class="text-7xl font-bold dark:text-white mb-14">Magies par élément</h3>
+
+        <div class="absolute left-0 w-screen p-10 pt-10 rounded-t-10xl bg-gray-100 dark:bg-gray-800"
+             style="min-height: -webkit-fill-available"> <!-- Won't work for firefox, but honestly no one uses firefox on mobiles... -->
+            <div class="swiper">
+                <div class="h-4 swiper-pagination"></div>
+                <div class="swiper-wrapper w-full">
+                    {% for elem in elems %}
+                        <div class="mt-8 swiper-slide w-full">
+                            <div class="flex justify-between mb-8">
+                                <h3 class="text-6xl font-bold dark:text-white p-3">{{ elem.getName() }}</h3>
+                                <img src="/elems/{{ elem.getId() }}" alt="{{ elem.getId() }}" style="width: 6rem; height: 6rem;"/>
+                            </div>
+
+                            <div class="grid grid-cols-1 gap-8">
+                                {% for magic in magics[elem.getName()] %}
+                                    <div class="w-full p-6 bg-white border-2 border-gray-200 rounded-3xl shadow dark:bg-gray-700 dark:border-gray-700">
+                                        <div class="flex flex-row justify-between items-center mb-6">
+                                            <div>
+                                                <a href="/magics/{{ magic.getId() }}">
+                                                    <h5 class="text-5xl font-bold tracking-tight text-gray-900 dark:text-white">{{ magic.getName() }}</h5>
+                                                </a>
+                                            </div>
+
+                                            <div class="flex flex-row mb-4">
+                                                {% for innerElem in magic.getElems() %}
+                                                    <img src="/elems/{{ innerElem.getId() }}" alt="{{ innerElem.getId() }}" class="w-16 h-16">
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <p class="text-4xl font-normal text-gray-600 dark:text-gray-400 mb-6">{{ magic.getDescription() }}</p>
+
+                                        <a href="/magics/{{ magic.getId() }}" class="inline-flex items-center justify-center w-full mt-2 px-3 py-3 text-4.5xl text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-8 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                            Consulter
+                                            <svg class="w-6 h-6 ml-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"></path>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+
+    <!-- Initialize Swiper -->
+    <script>
+        var swiper = new Swiper(".swiper", {
+            pagination: {
+                el: ".swiper-pagination"
+            }
+        });
+    </script>
 {% endblock %}
