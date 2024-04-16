@@ -22,8 +22,10 @@ class NationService implements IGetService
         $this->calendarService = $calendarService;
     }
 
-    public function getById(int $id): ?Nation
+    public function getById(?int $id): ?Nation
     {
+        if ($id == null) return null;
+
         $nation = new Nation();
         $statement = $this->context->prepare(
             "SELECT
